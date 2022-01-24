@@ -1,0 +1,39 @@
+[
+    {
+        "icon": "assets/images/signIn.png",
+        "title": "Easy connect",
+        "description": "This connects you to the nearest and most reliable stations closest to you using your real time location.",
+        "action": "Connect now !"
+    },
+    {
+        "icon": "assets/images/signIn.png",
+        "title": "House surveillance",
+        "description": "This feature allows you to connect the app to your indoor surveillance devices. Monitor your house on-the-go!",
+        "action": "Connect now !"
+    },
+    
+    {
+        "icon": "assets/images/signIn.png",
+        "title": "Get Insurance",
+        "description": "This feature allows you to buy Health and Property Insurance from the tip of your fingers! Fast and easy at affordable rates.",
+        "action": "Buy now !"
+    },
+    {
+        "icon": "assets/images/signIn.png",
+        "title": "First Aid tips",
+        "description": "Learn first hand tips to combact household and environmental accidents.",
+        "action": "Start learning"
+    },
+    {
+        "icon": "assets/images/signIn.png",
+        "title": "Share current location",
+        "description": "Share your current location with friends and family. Don’t be a lone tree....lorem ipsum",
+        "action": "Share"
+    },
+    {
+        "icon": "assets/images/signIn.png",
+        "title": "Weather forecasts",
+        "description": "Stop! before you step out of the house, check your weather forecasts.. you don’t want to come back drenched!",
+        "action": "Connect now !"
+    }
+]

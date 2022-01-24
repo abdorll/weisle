@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/profile/profile.dart';
+import 'package:weisle/ui/screens/activity_report.dart';
+import 'package:weisle/ui/screens/settings.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +14,7 @@ import 'home_page.dart';
 class LandingScreen extends StatelessWidget {
   final _myNavController = Get.put(NavController());
 
-    LandingScreen({Key? key}) : super(key: key);
+  LandingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +25,11 @@ class LandingScreen extends StatelessWidget {
           if (_myNavController.selectedTab.value == 0) {
             return const Homepage();
           } else if (_myNavController.selectedTab.value == 1) {
-            return const ProfileScreen();
+            return const Report();
           } else if (_myNavController.selectedTab.value == 2) {
-            return const Homepage();
+            return const ProfileScreen();
           } else if (_myNavController.selectedTab.value == 3) {
-            return const Homepage();
+            return const Settings();
           }
           return Container();
         }),

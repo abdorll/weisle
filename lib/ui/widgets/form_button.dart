@@ -33,10 +33,13 @@ Widget FormButton(
   );
 }
 
-
 // ignore: non_constant_identifier_names
-Widget OnboardingButton({VoidCallback? function,Color? color, Widget? child, double? height, double? width})
-{
+Widget OnboardingButton(
+    {VoidCallback? function,
+    Color? color,
+    Widget? child,
+    double? height,
+    double? width}) {
   return InkWell(
     onTap: function ?? () => print(""),
     child: Container(
@@ -44,9 +47,8 @@ Widget OnboardingButton({VoidCallback? function,Color? color, Widget? child, dou
       width: width ?? 46,
       // padding: EdgeInsets.symmetric(vertical: 17, horizontal: 10),
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: const BorderRadius.all(Radius.circular(10))
-      ),
+          color: color,
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Center(child: child),
     ),
   );

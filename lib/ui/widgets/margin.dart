@@ -20,6 +20,16 @@ class YMargin extends StatelessWidget {
   }
 }
 
+// class SideSpace extends StatelessWidget {
+//   final double y;
+//   // ignore: use_key_in_widget_constructors
+//   const SideSpace(this.y);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(padding: EdgeInsets.fromLTRB(left, top, right, bottom));
+//   }
+// }
+
 double screenHeight(BuildContext context, {double percent = 1}) =>
     MediaQuery.of(context).size.height * percent;
 

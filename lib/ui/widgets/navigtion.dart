@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';  
+import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
@@ -12,6 +12,10 @@ navigateReplaces(context, Widget route, {isDialog = false}) {
   );
 }
 
+goBack(context) {
+  Navigator.pop(context);
+}
+
 navigate(context, Widget route, {isDialog = false}) => Navigator.push(
       context,
       MaterialPageRoute(
@@ -21,7 +25,7 @@ navigate(context, Widget route, {isDialog = false}) => Navigator.push(
       ),
     );
 
-popToFirst(BuildContext context) => 
+popToFirst(BuildContext context) =>
     Navigator.of(context).popUntil((route) => route.isFirst);
 
 popView(BuildContext context) => Navigator.pop(context);
@@ -38,7 +42,7 @@ navigateTransparentRoute(BuildContext context, Widget route) {
 class TransparentRoute extends PageRoute<void> {
   TransparentRoute({
     required this.builder,
-  // ignore: unnecessary_null_comparison
+    // ignore: unnecessary_null_comparison
   })  : assert(builder != null),
         super(fullscreenDialog: false);
 
@@ -87,8 +91,6 @@ class TransparentRoute extends PageRoute<void> {
   }
 }
 
-
 class NavController extends GetxController {
   var selectedTab = 0.obs;
 }
- 

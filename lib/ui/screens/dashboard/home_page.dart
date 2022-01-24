@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/margin.dart';
+import 'package:weisle/ui/widgets/navigtion.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget getGridView() {
-    return GridView.count( 
+    return GridView.count(
       shrinkWrap: true,
       crossAxisCount: 3,
       primary: false,
