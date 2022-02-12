@@ -18,7 +18,7 @@ class PlainTextField extends StatelessWidget {
   final String? hint;
   final Widget? info;
   final Stream? stream;
-  final Function(String? e)? onchanged;
+  final Function(String e)? onchanged;
   final int? maxLines;
   final bool? enabled;
   final Widget? leading;

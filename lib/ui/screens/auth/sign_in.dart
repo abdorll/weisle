@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weisle/helpers/Alerts.dart';
+import 'package:weisle/service/customers_apis.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
+import 'package:weisle/utils/base_provider.dart';
+import 'package:weisle/utils/index.dart';
 
 import 'sign_up.dart';
 
@@ -21,54 +26,128 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: white,
       body: SafeArea(
-        child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
-            children: [
-              // Text("Welcome", textAlign: TextAlign.center, style: onboardTitle.copyWith(fontSize: 30)),
-              SizedBox(
-                  height: 322,
-                  width: 400,
-                  child: Image.asset("assets/images/welcome.png")),
-              const PlainTextField(
-                  leading: Icon(Icons.person, color: Color(0xffFF2156)),
-                  hint: "Username"),
-              const PasswordField(
-                  leading: Icon(Icons.lock, color: Color(0xffFF2156)),
-                  hint: "Password"),
-              const YMargin(40),
-              FormButton(
-                  enabled: true,
-                  text: "Login",
-                  function: () {
-                    navigate(context, LandingScreen());
-                  }),
-              const YMargin(40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        child: Consumer<SignInProvider>(
+          builder: (BuildContext context, value, child) {
+            return ListView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
                 children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUp()));
-                      },
-                      child: const Text("Dont have an account?")),
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUp()));
-                      },
-                      child: Text(
-                        "Register",
-                        style: TextStyle(color: colorPrimary),
-                      ))
-                ],
-              )
-            ]),
+                  // Text("Welcome", textAlign: TextAlign.center, style: onboardTitle.copyWith(fontSize: 30)),
+                  SizedBox(
+                      height: 322,
+                      width: 400,
+                      child: Image.asset("assets/images/welcome.png")),
+                  PlainTextField(
+                      onchanged: (e) => value.setusername = e,
+                      leading: Icon(Icons.person, color: Color(0xffFF2156)),
+                      hint: "Username"),
+                  PasswordField(
+                      onchanged: (e) => value.setPasword = e,
+                      leading: Icon(Icons.lock, color: Color(0xffFF2156)),
+                      hint: "Password"),
+                  const YMargin(40),
+                  FormButton(
+                      enabled: true,
+                      text: "Login",
+                      function: () {
+                        value.login(context);
+                      }),
+                  const YMargin(40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignUp()));
+                          },
+                          child: const Text("Dont have an account?")),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignUp()));
+                          },
+                          child: Text(
+                            "Register",
+                            style: TextStyle(color: colorPrimary),
+                          ))
+                    ],
+                  )
+                ]);
+          },
+        ),
       ),
     );
+  }
+}
+
+//------------------------------------------------LOGIN PROVIDER STARTS HERE
+class SignInProvider extends BaseProvider {
+  String? _username;
+  String? _password;
+  bool formValidity = false;
+
+  String get username => _username ?? "";
+  String get password => _password ?? '';
+
+  set setusername(String username) {
+    _username = username;
+    checkFormValidity();
+    notifyListeners();
+  }
+
+  set setPasword(String password) {
+    _password = password;
+    checkFormValidity();
+    notifyListeners();
+  }
+
+  void checkFormValidity() {
+    if ((_username != null) && (_password != null)) {
+      formValidity = true;
+    } else {
+      formValidity = false;
+    }
+    notifyListeners();
+  }
+
+  void login(BuildContext context) async {
+    try {
+      if (_username == null || _password == null) {
+        Alerts.errorAlert(context, 'Al fields are required', () {
+          Navigator.pop(context);
+        });
+      } else if (_password!.length < 8) {
+        Alerts.errorAlert(context, 'Password lengt too short', () {
+          Navigator.pop(context);
+        });
+      } else {
+        Alerts.loadingAlert(context, 'Login in progress');
+        FocusScope.of(context).unfocus();
+        setLoading = true;
+        var loginResponse = await customerApiBasic.signIn(
+            username: _username, password: _password);
+        print("Weisle Login Response is $loginResponse");
+        if (loginResponse['responseCode'] == '00') {
+          print('Request Successful');
+          navigate(context, LandingScreen());
+        } else {
+          print("Weisle Login Response is $loginResponse");
+        }
+      }
+    } catch (e) {
+      print("Weisle error: $e");
+      Alerts.errorAlert(context, 'Something went wrong', () {
+        Navigator.pop(context);
+      });
+    }
+  }
+
+  SignInProvider() {
+    checkFormValidity();
   }
 }
