@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weisle/helpers/Alerts.dart';
+import 'package:weisle/helpers/alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/auth/sign_in.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
-import 'package:weisle/ui/widgets/basicWidgets.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
@@ -111,7 +110,7 @@ class SignUpProvider extends BaseProvider {
   String? _regCode;
   bool formValidity = false;
 
-  String get fullName => _fullName ?? "";
+  String get fullName => _fullName ?? '';
   String get phoneNo => _phoneNo ?? '';
   String get userName => _userName ?? '';
   String get userPass => _userPass ?? '';
@@ -167,7 +166,7 @@ class SignUpProvider extends BaseProvider {
           _userName == null ||
           _userPass == null ||
           _regCode == null) {
-        Alerts.errorAlert(context, 'Al fields are required', () {
+        Alerts.errorAlert(context, 'All fields are required', () {
           Navigator.pop(context);
         });
       } else if (_phoneNo!.length < 11) {
@@ -175,7 +174,7 @@ class SignUpProvider extends BaseProvider {
           Navigator.pop(context);
         });
       } else {
-        Alerts.loadingAlert(context, 'Registring...');
+        Alerts.loadingAlert(context, 'Registering...');
         FocusScope.of(context).unfocus();
         setLoading = true;
         var registerResponse = await customerApiBasic.register(
@@ -184,18 +183,35 @@ class SignUpProvider extends BaseProvider {
             userName: _userName,
             userPass: _userPass,
             regCode: _regCode);
-        // ignore: avoid_print
-        print("Weisle register Response is $registerResponse");
-        if (registerResponse['responseCode'] == '00') {
+
+        // print(registerResponse['resposeCode']);
+        // // ignore: avoid_print
+        // print("Weisle register Response is $registerResponse");
+        if (registerResponse['resposeCode'] == '00') {
+          setLoading = false;
+          notifyListeners();
           print('Request Successful');
           navigate(context, LandingScreen());
+        } else if ((registerResponse['resposeCode'] == '01')) {
+          setLoading = false;
+          notifyListeners();
+          Alerts.errorAlert(context, registerResponse['message'], () {
+            Navigator.pop(context);
+          });
+
+          // print("Weisle register Response is $registerResponse");
         } else {
-          print("Weisle register Response is $registerResponse");
+          setLoading = false;
+          notifyListeners();
+          Alerts.errorAlert(context, registerResponse['message'], () {
+            Navigator.pop(context);
+          });
         }
       }
     } catch (e) {
+      setLoading = false;
       // ignore: avoid_print
-      print("Weisle error: $e");
+      // print("Weisle error: $e");
       Alerts.errorAlert(context, 'Something went wrong', () {
         Navigator.pop(context);
       });

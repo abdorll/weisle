@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weisle/helpers/Alerts.dart';
+import 'package:weisle/helpers/alerts.dart';
 import 'package:weisle/service/customers_apis.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
@@ -121,7 +121,7 @@ class SignInProvider extends BaseProvider {
         Alerts.errorAlert(context, 'Al fields are required', () {
           Navigator.pop(context);
         });
-      } else if (_password!.length < 8) {
+      } else if (_password!.length < 1) {
         Alerts.errorAlert(context, 'Password lengt too short', () {
           Navigator.pop(context);
         });
@@ -132,7 +132,7 @@ class SignInProvider extends BaseProvider {
         var loginResponse = await customerApiBasic.signIn(
             username: _username, password: _password);
         print("Weisle Login Response is $loginResponse");
-        if (loginResponse['responseCode'] == '00') {
+        if (loginResponse['resposeCode'] == '00') {
           print('Request Successful');
           navigate(context, LandingScreen());
         } else {
@@ -141,7 +141,7 @@ class SignInProvider extends BaseProvider {
       }
     } catch (e) {
       print("Weisle error: $e");
-      Alerts.errorAlert(context, 'Something went wrong', () {
+      Alerts.errorAlert(context, 'Something went Wrong', () {
         Navigator.pop(context);
       });
     }

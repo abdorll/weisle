@@ -19,11 +19,11 @@ class ApiBasics {
         .then((value) => value.data);
   }
 
-  Future makePostRequeest(url, header, data) async {
-    return await _dio
-        .post(url,
-            data: FormData.fromMap(data),
+  Future makePostRequest(url, header, data) async {
+    return await _dio.post(url,
+            data: data,
             options:
+                // ignore: prefer_if_null_operators
                 Options(headers: header == null ? await getHeaders() : header))
         .then((value) => value.data);
   }

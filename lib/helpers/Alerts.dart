@@ -1,22 +1,14 @@
+// ignore: file_names
+// ignore: file_names
+// ignore: file_names
+// ignore: file_names
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/widgets/basicWidgets.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart'; 
 import 'package:weisle/ui/widgets/margin.dart';
 
-// class Alerts {
-//   static notifySample(context, message, info) {
-//     showDialog(
-//         context: context,
-//         builder: (context) {
-//           return AlertDialog(
-//             content: Text(message),
-//             title: Text(info),
-//             scrollable: false,
-//           );
-//         });
-//   }
-// }
+ 
 
 class Alerts {
   static loadingAlert(context, String message) {
