@@ -59,6 +59,7 @@ class TextOfDecoration extends StatelessWidget {
 }
 
 //---------------------------------------------------BUTTON-------------------------
+// ignore: must_be_immutable
 class MediumSizeButton extends StatelessWidget {
   MediumSizeButton(this.onTapped, this.content, this.color, this.radius,
       this.rl, this.tb, this.elevate,
@@ -94,6 +95,7 @@ class MediumSizeButton extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class SideSpace extends StatelessWidget {
   SideSpace(this.rl, this.tb, this.content, {Key? key}) : super(key: key);
   double rl;
@@ -108,6 +110,7 @@ class SideSpace extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class WeisleAppBar extends StatelessWidget {
   WeisleAppBar(this.title, this.end, this.color, {Key? key}) : super(key: key);
   String title;

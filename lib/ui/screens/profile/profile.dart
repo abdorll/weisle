@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/constants/fonts.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
-import 'package:weisle/ui/widgets/basicWidgets.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 
@@ -110,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       10,
                       InkWell(
                         onTap: () {
-                          navigate(context, SubscribeToPremiumPage());
+                          navigate(context, const SubscribeToPremiumPage());
                         },
                         child: Container(
                           width: 200,

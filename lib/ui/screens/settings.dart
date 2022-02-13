@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/widgets/basicWidgets.dart';
+import 'package:weisle/ui/constants/colors.dart'; 
+import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/ui/screens/activity_report.dart';
