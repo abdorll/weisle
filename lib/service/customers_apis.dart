@@ -11,15 +11,20 @@ class CustomerApiBasi {
   }
 
   //------------------------------------------REGISTER ENDOINT CALLING
-  Future register({fullName, phoneNo, userName, userPass, regCode}) {
-    var data = {
+  Future register(
+      {String? fullName,
+      String? phoneNo,
+      String? userName,
+      String? userPass,
+      String? regCode}) {
+    Map<String, dynamic> data = {
       "fullName": fullName,
       "phoneNo": phoneNo,
       "userName": userName,
       "userPass": userPass,
-      "regCode": regCode,
+      "regCode": regCode
     };
-    return _apiBasics!.makePostRequeest(registerurl, null, data);
+    return _apiBasics!.makePostRequest(registerurl, null, data);
   }
 
   //-------------------------------------------SIGN IN ENDOINT CALLING
@@ -28,7 +33,7 @@ class CustomerApiBasi {
       "username": username,
       "password": password,
     };
-    return _apiBasics!.makePostRequeest(signInurl, null, data);
+    return _apiBasics!.makePostRequest(signInurl, null, data);
   }
 
   Future setSqa({userName, secQuestion, secAnswer}) {
@@ -37,14 +42,14 @@ class CustomerApiBasi {
       "secQuestion": secQuestion,
       "secAnswer": secAnswer,
     };
-    return _apiBasics!.makePostRequeest(setSqaurl, null, data);
+    return _apiBasics!.makePostRequest(setSqaurl, null, data);
   }
 
   Future acctLookup({accountId}) {
     var data = {
       "accountId": accountId,
     };
-    return _apiBasics!.makePostRequeest(acctLookupurl, null, data);
+    return _apiBasics!.makePostRequest(acctLookupurl, null, data);
   }
 
   Future resetPass({userName, secAnswer, userPass}) {
@@ -53,7 +58,7 @@ class CustomerApiBasi {
       "secAnswer": secAnswer,
       "userPass": userPass,
     };
-    return _apiBasics!.makePostRequeest(resetPassurl, null, data);
+    return _apiBasics!.makePostRequest(resetPassurl, null, data);
   }
 
   Future editProfile({userName, fullName, phoneNo}) {
@@ -62,7 +67,7 @@ class CustomerApiBasi {
       "fullName": fullName,
       "phoneNo": phoneNo,
     };
-    return _apiBasics!.makePostRequeest(editProfileurl, null, data);
+    return _apiBasics!.makePostRequest(editProfileurl, null, data);
   }
 
   Future notificationService(
@@ -84,7 +89,7 @@ class CustomerApiBasi {
       "fullAddress": fullAddress,
       "emergencyCountry": emergencyCountry,
     };
-    return _apiBasics!.makePostRequeest(notificationServiceurl, null, data);
+    return _apiBasics!.makePostRequest(notificationServiceurl, null, data);
   }
 
   Future getNotification({userName}) {
