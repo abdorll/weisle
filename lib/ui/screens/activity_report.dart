@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/widgets/basicWidgets.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -170,6 +170,7 @@ class _ReportState extends State<Report> {
                             child: Card(
                               elevation: 3.0,
                               child: Container(
+                                color: null,
                                 child: SideSpace(
                                     40,
                                     40,
@@ -400,8 +401,8 @@ class _TrackerState extends State<Tracker> {
                 width: double.infinity,
                 height: 100,
                 child: Center(
-                    child: TextOfDecoration(
-                        'Banner Ads', 20, FontWeight.w500, black)),
+                    child: TextOfDecoration('Banner Ads', 20, FontWeight.w500,
+                        black, TextAlign.center)),
                 decoration: BoxDecoration(color: white),
               )
             ],

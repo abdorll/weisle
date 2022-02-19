@@ -29,7 +29,7 @@ class CustomerApiBasi {
 
   //-------------------------------------------SIGN IN ENDOINT CALLING
   Future signIn({username, password}) {
-    var data = {
+    Map<String, dynamic> data = {
       "username": username,
       "password": password,
     };
@@ -37,7 +37,7 @@ class CustomerApiBasi {
   }
 
   Future setSqa({userName, secQuestion, secAnswer}) {
-    var data = {
+    Map<String, dynamic> data = {
       "userName": userName,
       "secQuestion": secQuestion,
       "secAnswer": secAnswer,
@@ -46,14 +46,14 @@ class CustomerApiBasi {
   }
 
   Future acctLookup({accountId}) {
-    var data = {
+    Map<String, dynamic> data = {
       "accountId": accountId,
     };
     return _apiBasics!.makePostRequest(acctLookupurl, null, data);
   }
 
   Future resetPass({userName, secAnswer, userPass}) {
-    var data = {
+    Map<String, dynamic> data = {
       "userName": userName,
       "secAnswer": secAnswer,
       "userPass": userPass,
@@ -62,7 +62,7 @@ class CustomerApiBasi {
   }
 
   Future editProfile({userName, fullName, phoneNo}) {
-    var data = {
+    Map<String, dynamic> data = {
       "userName": userName,
       "fullName": fullName,
       "phoneNo": phoneNo,
@@ -70,16 +70,17 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(editProfileurl, null, data);
   }
 
-  Future notificationService(
-      {accountId,
-      emergencySetupId,
-      emergencyState,
-      emergencyCity,
-      longitude,
-      latitude,
-      fullAddress,
-      emergencyCountry}) {
-    var data = {
+  Future notificationService({
+    accountId,
+    emergencySetupId,
+    emergencyState,
+    emergencyCity,
+    longitude,
+    latitude,
+    fullAddress,
+    emergencyCountry,
+  }) {
+    Map<String, dynamic> data = {
       "accountId": accountId,
       "emergencySetupId": emergencySetupId,
       "emergencyState": emergencyState,

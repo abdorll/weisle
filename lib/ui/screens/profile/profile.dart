@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/constants/fonts.dart';
+import 'package:weisle/ui/screens/settings/notoficationService.dart';
+import 'package:weisle/ui/screens/settings/resetPassword.dart';
+import 'package:weisle/ui/screens/settings/updateProfile.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
-import 'package:weisle/ui/widgets/basicWidgets.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 
@@ -68,20 +71,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           20,
                           10,
                           0),
-                      MediumSizeButton(
-                          () {},
-                          Row(
-                            children: [
-                              IconOf(Icons.edit_outlined, white, 30),
-                              const XMargin(10),
-                              TextOf('Edit Profile', 20, FontWeight.w500, white)
-                            ],
-                          ),
-                          colorPrimary,
-                          10,
-                          20,
-                          10,
-                          0)
+                      InkWell(
+                        onTap: () {
+                          navigate(context, const UpdateProfilePage());
+                        },
+                        child: MediumSizeButton(
+                            () {},
+                            Row(
+                              children: [
+                                IconOf(Icons.edit_outlined, white, 30),
+                                const XMargin(10),
+                                TextOf(
+                                    'Edit Profile', 20, FontWeight.w500, white)
+                              ],
+                            ),
+                            colorPrimary,
+                            10,
+                            20,
+                            10,
+                            0),
+                      )
                     ],
                   ),
                   const YMargin(20),
@@ -110,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       10,
                       InkWell(
                         onTap: () {
-                          navigate(context, SubscribeToPremiumPage());
+                          navigate(context, const SubscribeToPremiumPage());
                         },
                         child: Container(
                           width: 200,
@@ -185,6 +194,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       )),
+                  InkWell(
+                      onTap: () {
+                        navigate(context, const ResetPasword());
+                      },
+                      child: TextOf(
+                          'Reset password', 30, FontWeight.w600, colorPrimary)),
+                  InkWell(
+                      onTap: () {
+                        navigate(context, const NotificationPage());
+                      },
+                      child: TextOf(
+                          'Notification', 30, FontWeight.w600, colorPrimary)),
                 ])
           ],
         ),
@@ -263,8 +284,9 @@ class _SubscribeToPremiumPageState extends State<SubscribeToPremiumPage> {
                           20,
                           10,
                           0),
-                      MediumSizeButton(
-                          () {},
+                      MediumSizeButton(() {
+                        print('TRYING TO PRINT..................');
+                      },
                           Row(
                             children: [
                               IconOf(Icons.edit_outlined, white, 30),

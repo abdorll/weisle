@@ -38,20 +38,23 @@ class TextOf extends StatelessWidget {
 }
 
 class TextOfDecoration extends StatelessWidget {
-  TextOfDecoration(this.text, this.size, this.weight, this.color, {Key? key})
+  TextOfDecoration(this.text, this.size, this.weight, this.color, this.align,
+      {Key? key})
       : super(key: key);
   String text;
   double size;
   FontWeight weight;
+  TextAlign align;
   Color color;
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      textAlign: TextAlign.center,
+      textAlign: align,
       style: GoogleFonts.poppins(
           fontSize: size,
-          fontStyle: FontStyle.italic,
+
+          ///fontStyle: FontStyle.italic,
           fontWeight: weight,
           color: color),
     );
@@ -59,6 +62,7 @@ class TextOfDecoration extends StatelessWidget {
 }
 
 //---------------------------------------------------BUTTON-------------------------
+// ignore: must_be_immutable
 class MediumSizeButton extends StatelessWidget {
   MediumSizeButton(this.onTapped, this.content, this.color, this.radius,
       this.rl, this.tb, this.elevate,
@@ -94,6 +98,7 @@ class MediumSizeButton extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class SideSpace extends StatelessWidget {
   SideSpace(this.rl, this.tb, this.content, {Key? key}) : super(key: key);
   double rl;
@@ -108,6 +113,7 @@ class SideSpace extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class WeisleAppBar extends StatelessWidget {
   WeisleAppBar(this.title, this.end, this.color, {Key? key}) : super(key: key);
   String title;
