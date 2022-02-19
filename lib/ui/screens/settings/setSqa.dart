@@ -37,7 +37,7 @@ class _SetSQAState extends State<SetSQA> {
   //   'Notes'
   // ];
   int current = 0;
-  Object? selectedItem;
+  String selectedItem = CategoriesPage.categoryName ?? 'Undefined';
 
   @override
   Widget build(BuildContext context) {
@@ -113,29 +113,36 @@ class _SetSQAState extends State<SetSQA> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   InkWell(
-                                    child:
-                                        IconOf(Icons.ac_unit, colorPrimary, 20),
+                                    child: SideSpace(
+                                      10,
+                                      5,
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Image.asset(
+                                                  CategoriesPage.catImage ??
+                                                      nothing,
+                                                  color: colorPrimary,
+                                                  height: 40,
+                                                  width: 40),
+                                              TextOf(
+                                                  CategoriesPage.categoryName ??
+                                                      'Select Cat',
+                                                  20,
+                                                  FontWeight.w500,
+                                                  colorPrimary)
+                                            ],
+                                          ),
+                                          IconOf(Icons.arrow_drop_down_rounded,
+                                              colorPrimary, 20)
+                                        ],
+                                      ),
+                                    ),
                                     onTap: () {
                                       navigate(context, CategoriesPage());
                                     },
                                   )
-
-                                  // DropdownButton(
-                                  //     elevation: 0,
-                                  //     icon: IconOf(Icons.arrow_drop_down,
-                                  //         colorPrimary, 40),
-                                  //     hint: TextOf('Select Type', 19,
-                                  //         FontWeight.w500, ash),
-                                  //     items: items.id.map((e) => DropdownMenuItem(
-                                  //         value: items,
-                                  //         child: TextOf(items, 19,
-                                  //             FontWeight.w500, ash))),
-                                  //     value: selectedItem,
-                                  //     onChanged: (selectedItem) {
-                                  //       setState(() {
-                                  //         this.selectedItem = selectedItem;
-                                  //       });
-                                  //     }),
                                 ],
                               ),
                             ],
@@ -174,22 +181,14 @@ class _SetSQAState extends State<SetSQA> {
                               color: colorPrimary,
                               borderRadius: BorderRadius.circular(20)),
                         ),
+                        const XMargin(10),
                         Expanded(
-                          child: TextFormField(
-                            // onChanged: (e) {
-                            //   value. = e;
-                            // },
-                            decoration: InputDecoration(
-                                hintText: "SQA Question",
-                                hintStyle: GoogleFonts.poppins(
-                                  color: ash,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                fillColor: litePink,
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(90))),
-                          ),
+                          child: TextOfDecoration(
+                              CategoriesPage.defaultMsg ?? "No message yet",
+                              20,
+                              FontWeight.w400,
+                              ash,
+                              TextAlign.left),
                         )
                       ],
                     ),
@@ -226,11 +225,8 @@ class _SetSQAState extends State<SetSQA> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const XMargin(5),
-                                      TextOf(
-                                          '${selectedItem ?? "Unidentified"} \nMessage',
-                                          20,
-                                          FontWeight.w500,
-                                          white),
+                                      TextOf('$selectedItem \nMessage', 20,
+                                          FontWeight.w500, white),
                                       const XMargin(5),
                                     ],
                                   ),
@@ -246,7 +242,7 @@ class _SetSQAState extends State<SetSQA> {
                                     value.setsecAnswer = e;
                                   },
                                   decoration: InputDecoration(
-                                      hintText: "SQA Answer",
+                                      hintText: "Emergency message",
                                       hintStyle: GoogleFonts.poppins(
                                         color: ash,
                                         fontSize: 18,
@@ -522,10 +518,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            categories.defaultMsg =
-                                                CategoriesPage.defaultMsg;
-                                            categories.catName =
-                                                CategoriesPage.categoryName;
+                                            CategoriesPage.defaultMsg =
+                                                categories.defaultMsg;
+                                            CategoriesPage.categoryName =
+                                                categories.catName;
                                           });
                                           value.getCategories();
                                           Navigator.pop(context);
