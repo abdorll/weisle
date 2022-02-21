@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/logic/local_db/first_time.dart';
-import 'package:weisle/ui/screens/auth/sign_in.dart';
 
 import 'onboarding_screen.dart';
 

@@ -27,7 +27,7 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(registerurl, null, data);
   }
 
-  //-------------------------------------------SIGN IN ENDOINT CALLING
+  //-------------------------------------------SIGN IN 
   Future signIn({username, password}) {
     Map<String, dynamic> data = {
       "username": username,
@@ -36,6 +36,10 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(signInurl, null, data);
   }
 
+  //-------------------------------------------SET SQA 
+  //-------------------------------------------SET SQA 
+  //-------------------------------------------SET SQA 
+  //-------------------------------------------SET SQA
   Future setSqa({userName, secQuestion, secAnswer}) {
     Map<String, dynamic> data = {
       "userName": userName,
@@ -45,6 +49,9 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(setSqaurl, null, data);
   }
 
+  //-------------------------------------------ACCOUNT LOOKUP
+  //-------------------------------------------ACCOUNT LOOKUP
+  //-------------------------------------------ACCOUNT LOOKUP
   Future acctLookup({accountId}) {
     Map<String, dynamic> data = {
       "accountId": accountId,
@@ -52,6 +59,10 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(acctLookupurl, null, data);
   }
 
+
+  //-------------------------------------------RESET PASSWORD
+  //-------------------------------------------RESET PASSWORD
+  //-------------------------------------------RESET PASSWORD
   Future resetPass({userName, secAnswer, userPass}) {
     Map<String, dynamic> data = {
       "userName": userName,
@@ -61,6 +72,10 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(resetPassurl, null, data);
   }
 
+
+  //-------------------------------------------EDIT PROFILE
+  //-------------------------------------------EDIT PROFILE
+  //-------------------------------------------EDIT PROFILE
   Future editProfile({userName, fullName, phoneNo}) {
     Map<String, dynamic> data = {
       "userName": userName,
@@ -70,6 +85,9 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(editProfileurl, null, data);
   }
 
+  //-------------------------------------------NOTIFICATION SERVICE
+  //-------------------------------------------NOTIFICATION SERVICE
+  //-------------------------------------------NOTIFICATION SERVICE
   Future notificationService({
     accountId,
     emergencySetupId,
@@ -93,6 +111,9 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(notificationServiceurl, null, data);
   }
 
+  //-------------------------------------------GET NOTIFICATION
+  //-------------------------------------------GET NOTIFICATION
+  //-------------------------------------------GET NOTIFICATION
   Future getNotification({userName}) {
     return _apiBasics!.makeGetRequest(getNotificationurl + userName, null);
   }

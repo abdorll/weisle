@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/helpers/Alerts.dart';
-import 'package:weisle/ui/screens/auth/sign_in.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
 import 'package:weisle/utils/index.dart';
-import '../../constants/colors.dart';
+import '../ui/constants/colors.dart';
 
 class ResetPasword extends StatefulWidget {
   const ResetPasword({Key? key}) : super(key: key);
@@ -114,6 +114,7 @@ class ResetPasswordProvider extends BaseProvider {
         if (registerResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
+
           navigate(context, const LoginScreen());
         } else if ((registerResponse['resposeCode'] == '01')) {
           Alerts.errorAlert(context, 'Invalid request', () {

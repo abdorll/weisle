@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weisle/helpers/Alerts.dart';
+import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
@@ -7,23 +8,23 @@ import 'package:weisle/utils/index.dart';
 import 'package:provider/provider.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
+import 'package:hive/hive.dart';
 import 'package:weisle/ui/widgets/margin.dart';
-import '../../constants/colors.dart';
 
-class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+class CreateSubscriptionPage extends StatefulWidget {
+  const CreateSubscriptionPage({Key? key}) : super(key: key);
 
   @override
-  _NotificationPageState createState() => _NotificationPageState();
+  _CreateSubscriptionPageState createState() => _CreateSubscriptionPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
+class _CreateSubscriptionPageState extends State<CreateSubscriptionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: white,
       body: SafeArea(
-        child: Consumer<NotificationServiceProvider>(
+        child: Consumer<CreateSubscriptionServiceProvider>(
             builder: (context, value, child) {
           return ListView(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
@@ -38,45 +39,40 @@ class _NotificationPageState extends State<NotificationPage> {
                         color: Color(0xffFF2156)),
                     hint: "Account ID"),
                 PlainTextField(
-                    onchanged: (String e) => value.setemergencyCity = e,
-                    leading: const Icon(Icons.apartment_rounded,
+                    onchanged: (String e) => value.setphoneNumber = e,
+                    leading: const Icon(Icons.phone_android_rounded,
                         color: Color(0xffFF2156)),
-                    hint: "Emergency city"),
+                    hint: "Phone number"),
                 PlainTextField(
-                    onchanged: (e) => value.setemergencyCountry = e,
+                    onchanged: (e) => value.setplanCurrency = e,
                     leading: const Icon(Icons.public_rounded,
                         color: Color(0xffFF2156)),
-                    hint: "Emergency country"),
+                    hint: "Plan currency"),
                 PlainTextField(
                     onchanged: (e) => value.setemergencySetupId = e,
                     leading: const Icon(Icons.location_city_rounded,
                         color: Color(0xffFF2156)),
                     hint: "Emergency setup ID"),
                 PlainTextField(
-                    onchanged: (e) => value.setemergencyState = e,
+                    onchanged: (e) => value.setcountryName = e,
                     leading: const Icon(Icons.map, color: Color(0xffFF2156)),
-                    hint: "Emergency state"),
+                    hint: "Country name"),
                 PlainTextField(
-                    onchanged: (e) => value.setfullAddress = e,
+                    onchanged: (e) => value.setplanAmt = e,
                     leading: const Icon(Icons.location_on_rounded,
                         color: Color(0xffFF2156)),
-                    hint: "Full address"),
+                    hint: "Plan amount"),
                 PlainTextField(
-                    onchanged: (e) => value.setlongitude = e,
+                    onchanged: (e) => value.setpremiumPlanId = e,
                     leading: const Icon(Icons.navigation_rounded,
                         color: Color(0xffFF2156)),
-                    hint: "Longitude"),
-                PlainTextField(
-                    onchanged: (e) => value.setlatitude = e,
-                    leading: const Icon(Icons.near_me_rounded,
-                        color: Color(0xffFF2156)),
-                    hint: "Latitude"),
+                    hint: "Premium plan ID"),
                 const YMargin(20),
                 FormButton(
                     enabled: true,
-                    text: "Complete notification",
+                    text: "Complete subscription",
                     function: () {
-                      value.notoficationService(context);
+                      value.subscribe(context);
                     }),
                 const YMargin(40),
               ]);
@@ -86,25 +82,23 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 }
 
-class NotificationServiceProvider extends BaseProvider {
+class CreateSubscriptionServiceProvider extends BaseProvider {
   String? _accountId;
   String? _emergencySetupId;
-  String? _emergencyState;
-  String? _emergencyCity;
-  String? _longitude;
-  String? _fullAddress;
-  String? _emergencyCountry;
-  String? _latitude;
+  String? _countryName;
+  String? _phoneNumber;
+  String? _premiumPlanId;
+  String? _planAmt;
+  String? _planCurrency;
   bool formValidity = false;
 
   String get accountId => _accountId ?? "";
   String get emergencySetupId => _emergencySetupId ?? '';
-  String get emergencyState => _emergencyState ?? '';
-  String get emergencyCity => _emergencyCity ?? "";
-  String get longitude => _longitude ?? '';
-  String get fullAddress => _fullAddress ?? '';
-  String get emergencyCountry => _emergencyCountry ?? '';
-  String get latitude => _latitude ?? '';
+  String get countryName => _countryName ?? '';
+  String get phoneNumber => _phoneNumber ?? "";
+  String get premiumPlanId => _premiumPlanId ?? '';
+  String get planAmt => _planAmt ?? '';
+  String get planCurrency => _planCurrency ?? '';
 
   set setaccountId(String accountId) {
     _accountId = accountId;
@@ -118,38 +112,32 @@ class NotificationServiceProvider extends BaseProvider {
     notifyListeners();
   }
 
-  set setemergencyState(String emergencyState) {
-    _emergencyState = emergencyState;
+  set setcountryName(String countryName) {
+    _countryName = countryName;
     checkFormValidity();
     notifyListeners();
   }
 
-  set setemergencyCity(String emergencyCity) {
-    _emergencyCity = emergencyCity;
+  set setphoneNumber(String phoneNumber) {
+    _phoneNumber = phoneNumber;
     checkFormValidity();
     notifyListeners();
   }
 
-  set setlongitude(String longitude) {
-    _longitude = longitude;
+  set setpremiumPlanId(String premiumPlanId) {
+    _premiumPlanId = premiumPlanId;
     checkFormValidity();
     notifyListeners();
   }
 
-  set setfullAddress(String fullAddress) {
-    _fullAddress = fullAddress;
+  set setplanAmt(String planAmt) {
+    _planAmt = planAmt;
     checkFormValidity();
     notifyListeners();
   }
 
-  set setemergencyCountry(String emergencyCountry) {
-    _emergencyCountry = emergencyCountry;
-    checkFormValidity();
-    notifyListeners();
-  }
-
-  set setlatitude(String latitude) {
-    _latitude = latitude;
+  set setplanCurrency(String planCurrency) {
+    _planCurrency = planCurrency;
     checkFormValidity();
     notifyListeners();
   }
@@ -157,12 +145,11 @@ class NotificationServiceProvider extends BaseProvider {
   void checkFormValidity() {
     if ((_accountId != null) &&
         (_emergencySetupId != null) &&
-        (_emergencyState != null) &&
-        (_longitude != null) &&
-        (_emergencyCity != null) &&
-        (_fullAddress != null) &&
-        (_emergencyCountry != null) &&
-        (_latitude != null)) {
+        (_countryName != null) &&
+        (_premiumPlanId != null) &&
+        (_phoneNumber != null) &&
+        (_planAmt != null) &&
+        (_planCurrency != null)) {
       formValidity = true;
     } else {
       formValidity = false;
@@ -170,16 +157,15 @@ class NotificationServiceProvider extends BaseProvider {
     notifyListeners();
   }
 
-  void notoficationService(BuildContext context) async {
+  void subscribe(BuildContext context) async {
     try {
       if (_accountId == null ||
           _emergencySetupId == null ||
-          _emergencyState == null ||
-          _emergencyCity == null ||
-          _longitude == null ||
-          _fullAddress == null ||
-          _emergencyCountry == null ||
-          _latitude == null) {
+          _countryName == null ||
+          _phoneNumber == null ||
+          _premiumPlanId == null ||
+          _planAmt == null ||
+          _planCurrency == null) {
         Alerts.errorAlert(context, 'Al fields are required', () {
           Navigator.pop(context);
         });
@@ -188,32 +174,35 @@ class NotificationServiceProvider extends BaseProvider {
           Navigator.pop(context);
         });
       } else {
-        Alerts.loadingAlert(context, 'Notification in progress...');
+        Alerts.loadingAlert(context, 'Proccessing notif...');
         FocusScope.of(context).unfocus();
         setLoading = true;
-        var notoficationServiceResponse =
-            await customerApiBasic.notificationService(
+        var subscriptionServiceResponse =
+            await emergencyApiBasics.createSubscription(
           accountId: _accountId,
           emergencySetupId: _emergencySetupId,
-          emergencyState: _emergencyState,
-          emergencyCity: _emergencyCity,
-          longitude: _longitude,
-          fullAddress: _fullAddress,
-          emergencyCountry: _emergencyCountry,
-          latitude: _latitude,
+          countryName: _countryName,
+          phoneNumber: _phoneNumber,
+          premiumPlanId: _premiumPlanId,
+          planAmt: _planAmt,
+          planCurrency: _planCurrency,
         );
         print(
-            "Weisle Notification service response is $notoficationServiceResponse");
-        if (notoficationServiceResponse['resposeCode'] == '00') {
+            "Weisle CreateSubscription service response is $subscriptionServiceResponse");
+        if (subscriptionServiceResponse['resposeCode'] == '00') {
           setLoading = false;
+          var userBox = await Hive.openBox(weisleUserBox);
+          var currency = userBox.put(weisleCurrency,
+              subscriptionServiceResponse['data']['planCurrency']);
           print('Request Successful');
           navigate(context, LandingScreen());
-        } else if (notoficationServiceResponse['resposeCode'] == '06') {
-          Alerts.errorAlert(context, 'Emergency setup is inactive', () {
+        } else if (subscriptionServiceResponse['resposeCode'] == '06') {
+          Alerts.errorAlert(context, 'Improper format', () {
             Navigator.pop(context);
           });
         } else {
-          print("Weisle Notification Response is $notoficationServiceResponse");
+          print(
+              "Weisle CreateSubscription Response is $subscriptionServiceResponse");
         }
       }
     } catch (e) {
@@ -224,7 +213,7 @@ class NotificationServiceProvider extends BaseProvider {
     }
   }
 
-  NotificationServiceProvider() {
+  CreateSubscriptionServiceProvider() {
     checkFormValidity();
   }
 }

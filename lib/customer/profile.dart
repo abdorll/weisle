@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:weisle/emergencySetup/confirmSubscription.dart';
+import 'package:weisle/emergencySetup/createSubscription.dart';
+import 'package:weisle/subscription/getSubHistory.dart';
+import 'package:weisle/subscription/subscribtionHistoryByDate.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/constants/fonts.dart';
-import 'package:weisle/ui/screens/settings/notoficationService.dart';
-import 'package:weisle/ui/screens/settings/resetPassword.dart';
-import 'package:weisle/ui/screens/settings/updateProfile.dart';
+import 'package:weisle/customer/resetPassword.dart';
+import 'package:weisle/customer/updateProfile.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
-import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
+import 'notificationService/notoficationService.dart';
+import 'sqaPage.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -202,10 +205,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           'Reset password', 30, FontWeight.w600, colorPrimary)),
                   InkWell(
                       onTap: () {
+                        navigate(context, const SQaPage());
+                      },
+                      child:
+                          TextOf('Set SQA', 30, FontWeight.w600, colorPrimary)),
+                  InkWell(
+                      onTap: () {
                         navigate(context, const NotificationPage());
                       },
                       child: TextOf(
                           'Notification', 30, FontWeight.w600, colorPrimary)),
+                  InkWell(
+                      onTap: () {
+                        navigate(context, const CreateSubscriptionPage());
+                      },
+                      child: TextOf('Create subscription', 30, FontWeight.w600,
+                          colorPrimary)),
+                  InkWell(
+                      onTap: () {
+                        navigate(context, const ConfirmSubscriptionPage());
+                      },
+                      child: TextOf('Confirm subscription', 30, FontWeight.w600,
+                          colorPrimary)),
+                  InkWell(
+                      onTap: () {
+                        navigate(context, const SubHistoryByDate());
+                      },
+                      child: TextOf(
+                          'Sub by date', 30, FontWeight.w600, colorPrimary)),
+                  InkWell(
+                      onTap: () {
+                        navigate(context, const GetSubscribtionHistoryPage());
+                      },
+                      child: TextOf('Get sub History', 30, FontWeight.w600,
+                          colorPrimary)),
                 ])
           ],
         ),

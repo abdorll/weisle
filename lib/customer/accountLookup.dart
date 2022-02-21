@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:weisle/emergencySetup/getWeislePrmium/secGetPremiumPlan.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/margin.dart';
@@ -11,7 +12,6 @@ import 'package:weisle/utils/base_provider.dart';
 import 'package:weisle/utils/index.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weisle/ui/screens/settings/settings.dart';
 
 class AccountLookup extends StatefulWidget {
   const AccountLookup({Key? key}) : super(key: key);
@@ -245,7 +245,7 @@ class AccountLookupProvider extends BaseProvider {
           Navigator.pop(context);
         });
       } else {
-        Alerts.loadingAlert(context, 'Looking up your account...');
+        Alerts.loadingAlert(context, 'Looking up...');
         FocusScope.of(context).unfocus();
         setLoading = true;
         var accountLookupResponse =

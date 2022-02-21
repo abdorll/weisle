@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:weisle/emergencySetup/setUp/setUp.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/screens/profile/profile.dart';
+import 'package:weisle/customer/profile.dart';
 import 'package:weisle/ui/screens/activity_report.dart';
-import 'package:weisle/ui/screens/settings/setSqa.dart';
-import 'package:weisle/ui/screens/settings/settings.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +29,7 @@ class LandingScreen extends StatelessWidget {
           } else if (_myNavController.selectedTab.value == 2) {
             return const ProfileScreen();
           } else if (_myNavController.selectedTab.value == 3) {
-            return const SetSQA();
+            return const SetUp();
           }
           return Container();
         }),

@@ -1,14 +1,10 @@
 // ignore_for_file: unrelated_type_equality_checks
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:weisle/helpers/alerts.dart';
+import 'package:weisle/emergencySetup/setUp/setUpProvider.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/screens/settings/accountLookup.dart';
-import 'package:weisle/ui/screens/settings/setSqa.dart';
+import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
@@ -17,14 +13,14 @@ import 'package:weisle/ui/screens/activity_report.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SetSQA extends StatefulWidget {
-  const SetSQA({Key? key}) : super(key: key);
+class SetUp extends StatefulWidget {
+  const SetUp({Key? key}) : super(key: key);
 
   @override
-  _SetSQAState createState() => _SetSQAState();
+  _SetUpState createState() => _SetUpState();
 }
 
-class _SetSQAState extends State<SetSQA> {
+class _SetUpState extends State<SetUp> {
   // final items = [
   //   'Medical',
   //   'Robbery',
@@ -156,6 +152,23 @@ class _SetSQAState extends State<SetSQA> {
                   ),
                 ),
                 const YMargin(20),
+                Consumer<SetUpProvider>(builder: (context, value, child) {
+                  value.setemergencyCat = selectedItem;
+                  return PlainTextField(
+                      onchanged: (e) => value.setuserNames = e,
+                      leading:
+                          const Icon(Icons.person, color: Color(0xffFF2156)),
+                      hint: "Username");
+                }),
+                const YMargin(10),
+                Consumer<SetUpProvider>(builder: (context, value, child) {
+                  return PlainTextField(
+                      onchanged: (e) => value.setuserContacts = e,
+                      leading: const Icon(Icons.phone_android_rounded,
+                          color: Color(0xffFF2156)),
+                      hint: "Phone number");
+                }),
+                const YMargin(10),
                 Material(
                   borderRadius: BorderRadius.circular(20),
                   elevation: 6.0,
@@ -195,16 +208,7 @@ class _SetSQAState extends State<SetSQA> {
                   ),
                 ),
                 const YMargin(20),
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                //----------------------------SETUP PROVIDER STARTS HERE------------------------
-                Consumer<SetSQaProvider>(builder: ((context, value, child) {
+                Consumer<SetUpProvider>(builder: ((context, value, child) {
                   return Column(
                     children: [
                       Material(
@@ -239,7 +243,7 @@ class _SetSQAState extends State<SetSQA> {
                               Expanded(
                                 child: TextFormField(
                                   onChanged: (e) {
-                                    value.setsecAnswer = e;
+                                    value.setemergencyMsg = e;
                                   },
                                   decoration: InputDecoration(
                                       hintText: "Emergency message",
@@ -263,138 +267,28 @@ class _SetSQAState extends State<SetSQA> {
                     ],
                   );
                 })),
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
-                //----------------------------SETUP PROVIDER ENDS HERE------------------------
                 const YMargin(20),
-                InkWell(
-                  onTap: () async {
-                    // value.;
-                    //navigate(context, const EmergencySetup());
-                  },
-                  child: MediumSizeButton(
-                      () {},
-                      TextOf('Continue', 29, FontWeight.w500, white),
-                      colorPrimary,
-                      90,
-                      30,
-                      10,
-                      4),
-                )
+                Consumer<SetUpProvider>(builder: ((context, value, child) {
+                  return InkWell(
+                    onTap: () async {
+                      value.SetUp(context);
+                    },
+                    child: MediumSizeButton(
+                        () {},
+                        TextOf('Continue', 29, FontWeight.w500, white),
+                        colorPrimary,
+                        90,
+                        30,
+                        10,
+                        4),
+                  );
+                }))
               ],
             ),
           ),
         );
       })),
     );
-  }
-}
-
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-//---------------------------------------------setSQA Provider----------------------------------------
-
-//-----------------------------------------SetSQaProvider PROVIDER
-class SetSQaProvider extends BaseProvider {
-  String? _secQuestion;
-  String? _secAnswer;
-  bool formValidity = false;
-
-  String get secQuestion => _secQuestion ?? '';
-  String get secAnswer => _secAnswer ?? '';
-
-  set setsecQuestion(String secQuestion) {
-    _secQuestion = secQuestion;
-    checkFormValidity();
-    notifyListeners();
-  }
-
-  set setsecAnswer(String secAnswer) {
-    _secAnswer = secAnswer;
-    checkFormValidity();
-    notifyListeners();
-  }
-
-  void checkFormValidity() {
-    if ((_secQuestion != null) && (_secAnswer != null)) {
-      formValidity = true;
-    } else {
-      formValidity = false;
-    }
-    notifyListeners();
-  }
-
-  void setSQA(BuildContext context) async {
-    var box = await Hive.openBox(weisleUserBox);
-    String name = box.get(weisleUserName);
-    try {
-      if (_secQuestion == null || _secAnswer == null) {
-        Alerts.errorAlert(context, 'All fields are required', () {
-          Navigator.pop(context);
-        });
-      } else {
-        Alerts.loadingAlert(context, 'Setting SQA...');
-        FocusScope.of(context).unfocus();
-        setLoading = true;
-        var registerResponse = await customerApiBasic.setSqa(
-            userName: name, secQuestion: _secQuestion, secAnswer: _secAnswer);
-        if (registerResponse['resposeCode'] == '00') {
-          setLoading = false;
-          print('Request Successful');
-          navigate(context, const AccountLookup());
-        } else if ((registerResponse['resposeCode'] == '01')) {
-          setLoading = false;
-          notifyListeners();
-          Alerts.errorAlert(context, registerResponse['message'], () {
-            Navigator.pop(context);
-          });
-
-          // print("Weisle register Response is $registerResponse");
-        } else {
-          setLoading = false;
-          notifyListeners();
-          Alerts.errorAlert(context, registerResponse['message'], () {
-            Navigator.pop(context);
-          });
-        }
-      }
-    } catch (e) {
-      setLoading = false;
-      // ignore: avoid_print
-      // print("Weisle error: $e");
-      Alerts.errorAlert(context, 'Something went wrong', () {
-        Navigator.pop(context);
-      });
-    }
-  }
-
-  SetSQaProvider() {
-    checkFormValidity();
   }
 }
 
@@ -411,9 +305,9 @@ class CategoriesModel {
   });
 
   CategoriesModel.fromJson(Map<String, dynamic> json)
-      : catName = json['catName'],
-        id = json['id'],
-        defaultMsg = json['defaultMsg'];
+      : catName = json['catName'] ?? 'Categoty name',
+        id = json['id'] ?? 'Id',
+        defaultMsg = json['defaultMsg'] ?? "Default msg";
 }
 
 ////---------------------------------------CATEGORIES PROVIDER
@@ -452,11 +346,11 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class _CategoriesPageState extends State<CategoriesPage> {
-  @override
-  void initState() {
-    categoriesProvider.getCategories();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   categoriesProvider.getCategories();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/helpers/alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/screens/auth/sign_in.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
