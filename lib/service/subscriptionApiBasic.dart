@@ -25,6 +25,6 @@ class SubscribtionApiBasic {
   Future getSubHistory() async {
     var userBox = await Hive.openBox(weisleUserBox);
     String accountId = userBox.get(weisleUserName);
-    return apiBasics.makeGetRequest("$allSubHistoryurl$accountId", null);
+    return apiBasics.makeGetRequest("$allSubHistoryurl/$accountId", null);
   }
 }
