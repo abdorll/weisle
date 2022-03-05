@@ -12,6 +12,7 @@ navigateReplaces(context, Widget route, {isDialog = false}) {
 }
 
 navigatedForever(context, Widget route, {isDialog = false}) {
+  print('nothing');
   return Navigator.pushAndRemoveUntil(context,
       MaterialPageRoute(builder: (context) => route), (route) => false);
 }
