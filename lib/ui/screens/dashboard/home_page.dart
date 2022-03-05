@@ -136,7 +136,7 @@ class _HomepageState extends State<Homepage> {
                 bottom: 120,
                 right: 0,
                 child: _selectedIndex == index
-                    ? IconOf(Icons.check_circle_rounded, colorPrimary, 30)
+                    ? IconOf(Icons.check_circle_rounded, colorPrimary, 20)
                     : Container())
           ],
         ),
