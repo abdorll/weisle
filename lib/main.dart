@@ -39,7 +39,7 @@ void main() async {
       // ChangeNotifierProvider(create: (context) => Leading()),
 
       ChangeNotifierProvider(create: (context) => GetSubHistoryProvider()),
-      ChangeNotifierProvider(create: (context) => UserDetailsGetter()),
+      //ChangeNotifierProvider(create: (context) => UserDetailsGetter()),
       ChangeNotifierProvider(create: (context) => PremiumPlansProvider()),
       ChangeNotifierProvider(create: (context) => SQaProvider()),
       ChangeNotifierProvider(

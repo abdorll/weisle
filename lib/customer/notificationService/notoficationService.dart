@@ -208,7 +208,7 @@ class NotificationServiceProvider extends BaseProvider {
           setLoading = false;
           print('Request Successful');
           Alerts.successAlert(context, 'Notification succssfully set', () {
-            navigateReplaces(context, LandingScreen());
+            navigatedForever(context, LandingScreen());
           });
         } else if (notoficationServiceResponse['resposeCode'] == '06') {
           Alerts.errorAlert(context, 'Emergency setup is inactive', () {

@@ -144,6 +144,7 @@ class SQaProvider extends BaseProvider {
           var box = await Hive.openBox(weisleUserBox);
           SQaProvider.securityAnswer = box.put(weisleSecurityAnswer, secAnswer);
           print('Request Successful');
+          goBack(context);
           Alerts.successAlert(context, 'Security question set successfully',
               () {
             goBack(context);

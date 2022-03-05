@@ -15,7 +15,7 @@ PremiumPlansProvider premiumPlansProvider = PremiumPlansProvider();
 // LocalStorageService localStorageService = LocalStorageService();
 CategoriesPage categoriesPage = CategoriesPage();
 CategoriesProvider categoriesProvider = CategoriesProvider();
-UserDetailsGetter userDetailsGetter = UserDetailsGetter();
+//UserDetailsGetter userDetailsGetter = UserDetailsGetter();
 UpdateProfileProvider updateProfileProvider = UpdateProfileProvider();
 
 const weisleUserBox = 'weisleUserBox';

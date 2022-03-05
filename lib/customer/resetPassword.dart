@@ -184,7 +184,7 @@ class ResetPasswordProvider extends BaseProvider {
           goBack(context);
           Alerts.successAlert(
               context, registerResponse['data']['responseMessage'], () {
-            navigateReplaces(context, const WelcomeBack());
+            navigatedForever(context, const WelcomeBack());
           });
         } else {
           setLoading = false;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weisle/currentLocation.dart';
+import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/margin.dart';
@@ -66,10 +67,10 @@ class _ReportState extends State<Report> {
                             FontWeight.w400,
                             ash),
                         const YMargin(5),
-                        Consumer<UserDetailsGetter>(
+                        Consumer<SignInProvider>(
                             builder: ((context, value, child) {
                           return TextOf(
-                              "${value.fullName}", 18, FontWeight.w400, black);
+                              value.fullName, 18, FontWeight.w400, black);
                         })),
                       ],
                     )

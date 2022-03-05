@@ -116,6 +116,103 @@ class SignInProvider extends BaseProvider {
     notifyListeners();
   }
 
+  //------------------------------------------------USER DETAILS SETTER AND GETTER
+  String? _fullName;
+  String? _accountType;
+  String? _userName;
+  String? _referralCode;
+  String? _weisleId;
+  //-----------------------------FROM SUB HISTORY BY DATE
+  String? _id;
+  String? _txtRef;
+  String? _planAmt;
+  String? _planCurrency;
+  String? _emergencyCountry;
+  String? _subStatus;
+  String? _createdDate;
+  bool _userloggedIn = false;
+  String get fullName => _fullName ?? 'full name';
+  String get uername => _username ?? 'username';
+  String get accountType => _accountType ?? 'accountType';
+  String get weisleId => _weisleId ?? 'weisleId';
+
+  String get referralCode => _referralCode ?? 'referralCode';
+  //---------------------------------FROM SUB HISTORY BY DATE
+  String get id => _id ?? 'id';
+  String get txtRef => _txtRef ?? 'txtRef';
+  String get planAmt => _planAmt ?? 'planAmt';
+  String get planCurrency => _planCurrency ?? 'planCurrency';
+  String get emergencyCountry => _emergencyCountry ?? 'emergencyCountry';
+  String get subStatus => _subStatus ?? 'subStatus';
+  String get createdDate => _createdDate ?? 'createdDate';
+  bool get userloggedIn => _userloggedIn;
+  static var userName;
+  set setfullName(String fullName) {
+    _fullName = fullName;
+    notifyListeners();
+  }
+
+  set setaccountType(String accountType) {
+    _accountType = accountType;
+    notifyListeners();
+  }
+
+  set setreferralCode(String referralCode) {
+    _referralCode = referralCode;
+    notifyListeners();
+  }
+
+  set setUsername(String username) {
+    _userName = username;
+    notifyListeners();
+  }
+
+  set setuserloggedIn(bool userloggedIn) {
+    _userloggedIn = userloggedIn;
+    notifyListeners();
+  }
+
+  //---------------------------------FROM SUB HISTORY BY DATE
+  set setid(String id) {
+    _id = id;
+    notifyListeners();
+  }
+
+  set settxtRef(String txtRef) {
+    _txtRef = txtRef;
+    notifyListeners();
+  }
+
+  set setplanAmt(String planAmt) {
+    _planAmt = planAmt;
+    notifyListeners();
+  }
+
+  set setplanCurrency(String planCurrency) {
+    _planCurrency = planCurrency;
+    notifyListeners();
+  }
+
+  set setemergencyCountry(String emergencyCountry) {
+    _emergencyCountry = emergencyCountry;
+    notifyListeners();
+  }
+
+  set setsubStatus(String subStatus) {
+    _subStatus = subStatus;
+    notifyListeners();
+  }
+
+  set setcreatedDate(String createdDate) {
+    _createdDate = createdDate;
+    notifyListeners();
+  }
+
+  set setweisleId(String weisleId) {
+    _weisleId = weisleId;
+    notifyListeners();
+  }
+
   void login(BuildContext context) async {
     try {
       if (_username == null || _password == null) {
@@ -148,9 +245,22 @@ class SignInProvider extends BaseProvider {
               weisleaccountType, loginResponse['data']['accountType']);
           userDetails.put(weislemyRefCode, loginResponse['data']["myRefCode"]);
           userDetails.put(weisleuserStatus, loginResponse);
+          setUsername = userDetails.get(weisleUserName);
+          setweisleId = userDetails.get(weisleId) ?? userDetails.get(weisleid);
+          setfullName = userDetails.get(weisleFullName);
+          setaccountType = userDetails.get(weisleaccountType);
+          setreferralCode = userDetails.get(weislemyRefCode);
+          //---------------------------------FROM SUB HISTORY BY DATE
+          // setid = userDetails.get(weisleId);
+          // settxtRef = userDetails.get(weisletxtRef);
+          // setplanAmt = userDetails.get(weisleplanAmt);
+          // setplanCurrency = userDetails.get(weisleplanCurrency);
+          // setemergencyCountry = userDetails.get(weisleemergencyCountry);
+          // setsubStatus = userDetails.get(weislesubStatus);
+          // setcreatedDate = userDetails.get(weislecreatedDate);
           goBack(context);
           Alerts.successAlert(context, 'Login successful', () {
-            navigateReplaces(context, LandingScreen());
+            navigatedForever(context, LandingScreen());
           });
         } else {
           goBack(context);

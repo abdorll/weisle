@@ -211,7 +211,7 @@ class CreateSubscriptionServiceProvider extends BaseProvider {
         if (subscriptionServiceResponse['resposeCode'] == '00') {
           setLoading = false;
           Alerts.successAlert(context, 'Subscription successfully created', () {
-            navigateReplaces(context, LandingScreen());
+            navigatedForever(context, LandingScreen());
           });
           print('Request Successful');
         } else if (subscriptionServiceResponse['resposeCode'] == '06') {

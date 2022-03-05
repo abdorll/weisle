@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/emergencySetup/confirmSubscription.dart';
 import 'package:weisle/randoms/map.dart';
 import 'package:weisle/ui/constants/colors.dart';
@@ -46,8 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: white,
                           borderRadius: BorderRadius.circular(20)),
                       child: Container()),
-                  Consumer<UserDetailsGetter>(
-                      builder: ((context, value, child) {
+                  Consumer<SignInProvider>(builder: ((context, value, child) {
                     return TextOf(
                         "${value.fullName}", 20, FontWeight.w400, black);
                   })),
@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Consumer<UserDetailsGetter>(
+                      Consumer<SignInProvider>(
                           builder: ((context, value, child) {
                         return InkWell(
                           onTap: () {
@@ -136,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SideSpace(
                               10,
                               10,
-                              Consumer<UserDetailsGetter>(
+                              Consumer<SignInProvider>(
                                   builder: ((context, value, child) {
                                 return TextOf(
                                     "Account type: ${value.accountType}",
@@ -321,7 +321,7 @@ class _SubscribeToPremiumPageState extends State<SubscribeToPremiumPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Consumer<UserDetailsGetter>(
+                            Consumer<SignInProvider>(
                                 builder: ((context, value, child) {
                               return SideSpace(
                                 10,

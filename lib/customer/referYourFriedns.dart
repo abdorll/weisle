@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
@@ -54,7 +55,7 @@ class _ReferYourFriendsState extends State<ReferYourFriends> {
                         decoration: BoxDecoration(
                             color: white,
                             borderRadius: BorderRadius.circular(13)),
-                        child: Consumer<UserDetailsGetter>(
+                        child: Consumer<SignInProvider>(
                             builder: ((context, value, child) {
                           return SideSpace(
                             10,
