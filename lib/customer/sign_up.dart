@@ -192,7 +192,7 @@ class SignUpProvider extends BaseProvider {
             userName: _userName,
             userPass: _userPass,
             regCode: _regCode);
-
+        goBack(context);
         // print(registerResponse['resposeCode']);
         // // ignore: avoid_print
         // print("Weisle register Response is $registerResponse");
@@ -210,9 +210,8 @@ class SignUpProvider extends BaseProvider {
           userBox.put(rweislemyRefCode, registerResponse['data']["myRefCode"]);
           userBox.put(
               rweisleuserStatus, registerResponse['data']["userStatus"]);
-          goBack(context);
-          Alerts.successAlert(
-              context, registerResponse['data']['responseMessage'], () {
+
+          Alerts.successAlert(context, 'Regiteraation successful', () {
             navigateReplaces(context, const SetUp());
           });
         } else {
@@ -226,8 +225,6 @@ class SignUpProvider extends BaseProvider {
       }
     } catch (e) {
       setLoading = false;
-      // ignore: avoid_print
-      // print("Weisle error: $e");
       goBack(context);
       Alerts.errorAlert(context, 'Something went wrong', () {
         Navigator.pop(context);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:weisle/helpers/Alerts.dart';
+import 'package:weisle/subscription/getSubHistory.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
@@ -11,63 +12,63 @@ import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 
-class ConfirmSubscriptionPage extends StatefulWidget {
-  const ConfirmSubscriptionPage({Key? key}) : super(key: key);
+// class ConfirmSubscriptionPage extends StatefulWidget {
+//   const ConfirmSubscriptionPage({Key? key}) : super(key: key);
 
-  @override
-  _ConfirmSubscriptionPageState createState() =>
-      _ConfirmSubscriptionPageState();
-}
+//   @override
+//   _ConfirmSubscriptionPageState createState() =>
+//       _ConfirmSubscriptionPageState();
+// }
 
-class _ConfirmSubscriptionPageState extends State<ConfirmSubscriptionPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: white,
-      body: SafeArea(
-        child: Consumer<ConfirmSubscriptionServiceProvider>(
-            builder: (context, value, child) {
-          return ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
-              children: [
-                SizedBox(
-                    height: 163,
-                    width: 129,
-                    child: Image.asset("assets/images/signIn.png")),
-                PlainTextField(
-                    onchanged: (String e) => value.setaccountId = e,
-                    leading: const Icon(Icons.remember_me_rounded,
-                        color: Color(0xffFF2156)),
-                    hint: "Account ID"),
-                PlainTextField(
-                    onchanged: (String e) => value.setpaymentStatus = e,
-                    leading: const Icon(Icons.phone_android_rounded,
-                        color: Color(0xffFF2156)),
-                    hint: "Paymet status"),
-                PlainTextField(
-                    onchanged: (e) => value.setsubId = e,
-                    leading: const Icon(Icons.payment_rounded,
-                        color: Color(0xffFF2156)),
-                    hint: "Subscription ID"),
-                PlainTextField(
-                    onchanged: (e) => value.settxtRef = e,
-                    leading: const Icon(Icons.text_fields_rounded,
-                        color: Color(0xffFF2156)),
-                    hint: "Text ref"),
-                const YMargin(20),
-                FormButton(
-                    enabled: true,
-                    text: "Complete confirmation",
-                    function: () {
-                      value.notoficationService(context);
-                    }),
-                const YMargin(40),
-              ]);
-        }),
-      ),
-    );
-  }
-}
+// class _ConfirmSubscriptionPageState extends State<ConfirmSubscriptionPage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: white,
+//       body: SafeArea(
+//         child: Consumer<ConfirmSubscriptionServiceProvider>(
+//             builder: (context, value, child) {
+//           return ListView(
+//               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+//               children: [
+//                 SizedBox(
+//                     height: 163,
+//                     width: 129,
+//                     child: Image.asset("assets/images/signIn.png")),
+//                 PlainTextField(
+//                     onchanged: (String e) => value.setaccountId = e,
+//                     leading: const Icon(Icons.remember_me_rounded,
+//                         color: Color(0xffFF2156)),
+//                     hint: "Account ID"),
+//                 PlainTextField(
+//                     onchanged: (String e) => value.setpaymentStatus = e,
+//                     leading: const Icon(Icons.phone_android_rounded,
+//                         color: Color(0xffFF2156)),
+//                     hint: "Paymet status"),
+//                 PlainTextField(
+//                     onchanged: (e) => value.setsubId = e,
+//                     leading: const Icon(Icons.payment_rounded,
+//                         color: Color(0xffFF2156)),
+//                     hint: "Subscription ID"),
+//                 PlainTextField(
+//                     onchanged: (e) => value.settxtRef = e,
+//                     leading: const Icon(Icons.text_fields_rounded,
+//                         color: Color(0xffFF2156)),
+//                     hint: "Text ref"),
+//                 const YMargin(20),
+//                 FormButton(
+//                     enabled: true,
+//                     text: "Complete confirmation",
+//                     function: () {
+//                       value.confirmSubscription(context);
+//                     }),
+//                 const YMargin(40),
+//               ]);
+//         }),
+//       ),
+//     );
+//   }
+// }
 
 class ConfirmSubscriptionServiceProvider extends BaseProvider {
   String? _accountId;
@@ -117,49 +118,59 @@ class ConfirmSubscriptionServiceProvider extends BaseProvider {
     notifyListeners();
   }
 
-  void notoficationService(BuildContext context) async {
+  void confirmSubscription(BuildContext context) async {
+    var box = await Hive.openBox(weisleUserBox);
+    String accountID = box.get(weisleUserName);
+    String subID = box.get(weislemyRefCode) ??
+        box.get(rweislemyRefCode) ??
+        '6223A1CD2237C';
+    setaccountId = accountID;
+    setsubId = subID;
+
     try {
-      if (_accountId == null ||
-          _subId == null ||
-          _txtRef == null ||
-          _paymentStatus == null) {
-        Alerts.errorAlert(context, 'Al fields are required', () {
+      setpaymentStatus = 'Approved';
+      if (_accountId == null) {
+        Alerts.errorAlert(context, 'Account ID is required', () {
           Navigator.pop(context);
         });
-      } else if (_subId!.length < 1) {
-        Alerts.errorAlert(context, 'Emergency Setup Id lengt too short', () {
+      } else if (_subId == null) {
+        Alerts.errorAlert(context, 'SUB ID is required', () {
+          Navigator.pop(context);
+        });
+      } else if (_txtRef == null) {
+        Alerts.errorAlert(context, 'Text ref is required', () {
+          Navigator.pop(context);
+        });
+      } else if (_paymentStatus == null) {
+        Alerts.errorAlert(context, 'Payment status is required', () {
           Navigator.pop(context);
         });
       } else {
         Alerts.loadingAlert(context, 'Confirming...');
         FocusScope.of(context).unfocus();
         setLoading = true;
-        var box = await Hive.openBox(weisleUserBox);
-        String accountID = box.get(weisleUserName);
-        String subID = box.get(weislesetUpId) ?? box.get(rweislesetUpId);
-        setaccountId = accountID;
-        setsubId = subID;
-        var notoficationServiceResponse =
+
+        var confirmSubscriptionResponse =
             await emergencyApiBasics.confirmSubscription(
                 accountId: _accountId, //already set
                 subId: _subId,
                 txtRef: _txtRef,
                 paymentStatus: _paymentStatus);
         print(
-            "Weisle ConfirmSubscription service response is $notoficationServiceResponse");
-        if (notoficationServiceResponse['resposeCode'] == '00') {
+            "Weisle ConfirmSubscription service response is $confirmSubscriptionResponse");
+        if (confirmSubscriptionResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
           Alerts.successAlert(context, 'Confirmation successsful', () {
-            navigateReplaces(context, LandingScreen());
+            goBack(context);
           });
-        } else if (notoficationServiceResponse['resposeCode'] == '06') {
+        } else if (confirmSubscriptionResponse['resposeCode'] == '06') {
           Alerts.errorAlert(context, 'Improper format', () {
             Navigator.pop(context);
           });
         } else {
           print(
-              "Weisle ConfirmSubscription Response is $notoficationServiceResponse");
+              "Weisle ConfirmSubscription Response is $confirmSubscriptionResponse");
         }
       }
     } catch (e) {

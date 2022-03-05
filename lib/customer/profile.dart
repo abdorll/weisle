@@ -212,12 +212,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       child: TextOf(
                           'Notification', 30, FontWeight.w600, colorPrimary)),
-                  InkWell(
-                      onTap: () {
-                        navigate(context, const ConfirmSubscriptionPage());
-                      },
-                      child: TextOf('Confirm subscription', 30, FontWeight.w600,
-                          colorPrimary)),
+                  // InkWell(
+                  //     onTap: () {
+                  //       navigate(context, const ConfirmSubscriptionPage());
+                  //     },
+                  //     child: TextOf('Confirm subscription', 30, FontWeight.w600,
+                  //         colorPrimary)),
                 ])
           ],
         ),

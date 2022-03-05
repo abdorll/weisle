@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:weisle/emergencySetup/confirmSubscription.dart';
 import 'package:weisle/subscription/subscribtionHistoryByDate.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
@@ -111,6 +112,7 @@ class GetSubHistoryModel {
 }
 
 class AllSubHistpries extends StatelessWidget {
+  static var textRef;
   const AllSubHistpries({Key? key}) : super(key: key);
 
   @override
@@ -235,23 +237,39 @@ class AllSubHistpries extends StatelessWidget {
                                                   17,
                                                   FontWeight.w300,
                                                   Colors.red),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    color: Colors.green,
-                                                    border: Border.all(
-                                                        color: Colors.green),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                child: SideSpace(
-                                                    5,
-                                                    2,
-                                                    TextOf(
-                                                        'Approve',
-                                                        17,
-                                                        FontWeight.w300,
-                                                        Colors.white)),
-                                              )
+                                              Consumer<
+                                                      ConfirmSubscriptionServiceProvider>(
+                                                  builder:
+                                                      ((context, value, child) {
+                                                return InkWell(
+                                                  onTap: () {
+                                                    AllSubHistpries.textRef =
+                                                        listOfhistories.txtRef;
+                                                    value.settxtRef =
+                                                        AllSubHistpries.textRef;
+                                                    value.confirmSubscription(
+                                                        context);
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.green,
+                                                        border: Border.all(
+                                                            color:
+                                                                Colors.green),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15)),
+                                                    child: SideSpace(
+                                                        5,
+                                                        2,
+                                                        TextOf(
+                                                            'Approve',
+                                                            17,
+                                                            FontWeight.w300,
+                                                            Colors.white)),
+                                                  ),
+                                                );
+                                              }))
                                             ],
                                           )
                                         : listOfhistories.subStatus ==

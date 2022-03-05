@@ -91,42 +91,54 @@ class _HomepageState extends State<Homepage> {
           });
           _selectedIndex == index ? navigate(context, const SetUp()) : () {};
         },
-        child: Material(
-          elevation: 2.0,
-          borderRadius: BorderRadius.circular(5.0),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                  color: _selectedIndex == index ? colorPrimary : white,
-                  width: 2),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 5, top: 20, right: 5),
+        child: Stack(
+          children: [
+            Material(
+              color: white,
+              elevation: 2.0,
+              borderRadius: BorderRadius.circular(5.0),
               child: Container(
-                color: white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(icon,
-                        height: 35, width: 35, color: colorPrimary),
-                    Column(
+                width: 100,
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5, top: 20, right: 5),
+                  child: Container(
+                    color: white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          title,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                              color: textColor),
+                        Image.asset(icon,
+                            height: 35, width: 35, color: colorPrimary),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              title,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: textColor),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
+            Positioned(
+                top: 0,
+                left: 70,
+                bottom: 120,
+                right: 0,
+                child: _selectedIndex == index
+                    ? IconOf(Icons.check_circle_rounded, colorPrimary, 30)
+                    : Container())
+          ],
         ),
       ),
     );

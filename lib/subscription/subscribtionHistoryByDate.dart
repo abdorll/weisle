@@ -507,22 +507,26 @@ class HistoryByDatePage extends StatelessWidget {
                                                     17,
                                                     FontWeight.w300,
                                                     Colors.red),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.green,
-                                                      border: Border.all(
-                                                          color: Colors.green),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15)),
-                                                  child: SideSpace(
-                                                      5,
-                                                      2,
-                                                      TextOf(
-                                                          'Approve',
-                                                          17,
-                                                          FontWeight.w300,
-                                                          Colors.white)),
+                                                InkWell(
+                                                  onTap: () {},
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.green,
+                                                        border: Border.all(
+                                                            color:
+                                                                Colors.green),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15)),
+                                                    child: SideSpace(
+                                                        5,
+                                                        2,
+                                                        TextOf(
+                                                            'Approve',
+                                                            17,
+                                                            FontWeight.w300,
+                                                            Colors.white)),
+                                                  ),
                                                 )
                                               ],
                                             )
