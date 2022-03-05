@@ -52,7 +52,8 @@ class _GetSubscribtionHistoryPageState
             backgroundColor: colorPrimary,
             title: TextOf('Subscription history', 20, FontWeight.w500, white),
           ),
-          body: TabBarView(children: [AllSubHistpries(), SubHistoryByDate()])),
+          body: TabBarView(
+              children: [const AllSubHistpries(), SubHistoryByDate()])),
     );
   }
 }
@@ -115,6 +116,7 @@ class AllSubHistpries extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: white,
       body: Column(
         children: [
           Expanded(
@@ -127,108 +129,156 @@ class AllSubHistpries extends StatelessWidget {
                         GetSubHistoryModel listOfhistories =
                             value.subHistories[indexPosition];
                         return SideSpace(
-                          10,
-                          10,
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border:
-                                    Border.all(color: colorPrimary, width: 2)),
-                            child: Card(
+                            5,
+                            10,
+                            Card(
                               elevation: 10,
-                              color: litePink,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SideSpace(
-                                      10,
-                                      0,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextOf('Plan Id:', 20,
-                                              FontWeight.w500, black),
-                                          TextOfDecoration(
-                                              listOfhistories.id!,
-                                              20,
-                                              FontWeight.w300,
-                                              black,
-                                              TextAlign.left),
-                                        ],
-                                      )),
-                                  SideSpace(
-                                    10,
-                                    0,
+                              child: SideSpace(
+                                10,
+                                5,
+                                Column(
+                                  children: [
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        TextOf('Text ref:', 20, FontWeight.w500,
-                                            black),
-                                        TextOf(listOfhistories.txtRef!, 20,
-                                            FontWeight.w300, black),
+                                        listOfhistories.subStatus == 'Pending'
+                                            ? CircleAvatar(
+                                                radius: 25,
+                                                child: IconOf(
+                                                    Icons
+                                                        .arrow_downward_rounded,
+                                                    white,
+                                                    30),
+                                                backgroundColor: Colors.red,
+                                              )
+                                            : listOfhistories.subStatus ==
+                                                    'Approved'
+                                                ? CircleAvatar(
+                                                    radius: 25,
+                                                    child: IconOf(
+                                                        Icons
+                                                            .arrow_upward_rounded,
+                                                        white,
+                                                        30),
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                  )
+                                                : CircleAvatar(
+                                                    radius: 25,
+                                                    child: IconOf(
+                                                        Icons
+                                                            .circle_notifications_rounded,
+                                                        white,
+                                                        30),
+                                                    backgroundColor: blue,
+                                                  ),
+                                        const XMargin(10),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextOf(listOfhistories.txtRef!,
+                                                  21, FontWeight.w500, black),
+                                              Row(
+                                                children: [
+                                                  TextOf(
+                                                      listOfhistories
+                                                          .emergencyCountry!,
+                                                      17,
+                                                      FontWeight.w300,
+                                                      ash),
+                                                  TextOf(
+                                                      '(${listOfhistories.planCurrency!})',
+                                                      17,
+                                                      FontWeight.w300,
+                                                      ash),
+                                                ],
+                                              ),
+                                              TextOf(
+                                                  listOfhistories.createdDate!,
+                                                  15,
+                                                  FontWeight.w300,
+                                                  ash),
+                                            ]),
+                                        const Expanded(child: XMargin(10)),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            TextOf(
+                                                'N${listOfhistories.planAmt}',
+                                                20,
+                                                FontWeight.w500,
+                                                listOfhistories.subStatus ==
+                                                        'Pending'
+                                                    ? Colors.red
+                                                    : listOfhistories
+                                                                .subStatus ==
+                                                            'Approved'
+                                                        ? Colors.green
+                                                        : black),
+                                            TextOf('${listOfhistories.id}', 17,
+                                                FontWeight.w300, black),
+                                          ],
+                                        )
                                       ],
                                     ),
-                                  ),
-                                  SideSpace(
-                                    10,
-                                    0,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextOf('Plan Amount:', 20,
-                                            FontWeight.w500, black),
-                                        TextOf(listOfhistories.planAmt!, 20,
-                                            FontWeight.w300, black),
-                                      ],
-                                    ),
-                                  ),
-                                  SideSpace(
-                                      10,
-                                      0,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextOf('Plan currency:', 20,
-                                              FontWeight.w500, black),
-                                          TextOf(listOfhistories.planCurrency!,
-                                              20, FontWeight.w300, black),
-                                        ],
-                                      )),
-                                  SideSpace(
-                                    10,
-                                    0,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextOf('Country:', 20, FontWeight.w500,
-                                            black),
-                                        TextOf(
-                                            listOfhistories.emergencyCountry!,
-                                            20,
-                                            FontWeight.w300,
-                                            black),
-                                      ],
-                                    ),
-                                  ),
-                                  const YMargin(5),
-                                  FormButton(
-                                      enabled: true,
-                                      text: "Confirm",
-                                      function: () {
-                                        //value.register(context);
-                                      }),
-                                ],
+                                    const YMargin(10),
+                                    listOfhistories.subStatus == 'Pending'
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextOf(
+                                                  '${listOfhistories.subStatus!} approval',
+                                                  17,
+                                                  FontWeight.w300,
+                                                  Colors.red),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    border: Border.all(
+                                                        color: Colors.green),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: SideSpace(
+                                                    5,
+                                                    2,
+                                                    TextOf(
+                                                        'Approve',
+                                                        17,
+                                                        FontWeight.w300,
+                                                        Colors.white)),
+                                              )
+                                            ],
+                                          )
+                                        : listOfhistories.subStatus ==
+                                                'Approved'
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  IconOf(
+                                                      Icons
+                                                          .check_circle_rounded,
+                                                      Colors.green,
+                                                      20),
+                                                  const YMargin(3),
+                                                  TextOf(
+                                                      listOfhistories
+                                                          .subStatus!,
+                                                      17,
+                                                      FontWeight.w300,
+                                                      Colors.green)
+                                                ],
+                                              )
+                                            : Row()
+                                  ],
+                                ),
                               ),
-                            ),
-                          ),
-                        );
+                            ));
                       })
                   : GettingLoading('Getting subscriptions...');
             }),

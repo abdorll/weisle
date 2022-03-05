@@ -158,10 +158,10 @@ class UpdateProfileProvider extends BaseProvider {
         print("Weisle Update profile response is $updateProfileResponse");
         if (updateProfileResponse['resposeCode'] == '00') {
           setLoading = false;
-
+          goBack(context);
           print('Request Successful');
           Alerts.successAlert(context, 'Profile update successful', () {
-            goBack(context);
+            navigatedForever(context, const WelcomeBack());
           });
         } else if (updateProfileResponse['resposeCode'] == '01') {
           goBack(context);

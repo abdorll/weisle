@@ -363,9 +363,8 @@ class HistoryByDatePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Card(
-              elevation: 10,
-              color: colorPrimary,
+            Container(
+              color: Colors.grey.shade300,
               child: SideSpace(
                 10,
                 0,
@@ -374,16 +373,16 @@ class HistoryByDatePage extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        TextOf('From:', 20, FontWeight.w500, white),
+                        TextOf('From:', 15, FontWeight.w500, black),
                         const XMargin(10),
-                        TextOf(startDate, 20, FontWeight.w300, white),
+                        TextOf(startDate, 15, FontWeight.w300, black),
                       ],
                     ),
                     Row(
                       children: [
-                        TextOf('To:', 20, FontWeight.w500, white),
+                        TextOf('To:', 15, FontWeight.w500, black),
                         const XMargin(10),
-                        TextOf(endDate, 20, FontWeight.w300, white),
+                        TextOf(endDate, 15, FontWeight.w300, black),
                       ],
                     ),
                   ],
@@ -400,109 +399,158 @@ class HistoryByDatePage extends StatelessWidget {
                           SubHistoryByDateModel histotiesByData =
                               value.subHistoryByDate[indexPosition];
                           return SideSpace(
-                            10,
-                            10,
-                            Card(
-                              elevation: 10,
-                              color: litePink,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SideSpace(
-                                      10,
-                                      0,
+                              10,
+                              10,
+                              Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: SideSpace(
+                                  10,
+                                  5,
+                                  Column(
+                                    children: [
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          TextOf('Plan Id:', 20,
-                                              FontWeight.w500, black),
-                                          TextOfDecoration(
-                                              histotiesByData.id!,
-                                              20,
-                                              FontWeight.w300,
-                                              black,
-                                              TextAlign.left),
+                                          histotiesByData.subStatus == 'Pending'
+                                              ? CircleAvatar(
+                                                  radius: 25,
+                                                  child: IconOf(
+                                                      Icons
+                                                          .arrow_downward_rounded,
+                                                      white,
+                                                      30),
+                                                  backgroundColor: Colors.red,
+                                                )
+                                              : histotiesByData.subStatus ==
+                                                      'Approved'
+                                                  ? CircleAvatar(
+                                                      radius: 25,
+                                                      child: IconOf(
+                                                          Icons
+                                                              .arrow_upward_rounded,
+                                                          white,
+                                                          30),
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                    )
+                                                  : CircleAvatar(
+                                                      radius: 25,
+                                                      child: IconOf(
+                                                          Icons
+                                                              .circle_notifications_rounded,
+                                                          white,
+                                                          30),
+                                                      backgroundColor: blue,
+                                                    ),
+                                          const XMargin(10),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextOf(histotiesByData.txtRef!,
+                                                    21, FontWeight.w500, black),
+                                                Row(
+                                                  children: [
+                                                    TextOf(
+                                                        histotiesByData
+                                                            .emergencyCountry!,
+                                                        17,
+                                                        FontWeight.w300,
+                                                        ash),
+                                                    TextOf(
+                                                        '(${histotiesByData.planCurrency!})',
+                                                        17,
+                                                        FontWeight.w300,
+                                                        ash),
+                                                  ],
+                                                ),
+                                                TextOf(
+                                                    histotiesByData
+                                                        .createdDate!,
+                                                    15,
+                                                    FontWeight.w300,
+                                                    ash),
+                                              ]),
+                                          const Expanded(child: XMargin(10)),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextOf(
+                                                  'N${histotiesByData.planAmt}',
+                                                  20,
+                                                  FontWeight.w500,
+                                                  histotiesByData.subStatus ==
+                                                          'Pending'
+                                                      ? Colors.red
+                                                      : histotiesByData
+                                                                  .subStatus ==
+                                                              'Approved'
+                                                          ? Colors.green
+                                                          : black),
+                                              TextOf('${histotiesByData.id}',
+                                                  17, FontWeight.w300, black),
+                                            ],
+                                          )
                                         ],
-                                      )),
-                                  SideSpace(
-                                    10,
-                                    0,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextOf('Text ref:', 20, FontWeight.w500,
-                                            black),
-                                        TextOf(histotiesByData.txtRef!, 20,
-                                            FontWeight.w300, black),
-                                      ],
-                                    ),
+                                      ),
+                                      const YMargin(10),
+                                      histotiesByData.subStatus == 'Pending'
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                TextOf(
+                                                    '${histotiesByData.subStatus!} approval',
+                                                    17,
+                                                    FontWeight.w300,
+                                                    Colors.red),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      border: Border.all(
+                                                          color: Colors.green),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15)),
+                                                  child: SideSpace(
+                                                      5,
+                                                      2,
+                                                      TextOf(
+                                                          'Approve',
+                                                          17,
+                                                          FontWeight.w300,
+                                                          Colors.white)),
+                                                )
+                                              ],
+                                            )
+                                          : histotiesByData.subStatus ==
+                                                  'Approved'
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    IconOf(
+                                                        Icons
+                                                            .check_circle_rounded,
+                                                        Colors.green,
+                                                        20),
+                                                    const YMargin(3),
+                                                    TextOf(
+                                                        histotiesByData
+                                                            .subStatus!,
+                                                        17,
+                                                        FontWeight.w300,
+                                                        Colors.green)
+                                                  ],
+                                                )
+                                              : Row()
+                                    ],
                                   ),
-                                  SideSpace(
-                                    10,
-                                    0,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextOf('Plan Amount:', 20,
-                                            FontWeight.w500, black),
-                                        TextOf(histotiesByData.planAmt!, 20,
-                                            FontWeight.w300, black),
-                                      ],
-                                    ),
-                                  ),
-                                  SideSpace(
-                                      10,
-                                      0,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextOf('Plan currency:', 20,
-                                              FontWeight.w500, black),
-                                          TextOf(histotiesByData.planCurrency!,
-                                              20, FontWeight.w300, black),
-                                        ],
-                                      )),
-                                  SideSpace(
-                                    10,
-                                    0,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextOf('Country:', 20, FontWeight.w500,
-                                            black),
-                                        TextOf(
-                                            histotiesByData.emergencyCountry!,
-                                            20,
-                                            FontWeight.w300,
-                                            black),
-                                      ],
-                                    ),
-                                  ),
-                                  SideSpace(
-                                    10,
-                                    0,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextOf('Sub status:', 20,
-                                            FontWeight.w500, black),
-                                        TextOf(histotiesByData.subStatus!, 20,
-                                            FontWeight.w300, black),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                                ),
+                              ));
                         })
                     : GettingLoading('Getting histories...');
               })),
