@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/customer/sign_up.dart';
+import 'package:weisle/emergencySetup/setUp/categorySetup.dart';
 import 'package:weisle/emergencySetup/setUp/setUp.dart';
 import 'package:weisle/emergencySetup/setUp/setUpProvider.dart';
 import 'package:weisle/service_locator.dart';
@@ -13,13 +14,14 @@ import 'package:weisle/ui/themes/light_theme/light_theme.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weisle/utils/index.dart';
-import 'customer/accountLookup.dart';
+import 'package:weisle/utils/user_details_getter.dart';
 import 'customer/notificationService/notoficationService.dart';
 import 'customer/sqaPage.dart';
 import 'emergencySetup/confirmSubscription.dart';
 import 'emergencySetup/createSubscription.dart';
-import 'emergencySetup/getPremiumPlan.dart';
+import 'emergencySetup/setUp/PLANgetPremium.dart';
 import 'subscription/subscribtionHistoryByDate.dart';
+// import 'customer/accountLookup.dart';
 
 void main() async {
   serviceLocator();
@@ -32,10 +34,12 @@ void main() async {
       ChangeNotifierProvider(create: (context) => SignInProvider()),
       ChangeNotifierProvider(create: (context) => SignUpProvider()),
       ChangeNotifierProvider(create: (context) => ResetPasswordProvider()),
-      ChangeNotifierProvider(create: (context) => AccountLookupProvider()),
+      ChangeNotifierProvider(create: (context) => UpdateProfileProvider()),
       ChangeNotifierProvider(create: (context) => SetUpProvider()),
+      // ChangeNotifierProvider(create: (context) => Leading()),
+
       ChangeNotifierProvider(create: (context) => GetSubHistoryProvider()),
-      ChangeNotifierProvider(create: (context) => SubHistoryByDateProvider()),
+      ChangeNotifierProvider(create: (context) => UserDetailsGetter()),
       ChangeNotifierProvider(create: (context) => PremiumPlansProvider()),
       ChangeNotifierProvider(create: (context) => SQaProvider()),
       ChangeNotifierProvider(
@@ -46,7 +50,6 @@ void main() async {
           create: (context) => NotificationServiceProvider()),
       ChangeNotifierProvider(create: (context) => CategoriesProvider()),
       ChangeNotifierProvider(create: (context) => SubHistoryByDateProvider()),
-      ChangeNotifierProvider(create: (context) => UpdateProfileProvider()),
     ],
     child: const MyApp(),
   ));
@@ -55,7 +58,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

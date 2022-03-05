@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:weisle/emergencySetup/getWeislePrmium/secGetPremiumPlan.dart';
+import 'package:weisle/emergencySetup/setUp/CONTACTGetPremiumPlan.dart';
+import 'package:weisle/emergencySetup/setUp/setUpProvider.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/margin.dart';
@@ -13,18 +14,19 @@ import 'package:weisle/utils/index.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AccountLookup extends StatefulWidget {
-  const AccountLookup({Key? key}) : super(key: key);
+class SetUsernamePage extends StatefulWidget {
+  static String? name;
+  const SetUsernamePage({Key? key}) : super(key: key);
 
   @override
-  _AccountLookupState createState() => _AccountLookupState();
+  _SetUsernamePageState createState() => _SetUsernamePageState();
 }
 
-class _AccountLookupState extends State<AccountLookup> {
+class _SetUsernamePageState extends State<SetUsernamePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SafeArea(child:
-        Consumer<AccountLookupProvider>(builder: (context, value, child) {
+    return Scaffold(body: SafeArea(
+        child: Consumer<SetUpProvider>(builder: (context, value, child) {
       return SideSpace(
           10,
           10,
@@ -91,10 +93,11 @@ class _AccountLookupState extends State<AccountLookup> {
                               height: 40,
                               child: TextFormField(
                                 onChanged: (e) {
-                                  value.setaccountID = e;
+                                  value.setuserNames = e;
                                 },
                                 decoration: InputDecoration(
-                                    hintText: ' @',
+                                    hintText:
+                                        'name 1, name2, name3, name4, etc..',
                                     hintStyle: GoogleFonts.poppins(
                                       color: white,
                                       fontSize: 18,
@@ -112,102 +115,31 @@ class _AccountLookupState extends State<AccountLookup> {
                   ),
                 ),
                 const YMargin(20),
-                InkWell(
-                  onTap: () {
-                    value.acctLookUps(context);
-                  },
-                  child: Container(
-                    width: 200,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SideSpace(
-                          10,
-                          10,
-                          TextOf('Subscribe to premium', 15, FontWeight.w400,
-                              white),
-                        )
-                      ],
+                Consumer<SetUpProvider>(builder: (context, value, child) {
+                  return InkWell(
+                    onTap: () {
+                      value.userNamesCheck(context);
+                    },
+                    child: Container(
+                      width: 200,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SideSpace(
+                            10,
+                            10,
+                            TextOf('Subscribe to premium', 15, FontWeight.w400,
+                                white),
+                          )
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          color: colorPrimary,
+                          borderRadius: BorderRadius.circular(10)),
                     ),
-                    decoration: BoxDecoration(
-                        color: colorPrimary,
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                ),
+                  );
+                }),
                 const YMargin(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: Card(
-                        child: Container(
-                            height: 100,
-                            width: 100,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/images/fire_truck.png",
-                                  ),
-                                  TextOf('Police', 15, FontWeight.w400, black)
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Card(
-                        child: Container(
-                            height: 100,
-                            width: 100,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/images/fire_truck.png",
-                                  ),
-                                  TextOf(
-                                      'Ambulance', 15, FontWeight.w400, black)
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Card(
-                        child: Container(
-                            height: 100,
-                            width: 100,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/images/fire_truck.png",
-                                  ),
-                                  TextOf('Firefighters', 15, FontWeight.w400,
-                                      black)
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                const YMargin(60),
-                Container(
-                  width: double.infinity,
-                  height: 100,
-                  child: Center(
-                      child: TextOfDecoration('Banner Ads', 20, FontWeight.w500,
-                          black, TextAlign.left)),
-                  decoration: BoxDecoration(color: white),
-                )
               ],
             ),
           ));
@@ -215,7 +147,7 @@ class _AccountLookupState extends State<AccountLookup> {
   }
 }
 
-class AccountLookupProvider extends BaseProvider {
+class SetUsernamePageProvider extends BaseProvider {
   String? _accountID;
   bool formValidity = false;
   String get accountID => _accountID ?? '';
@@ -248,36 +180,40 @@ class AccountLookupProvider extends BaseProvider {
         Alerts.loadingAlert(context, 'Looking up...');
         FocusScope.of(context).unfocus();
         setLoading = true;
-        var accountLookupResponse =
+        var SetUsernamePageResponse =
             await customerApiBasic.acctLookup(accountId: _accountID);
 
-        if (accountLookupResponse['resposeCode'] == '00') {
+        if (SetUsernamePageResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
-          navigate(context, const GetWeizlePremium1());
-        } else if (accountLookupResponse['resposeCode'] == "01") {
+          goBack(context);
+          Alerts.successAlert(context, 'Successfully looked up your account',
+              () {
+            navigateReplaces(context, GetWeizlePremiumContactAndCountyrPage());
+          });
+        } else if (SetUsernamePageResponse['resposeCode'] == "01") {
           setLoading = false;
           Alerts.errorAlert(context, 'Invalid account', () {
             Navigator.pop(context);
           });
         } else {
           setLoading = false;
-          notifyListeners();
-          Alerts.errorAlert(context, accountLookupResponse['message'], () {
+          goBack(context);
+          Alerts.errorAlert(context, SetUsernamePageResponse['message'], () {
             Navigator.pop(context);
           });
+          notifyListeners();
         }
       }
     } catch (e) {
       setLoading = false;
+      goBack(context);
       Alerts.errorAlert(
-          context, 'Your username or weisle Id is your Account Id', () {
-        Navigator.pop(context);
-      });
+          context, 'Your username or weisle Id is your Account Id', () {});
     }
   }
 
-  AccountLookupProvider() {
+  SetUsernamePageProvider() {
     checkFormValidity();
   }
 }

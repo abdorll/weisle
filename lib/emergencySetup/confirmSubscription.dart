@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
@@ -130,12 +131,17 @@ class ConfirmSubscriptionServiceProvider extends BaseProvider {
           Navigator.pop(context);
         });
       } else {
-        Alerts.loadingAlert(context, 'Processing confirmation...');
+        Alerts.loadingAlert(context, 'Confirming...');
         FocusScope.of(context).unfocus();
         setLoading = true;
+        var box = await Hive.openBox(weisleUserBox);
+        String accountID = box.get(weisleUserName);
+        String subID = box.get(weislesetUpId) ?? box.get(rweislesetUpId);
+        setaccountId = accountID;
+        setsubId = subID;
         var notoficationServiceResponse =
             await emergencyApiBasics.confirmSubscription(
-                accountId: _accountId,
+                accountId: _accountId, //already set
                 subId: _subId,
                 txtRef: _txtRef,
                 paymentStatus: _paymentStatus);
@@ -144,7 +150,9 @@ class ConfirmSubscriptionServiceProvider extends BaseProvider {
         if (notoficationServiceResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
-          navigate(context, LandingScreen());
+          Alerts.successAlert(context, 'Confirmation successsful', () {
+            navigateReplaces(context, LandingScreen());
+          });
         } else if (notoficationServiceResponse['resposeCode'] == '06') {
           Alerts.errorAlert(context, 'Improper format', () {
             Navigator.pop(context);
@@ -156,6 +164,7 @@ class ConfirmSubscriptionServiceProvider extends BaseProvider {
       }
     } catch (e) {
       print("Weisle error: $e");
+      Navigator.pop(context);
       Alerts.errorAlert(context, 'Something went Wrong', () {
         Navigator.pop(context);
       });

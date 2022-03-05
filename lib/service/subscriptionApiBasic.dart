@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:weisle/customer/profile.dart';
 import 'package:weisle/service/api_basics.dart';
 import 'package:weisle/utils/endpoints.dart';
 import 'package:weisle/utils/index.dart';
@@ -24,6 +25,7 @@ class SubscribtionApiBasic {
 
   Future getSubHistory() async {
     var userBox = await Hive.openBox(weisleUserBox);
+    String fullName = userBox.get(weisleFullName);
     String accountId = userBox.get(weisleUserName);
     return apiBasics.makeGetRequest("$allSubHistoryurl/$accountId", null);
   }

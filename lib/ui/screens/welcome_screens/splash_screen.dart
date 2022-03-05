@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:weisle/customer/sign_in.dart';
-import 'package:weisle/logic/local_db/first_time.dart';
+import 'package:hive/hive.dart';
+import 'package:weisle/customer/welcome_back.dart';
+import 'package:weisle/utils/index.dart';
 
 import 'onboarding_screen.dart';
 
@@ -14,22 +15,22 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  void nextPageCaller() async {
+    var box = await Hive.openBox(weisleUserBox);
+    bool userWasLoggedIn = box.get(isLoggedInUser) ?? false;
+    await Future.delayed(Duration(seconds: 2), () {
+      userWasLoggedIn == true
+          ? Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => WelcomeBack()))
+          : Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => OnboardingScreen()));
+    });
+  }
+
   @override
   void initState() {
-    Future.delayed(
-        Duration(seconds: 5),
-        () async => {
-              firstTime().then((value) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => value ?? true
-                            ? OnboardingScreen()
-                            : LoginScreen()));
-              })
-            });
-
     super.initState();
+    nextPageCaller();
   }
 
   @override

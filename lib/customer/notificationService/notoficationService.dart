@@ -207,7 +207,9 @@ class NotificationServiceProvider extends BaseProvider {
         if (notoficationServiceResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
-          navigate(context, LandingScreen());
+          Alerts.successAlert(context, 'Notification succssfully set', () {
+            navigateReplaces(context, LandingScreen());
+          });
         } else if (notoficationServiceResponse['resposeCode'] == '06') {
           Alerts.errorAlert(context, 'Emergency setup is inactive', () {
             Navigator.pop(context);
@@ -218,6 +220,7 @@ class NotificationServiceProvider extends BaseProvider {
       }
     } catch (e) {
       print("Weisle error: $e");
+      Navigator.pop(context);
       Alerts.errorAlert(context, 'Something went Wrong', () {
         Navigator.pop(context);
       });

@@ -1,11 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.weisle">
-
-
     <uses-permission android:name = "android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
    <application
         android:label="weisle"
         android:icon="@drawable/weisle_logo">
+        <!-- TODO: Add your Google Maps API key here -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDXFduTZgzYKoubdUkv0iuEVYbi6S3El4o"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

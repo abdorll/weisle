@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:weisle/customer/sign_in.dart';
+import 'package:weisle/customer/sqaPage.dart';
+import 'package:weisle/customer/welcome_back.dart';
 import 'package:weisle/helpers/Alerts.dart';
+import 'package:weisle/ui/constants/asset_images.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
 import 'package:weisle/utils/index.dart';
+import 'package:weisle/utils/user_details_getter.dart';
 import '../ui/constants/colors.dart';
 
 class ResetPasword extends StatefulWidget {
@@ -23,41 +29,87 @@ class _ResetPaswordState extends State<ResetPasword> {
     return Scaffold(
       backgroundColor: white,
       body: SafeArea(
-        child:
-            Consumer<ResetPasswordProvider>(builder: (context, value, child) {
-          return ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
-              children: [
-                SizedBox(
-                    height: 163,
-                    width: 129,
-                    child: Image.asset("assets/images/signIn.png")),
-                PlainTextField(
-                    onchanged: (String e) => value.setuserName = e,
-                    leading: const Icon(Icons.person_add_alt_1,
-                        color: Color(0xffFF2156)),
-                    hint: "Username"),
-                PasswordField(
-                    onchanged: (String e) => value.setuserPass = e,
-                    leading: const Icon(Icons.person_add_alt_1,
-                        color: Color(0xffFF2156)),
-                    hint: "Pawword"),
-                PlainTextField(
-                    onchanged: (e) => value.setsecAnswer = e,
-                    leading: const Icon(Icons.phone, color: Color(0xffFF2156)),
-                    hint: "Sec Answer"),
-                const YMargin(20),
-                FormButton(
-                    enabled: true,
-                    text: "Update profile",
-                    function: () {
-                      value.resetPass(context);
-                    }),
-                const YMargin(40),
-              ]);
-        }),
+        child: Column(
+          children: [
+            const Header(),
+            const YMargin(10),
+            SideSpace(
+              10,
+              10,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextOf('Reset password', 22, FontWeight.w600, black),
+                  TextOfDecoration(
+                      'Set a new password if you think your current password has been compromised',
+                      17,
+                      FontWeight.w400,
+                      black,
+                      TextAlign.left),
+                ],
+              ),
+            ),
+            const YMargin(20),
+            Expanded(
+              child: Consumer<ResetPasswordProvider>(
+                  builder: (context, value, child) {
+                return ListView(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 36),
+                    children: [
+                      PasswordField(
+                          onchanged: (String e) {
+                            value.setuserPass = e;
+                          },
+                          leading: const Icon(Icons.person_add_alt_1,
+                              color: Color(0xffFF2156)),
+                          hint: "Pawword"),
+                      PasswordField(
+                          onchanged: (String e) {
+                            value.setconfirmPass = e;
+                          },
+                          leading: const Icon(Icons.person_add_alt_1,
+                              color: Color(0xffFF2156)),
+                          hint: "Confirm pawword"),
+                      const YMargin(20),
+                      const YMargin(20),
+                      FormButton(
+                          enabled: true,
+                          text: "Reset password",
+                          function: () {
+                            value.resetPass(context);
+                          }),
+                      const YMargin(40),
+                    ]);
+              }),
+            ),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WeisleHeader(
+        Image.asset(
+          weisle_logo,
+          height: 30,
+        ),
+        Image.asset(
+          headericons,
+          height: 30,
+        ),
+        Image.asset(
+          alarm,
+          height: 40,
+        ));
   }
 }
 
@@ -66,11 +118,13 @@ class ResetPasswordProvider extends BaseProvider {
   String? _userPass;
   String? _secAnswer;
   String? _userName;
+  String? _confirmPass;
   bool formValidity = false;
 
   String get userPass => _userPass ?? '';
   String get secAnswer => _secAnswer ?? '';
   String get userName => _userName ?? '';
+  String get confirmPass => _confirmPass ?? '';
 
   set setuserPass(String userPass) {
     _userPass = userPass;
@@ -90,8 +144,14 @@ class ResetPasswordProvider extends BaseProvider {
     notifyListeners();
   }
 
+  set setconfirmPass(String confirmPass) {
+    _confirmPass = confirmPass;
+    checkFormValidity();
+    notifyListeners();
+  }
+
   void checkFormValidity() {
-    if ((_userPass != null) && (_secAnswer != null) && (_userName != null)) {
+    if ((_userPass != null) && (_confirmPass != null)) {
       formValidity = true;
     } else {
       formValidity = false;
@@ -101,39 +161,44 @@ class ResetPasswordProvider extends BaseProvider {
 
   void resetPass(BuildContext context) async {
     try {
-      if (_userPass == null || _secAnswer == null || _userName == null) {
+      var box = await Hive.openBox(weisleUserBox);
+      setuserName = box.get(weisleUserName) ?? box.get(rweisleUserName);
+      setsecAnswer = box.get(weisleSecurityAnswer);
+      if (_userPass == null || _confirmPass == null) {
         Alerts.errorAlert(context, 'All fields are required', () {
           Navigator.pop(context);
+        });
+      } else if (userPass != confirmPass) {
+        Alerts.errorAlert(context, 'Password mismatch', () {
+          goBack(context);
         });
       } else {
         Alerts.loadingAlert(context, 'Resetting pass...');
         FocusScope.of(context).unfocus();
         setLoading = true;
         var registerResponse = await customerApiBasic.resetPass(
-            userName: _userName, userPass: _userPass, secAnswer: _secAnswer);
+            userName: userName, userPass: _userPass, secAnswer: secAnswer);
         if (registerResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
-
-          navigate(context, const LoginScreen());
-        } else if ((registerResponse['resposeCode'] == '01')) {
-          Alerts.errorAlert(context, 'Invalid request', () {
-            Navigator.pop(context);
+          goBack(context);
+          Alerts.successAlert(
+              context, registerResponse['data']['responseMessage'], () {
+            navigateReplaces(context, const WelcomeBack());
           });
         } else {
           setLoading = false;
-          notifyListeners();
-          Alerts.errorAlert(context, registerResponse['message'], () {
+          goBack(context);
+          Alerts.errorAlert(context, 'Password reset successful', () {
             Navigator.pop(context);
           });
         }
       }
     } catch (e) {
       setLoading = false;
-      // ignore: avoid_print
-      // print("Weisle error: $e");
-      Alerts.errorAlert(context, 'Something went wrong', () {
-        Navigator.pop(context);
+      goBack(context);
+      Alerts.errorAlert(context, 'Go and set a security Q&A first', () {
+        goBack(context);
       });
     }
   }

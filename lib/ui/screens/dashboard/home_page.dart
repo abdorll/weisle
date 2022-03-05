@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:weisle/emergencySetup/setUp/setUp.dart';
+import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart';
+import 'package:weisle/ui/widgets/header.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 
@@ -21,21 +25,25 @@ class _HomepageState extends State<Homepage> {
           child: ListView(
             shrinkWrap: true,
             children: [
-              Image.asset("assets/icons/headericons.png",
-                  height: 30, width: 30),
-              Text("Whats your emergency?",
-                  style: GoogleFonts.poppins(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      fontStyle: FontStyle.normal)),
-              const YMargin(20),
-              Text("Long press on any of the emergency icons to send a message",
-                  style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.normal)),
+              const Header(),
+              const YMargin(5),
+              Image.asset(
+                hello_user,
+                height: 140,
+              ),
+              TextOfDecoration(
+                  'Hello user', 12, FontWeight.w700, black, TextAlign.center),
+              TextOfDecoration("What's your emergency?", 12, FontWeight.w700,
+                  black, TextAlign.center),
+              TextOfDecoration(
+                  'Long press on any of the emergency icons to send a message',
+                  12,
+                  FontWeight.w700,
+                  black,
+                  TextAlign.center),
               const YMargin(30),
               getGridView(),
+              const YMargin(20),
             ],
           ),
         ),
@@ -81,12 +89,18 @@ class _HomepageState extends State<Homepage> {
           setState(() {
             _selectedIndex = index;
           });
+          _selectedIndex == index ? navigate(context, const SetUp()) : () {};
         },
         child: Material(
           elevation: 2.0,
           borderRadius: BorderRadius.circular(5.0),
           child: Container(
-            color: _selectedIndex == index ? colorPrimary : white,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                  color: _selectedIndex == index ? colorPrimary : white,
+                  width: 2),
+            ),
             child: Padding(
               padding: const EdgeInsets.only(left: 5, top: 20, right: 5),
               child: Container(
@@ -94,7 +108,8 @@ class _HomepageState extends State<Homepage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Image.asset(icon, height: 35, width: 35),
+                    Image.asset(icon,
+                        height: 35, width: 35, color: colorPrimary),
                     Column(
                       children: <Widget>[
                         Text(

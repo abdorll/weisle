@@ -39,11 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Image.asset("assets/images/welcome.png")),
                   PlainTextField(
                       onchanged: (e) => value.setusername = e,
-                      leading: Icon(Icons.person, color: Color(0xffFF2156)),
+                      leading:
+                          const Icon(Icons.person, color: Color(0xffFF2156)),
                       hint: "Username"),
                   PasswordField(
                       onchanged: (e) => value.setPasword = e,
-                      leading: Icon(Icons.lock, color: Color(0xffFF2156)),
+                      leading: const Icon(Icons.lock, color: Color(0xffFF2156)),
                       hint: "Password"),
                   const YMargin(40),
                   FormButton(
@@ -91,8 +92,8 @@ class SignInProvider extends BaseProvider {
   String? _password;
   bool formValidity = false;
 
-  String get username => _username ?? "";
-  String get password => _password ?? '';
+  String get username => _username ?? " ";
+  String get password => _password ?? " ";
 
   set setusername(String username) {
     _username = username;
@@ -131,24 +132,37 @@ class SignInProvider extends BaseProvider {
         setLoading = true;
         var loginResponse = await customerApiBasic.signIn(
             username: _username, password: _password);
+
         print("Weisle Login Response is $loginResponse");
         if (loginResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
-          var uerBox = await Hive.openBox(weisleUserBox);
-          uerBox.put(weisleUserName, loginResponse['data']["userName"]);
-          uerBox.put(weisleId, loginResponse['data']["weizleId"]);
-          navigate(context, LandingScreen());
-        } else if (loginResponse['resposeCode'] == '01') {
-          Alerts.errorAlert(context, 'Invalid login credentials', () {
-            Navigator.pop(context);
+          //₦100,000
+          var userDetails = await Hive.openBox(weisleUserBox);
+          userDetails.put(isLoggedInUser, true);
+          userDetails.put(weisleId, loginResponse['data']["weizleId"]);
+          userDetails.put(weisleFullName, loginResponse['data']["fullName"]);
+          userDetails.put(weislephoneNumber, loginResponse['data']["phoneNo"]);
+          userDetails.put(weisleUserName, loginResponse['data']["userName"]);
+          userDetails.put(
+              weisleaccountType, loginResponse['data']['accountType']);
+          userDetails.put(weislemyRefCode, loginResponse['data']["myRefCode"]);
+          userDetails.put(weisleuserStatus, loginResponse);
+          goBack(context);
+          Alerts.successAlert(context, 'Login successful', () {
+            navigateReplaces(context, LandingScreen());
           });
         } else {
+          goBack(context);
+          Alerts.errorAlert(context, 'Failed', () {
+            Navigator.pop(context);
+          });
           print("Weisle Login Response is $loginResponse");
         }
       }
     } catch (e) {
       print("Weisle error: $e");
+      goBack(context);
       Alerts.errorAlert(context, 'Something went Wrong', () {
         Navigator.pop(context);
       });
@@ -159,12 +173,3 @@ class SignInProvider extends BaseProvider {
     checkFormValidity();
   }
 }
-
-// Map<String, 
-// *TO WHOM IT MAY CONCERN*
-// Feel free to explorre each one of them
-// Both males and Females
-//1) https://altschoolafrica.com/
-//2) https://bit.ly/3uDizjI
-//3) https://www.alxafrica.com/software-engineering-2022/?inf_contact_key=0534dadf1114f9d664f668be2ebbfb85#LB-PAmasG4nMmaTm3daGaZU2b
-// dynamic>

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/utils/endpoints.dart';
 
 class ApiBasics {
@@ -25,7 +27,7 @@ class ApiBasics {
             data: data,
             options:
                 // ignore: prefer_if_null_operators
-                Options(headers: header == null ? await getHeaders() : header))
+                Options(headers: header ?? await getHeaders()))
         .then((value) => value.data);
   }
 

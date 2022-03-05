@@ -1,14 +1,15 @@
 // ignore_for_file: unrelated_type_equality_checks
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weisle/customer/sign_in.dart';
+import 'package:weisle/customer/welcome_back.dart';
+import 'package:weisle/emergencySetup/setUp/categorySetup.dart';
 import 'package:weisle/emergencySetup/setUp/setUpProvider.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/widgets/custom_fields.dart';
+import 'package:weisle/ui/widgets/header.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
-import 'package:weisle/utils/base_provider.dart';
-import 'package:weisle/utils/index.dart';
 import 'package:weisle/ui/screens/activity_report.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,17 +22,6 @@ class SetUp extends StatefulWidget {
 }
 
 class _SetUpState extends State<SetUp> {
-  // final items = [
-  //   'Medical',
-  //   'Robbery',
-  //   'Fire',
-  //   'Assault',
-  //   'Kidnap',
-  //   'Accident',
-  //   'Natural Disaster',
-  //   'Other',
-  //   'Notes'
-  // ];
   int current = 0;
   String selectedItem = CategoriesPage.categoryName ?? 'Undefined';
 
@@ -50,20 +40,7 @@ class _SetUpState extends State<SetUp> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const YMargin(10),
-                Image.asset("assets/icons/headericons.png",
-                    height: 30, width: 30),
-                const YMargin(10),
-                SideSpace(
-                  0,
-                  0,
-                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    InkWell(
-                        onTap: () {
-                          navigate(context, const Tracker());
-                        },
-                        child: IconOf(Icons.alarm_add_rounded, black, 30))
-                  ]),
-                ),
+                const Header(),
                 const YMargin(10),
                 Image.asset(
                   'assets/images/individual_person.png',
@@ -72,15 +49,15 @@ class _SetUpState extends State<SetUp> {
                 const YMargin(20),
                 TextOf(
                     'Hello User, Congrats on Successfully signing up.\n Tap on any of the emergency icons to quickly set up.',
-                    10,
-                    FontWeight.w500,
+                    15,
+                    FontWeight.w600,
                     black),
                 const YMargin(20),
                 Material(
                   borderRadius: BorderRadius.circular(20),
                   elevation: 6.0,
                   child: Container(
-                    height: 100,
+                    height: 80,
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: litePink,
@@ -88,7 +65,7 @@ class _SetUpState extends State<SetUp> {
                     child: Row(
                       children: [
                         Container(
-                          height: 100,
+                          height: 80,
                           child: const XMargin(22),
                           decoration: BoxDecoration(
                               color: colorPrimary,
@@ -100,7 +77,7 @@ class _SetUpState extends State<SetUp> {
                         TextOf('Emergency', 20, FontWeight.w400, ash),
                         const Expanded(child: const XMargin(2)),
                         Container(
-                          height: 100,
+                          height: 80,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -153,27 +130,16 @@ class _SetUpState extends State<SetUp> {
                 ),
                 const YMargin(20),
                 Consumer<SetUpProvider>(builder: (context, value, child) {
-                  value.setemergencyCat = selectedItem;
-                  return PlainTextField(
-                      onchanged: (e) => value.setuserNames = e,
-                      leading:
-                          const Icon(Icons.person, color: Color(0xffFF2156)),
-                      hint: "Username");
-                }),
-                const YMargin(10),
-                Consumer<SetUpProvider>(builder: (context, value, child) {
-                  return PlainTextField(
-                      onchanged: (e) => value.setuserContacts = e,
-                      leading: const Icon(Icons.phone_android_rounded,
-                          color: Color(0xffFF2156)),
-                      hint: "Phone number");
+                  value.setemergencyCat =
+                      CategoriesPage.categoryName ?? 'Undefined';
+                  return const YMargin(0);
                 }),
                 const YMargin(10),
                 Material(
                   borderRadius: BorderRadius.circular(20),
                   elevation: 6.0,
                   child: Container(
-                    height: 100,
+                    height: 80,
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: litePink,
@@ -181,7 +147,7 @@ class _SetUpState extends State<SetUp> {
                     child: Row(
                       children: [
                         Container(
-                          height: 100,
+                          height: 80,
                           child: Center(
                             child: SideSpace(
                               10,
@@ -191,7 +157,7 @@ class _SetUpState extends State<SetUp> {
                             ),
                           ),
                           decoration: BoxDecoration(
-                              color: colorPrimary,
+                              color: blackGrey,
                               borderRadius: BorderRadius.circular(20)),
                         ),
                         const XMargin(10),
@@ -215,22 +181,25 @@ class _SetUpState extends State<SetUp> {
                         borderRadius: BorderRadius.circular(20),
                         elevation: 6.0,
                         child: Container(
-                          height: 100,
+                          height: 80,
                           decoration: BoxDecoration(
                               color: litePink,
                               borderRadius: BorderRadius.circular(20)),
                           child: Row(
                             children: [
                               Container(
-                                height: 100,
+                                height: 80,
                                 child: Center(
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const XMargin(5),
-                                      TextOf('$selectedItem \nMessage', 20,
-                                          FontWeight.w500, white),
+                                      TextOf(
+                                          '${CategoriesPage.categoryName ?? "Undefined"} \nMessage',
+                                          20,
+                                          FontWeight.w500,
+                                          white),
                                       const XMargin(5),
                                     ],
                                   ),
@@ -267,11 +236,11 @@ class _SetUpState extends State<SetUp> {
                     ],
                   );
                 })),
-                const YMargin(20),
+                const YMargin(10),
                 Consumer<SetUpProvider>(builder: ((context, value, child) {
                   return InkWell(
-                    onTap: () async {
-                      value.SetUp(context);
+                    onTap: () {
+                      value.emrgencyAndCategoryCheck(context);
                     },
                     child: MediumSizeButton(
                         () {},
@@ -282,7 +251,22 @@ class _SetUpState extends State<SetUp> {
                         10,
                         4),
                   );
-                }))
+                })),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const WelcomeBack()));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextOf('Not now,', 15, FontWeight.w400, black),
+                        TextOf(' later', 15, FontWeight.w400, colorPrimary),
+                      ],
+                    )),
+                const YMargin(10)
               ],
             ),
           ),
@@ -311,167 +295,9 @@ class CategoriesModel {
 }
 
 ////---------------------------------------CATEGORIES PROVIDER
-class CategoriesProvider extends BaseProvider {
-  List<CategoriesModel> categoriesList = [];
-
-  CategoriesProvider() {
-    getCategories();
-  }
-  void getCategories() async {
-    try {
-      setLoading = true;
-      const CircularProgressIndicator();
-      var getCategoriesResponse = await emergencyApiBasics.getCategories();
-      List listFromCatResponse = List.from(getCategoriesResponse['data']);
-      print(listFromCatResponse);
-      categoriesList = listFromCatResponse
-          .map((json) => CategoriesModel.fromJson(json))
-          .toList();
-      setLoading = false;
-    } catch (e) {
-      print("FAILED TO FETCHH CATEGORIES..... $e");
-    }
-  }
-}
 
 // ignore: must_be_immutable
-class CategoriesPage extends StatefulWidget {
-  CategoriesPage({Key? key}) : super(key: key);
-  static String? catImage;
-  static String? id;
-  static String? defaultMsg;
-  static String? categoryName;
-  @override
-  State<CategoriesPage> createState() => _CategoriesPageState();
-}
 
-class _CategoriesPageState extends State<CategoriesPage> {
-  // @override
-  // void initState() {
-  //   categoriesProvider.getCategories();
-  //   super.initState();
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      body: SafeArea(
-        child: Consumer<CategoriesProvider>(builder: (context, value, child) {
-          return SideSpace(
-              30,
-              20,
-              !value.loading
-                  ? Column(
-                      children: [
-                        TextOf('Select category', 20, FontWeight.w500, black),
-                        const YMargin(10),
-                        const Divider(),
-                        Expanded(
-                          child: SizedBox(
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: value.categoriesList.length,
-                                itemBuilder:
-                                    (BuildContext context, int indexPosition) {
-                                  CategoriesModel categories =
-                                      value.categoriesList[indexPosition];
-
-                                  categories.id == '1'
-                                      ? CategoriesPage.catImage == medical
-                                      : categories.id == '2'
-                                          ? CategoriesPage.catImage == robbery
-                                          : categories.id == '3'
-                                              ? CategoriesPage.catImage == fire
-                                              : categories.id == '4'
-                                                  ? CategoriesPage.catImage ==
-                                                      assault
-                                                  : categories.id == '5'
-                                                      ? CategoriesPage
-                                                              .catImage ==
-                                                          kidnap
-                                                      : categories.id == '6'
-                                                          ? CategoriesPage
-                                                                  .catImage ==
-                                                              accident
-                                                          : categories.id == '7'
-                                                              ? CategoriesPage
-                                                                      .catImage ==
-                                                                  naturalDisaster
-                                                              : categories.id ==
-                                                                      '8'
-                                                                  ? CategoriesPage
-                                                                          .catImage ==
-                                                                      note
-                                                                  : CategoriesPage
-                                                                          .catImage ==
-                                                                      nothing;
-
-                                  return Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            CategoriesPage.defaultMsg =
-                                                categories.defaultMsg;
-                                            CategoriesPage.categoryName =
-                                                categories.catName;
-                                          });
-                                          value.getCategories();
-                                          Navigator.pop(context);
-                                        },
-                                        child: Card(
-                                            child: Row(
-                                          children: [
-                                            SideSpace(
-                                              20,
-                                              20,
-                                              Container(
-                                                width: 40,
-                                                height: 40,
-                                                child: Center(
-                                                  child: Image.asset(
-                                                    CategoriesPage.catImage ??
-                                                        nothing,
-                                                    color: colorPrimary,
-                                                  ),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                    border: Border.all(
-                                                        color: colorPrimary)),
-                                              ),
-                                            ),
-                                            TextOfDecoration(
-                                                categories.catName ?? 'NULL',
-                                                20,
-                                                FontWeight.w400,
-                                                black,
-                                                TextAlign.left),
-                                          ],
-                                        )),
-                                      ),
-                                      const YMargin(20)
-                                    ],
-                                  );
-                                }),
-                          ),
-                        )
-                      ],
-                    )
-                  : Center(
-                      child: Column(
-                      children: [
-                        const CircularProgressIndicator(),
-                        const YMargin(10),
-                        TextOf(
-                            'Getting categories..', 20, FontWeight.w400, black)
-                      ],
-                    )));
-        }),
-      ),
-    );
-  }
+void wait() async {
+  await Future.delayed(Duration(seconds: 3));
 }

@@ -115,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     enabled: true,
                     backgroundColor: white,
                     function: () async {
-                      navigate(context, const LoginScreen());
+                      navigateReplaces(context, const SignUp());
                     }),
             const YMargin(50),
           ],

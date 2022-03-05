@@ -57,7 +57,7 @@ class EmergencyApiBasics {
       "planAmt": planAmt,
       "planCurrency": planCurrency
     };
-    return apiBasics.makePostRequest(setupEmergurl, null, data);
+    return apiBasics.makePostRequest(createSuburl, null, data);
   }
 
   //------------------CONFIRM SUBSCRIPTION
@@ -71,7 +71,7 @@ class EmergencyApiBasics {
       "txtRef": txtRef,
       "paymentStatus": paymentStatus,
     };
-    return apiBasics.makePostRequest(setupEmergurl, null, data);
+    return apiBasics.makePostRequest(confirmSubPlnurl, null, data);
   }
 
   //--------------GET PREMIUM PLAN
@@ -80,6 +80,6 @@ class EmergencyApiBasics {
   Future getPremiumPlan() async {
     var userBox = await Hive.openBox(weisleUserBox);
     var currency = userBox.get(weisleCurrency);
-    return apiBasics.makeGetRequest("$premiumPlanurl/$currency", null);
+    return apiBasics.makeGetRequest("$premiumPlanurl/NGN", null);
   }
 }

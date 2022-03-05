@@ -1,7 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:weisle/emergencySetup/setUp/setUp.dart';
 import 'package:weisle/helpers/Alerts.dart';
+import 'package:weisle/subscription/getSubHistory.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
@@ -10,10 +13,13 @@ import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
 import 'package:weisle/utils/index.dart';
+import 'package:weisle/utils/user_details_getter.dart';
 import '../ui/constants/colors.dart';
 
 class SubHistoryByDate extends StatefulWidget {
-  const SubHistoryByDate({Key? key}) : super(key: key);
+  SubHistoryByDate({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SubHistoryByDateState createState() => _SubHistoryByDateState();
@@ -26,7 +32,7 @@ class _SubHistoryByDateState extends State<SubHistoryByDate> {
     if (selectedDate == null) {
       return 'yyyy-mm-dd';
     } else {
-      return '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}';
+      return '${selectedDate!.year}-0${selectedDate!.month}-0${selectedDate!.day}';
     }
   }
 
@@ -34,7 +40,7 @@ class _SubHistoryByDateState extends State<SubHistoryByDate> {
     if (secondDselectedDate == null) {
       return 'yyyy-mm-dd';
     } else {
-      return '${secondDselectedDate!.year}-${secondDselectedDate!.month}-${secondDselectedDate!.day}';
+      return '${secondDselectedDate!.year}-0${secondDselectedDate!.month}-0${secondDselectedDate!.day}';
     }
   }
 
@@ -47,119 +53,117 @@ class _SubHistoryByDateState extends State<SubHistoryByDate> {
             builder: (context, value, child) {
           value.setstartDate = getNewDate();
           value.setendDate = secondGetNewDate();
-          return ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+          return SideSpace(
+            10,
+            10,
+            Column(
               children: [
-                SizedBox(
-                    height: 163,
-                    width: 129,
-                    child: Image.asset("assets/images/signIn.png")),
-                PlainTextField(
-                    onchanged: (String e) => value.setaccountId = e,
-                    leading: const Icon(Icons.person_add_alt_1,
-                        color: Color(0xffFF2156)),
-                    hint: "Account Id"),
-                const YMargin(10),
-                InkWell(
-                  onTap: () {
-                    dateSelector(context);
-                  },
-                  child: Material(
-                    borderRadius: BorderRadius.circular(20),
-                    elevation: 6.0,
-                    child: Container(
-                      height: 60,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 100,
-                            child: Center(
-                              child: SideSpace(
-                                  10,
-                                  10,
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      IconOf(
-                                          Icons.date_range_rounded, white, 21),
-                                      TextOf('S.D', 15, FontWeight.w500, white)
-                                    ],
-                                  )),
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  const YMargin(20),
+                  TextOf('Sub history by date', 23, FontWeight.w700, black),
+                  const YMargin(25),
+                  TextOfDecoration(
+                      'Get your subscription histories based on the date you subscribed',
+                      20,
+                      FontWeight.w500,
+                      ash,
+                      TextAlign.left),
+                  const YMargin(45),
+                ]),
+                Expanded(
+                  child: Column(children: [
+                    const YMargin(10),
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            dateSelector(context);
+                          },
+                          child: Material(
+                            borderRadius: BorderRadius.circular(20),
+                            elevation: 6.0,
+                            child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    child: Center(
+                                      child: SideSpace(
+                                          10,
+                                          10,
+                                          TextOf('From', 15, FontWeight.w500,
+                                              white)),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: colorPrimary,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                  ),
+                                  const XMargin(10),
+                                  TextOfDecoration(getNewDate(), 20,
+                                      FontWeight.w400, ash, TextAlign.left),
+                                ],
+                              ),
                             ),
-                            decoration: BoxDecoration(
-                                color: colorPrimary,
-                                borderRadius: BorderRadius.circular(20)),
                           ),
-                          const XMargin(10),
-                          Expanded(
-                            child: TextOfDecoration(getNewDate(), 20,
-                                FontWeight.w400, ash, TextAlign.left),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const YMargin(10),
-                InkWell(
-                  onTap: () {
-                    secondDateSelector(context);
-                  },
-                  child: Material(
-                    borderRadius: BorderRadius.circular(20),
-                    elevation: 6.0,
-                    child: Container(
-                      height: 60,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 100,
-                            child: Center(
-                              child: SideSpace(
-                                  10,
-                                  10,
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      IconOf(
-                                          Icons.date_range_rounded, white, 21),
-                                      TextOf('E.D', 15, FontWeight.w500, white)
-                                    ],
-                                  )),
+                        ),
+                        const YMargin(10),
+                        InkWell(
+                          onTap: () {
+                            secondDateSelector(context);
+                          },
+                          child: Material(
+                            borderRadius: BorderRadius.circular(20),
+                            elevation: 6.0,
+                            child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    child: Center(
+                                      child: SideSpace(
+                                          10,
+                                          10,
+                                          TextOf('To      ', 15,
+                                              FontWeight.w500, white)),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: colorPrimary,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                  ),
+                                  const XMargin(10),
+                                  TextOfDecoration(secondGetNewDate(), 20,
+                                      FontWeight.w400, ash, TextAlign.left),
+                                ],
+                              ),
                             ),
-                            decoration: BoxDecoration(
-                                color: colorPrimary,
-                                borderRadius: BorderRadius.circular(20)),
                           ),
-                          const XMargin(10),
-                          Expanded(
-                            child: TextOfDecoration(secondGetNewDate(), 20,
-                                FontWeight.w400, ash, TextAlign.left),
-                          )
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ),
+                    const YMargin(40),
+                    FormButton(
+                        enabled: true,
+                        text: "Get histories",
+                        function: () {
+                          value.subHistory(context);
+                        }),
+                    const YMargin(10),
+                    // SubHistoryByDate()
+                  ]),
                 ),
-                const YMargin(60),
-                FormButton(
-                    enabled: true,
-                    text: "Complete",
-                    function: () {
-                      value.subHistory(context);
-                    }),
-                const YMargin(40),
-              ]);
+              ],
+            ),
+          );
         }),
       ),
     );
@@ -174,7 +178,11 @@ class _SubHistoryByDateState extends State<SubHistoryByDate> {
       lastDate: DateTime(DateTime.now().year + 5),
     );
 
-    if (newDate == null) return;
+    if (newDate == null) {
+      Future.delayed(Duration(seconds: 1));
+      Alerts.errorAlert(context, 'Both dates are required', goBack(context));
+    }
+    ;
     setState(() {
       selectedDate = newDate;
     });
@@ -189,7 +197,11 @@ class _SubHistoryByDateState extends State<SubHistoryByDate> {
       lastDate: DateTime(DateTime.now().year + 5),
     );
 
-    if (newDate == null) return;
+    if (newDate == null) {
+      Future.delayed(Duration(seconds: 1));
+      Alerts.errorAlert(context, 'Both dates are required', goBack(context));
+    }
+    ;
     setState(() {
       secondDselectedDate = newDate;
     });
@@ -202,6 +214,7 @@ class SubHistoryByDateProvider extends BaseProvider {
   String? _endDate;
   String? _accountId;
   bool formValidity = false;
+  List<SubHistoryByDateModel> subHistoryByDate = [];
 
   String get startDate => _startDate ?? '';
   String get endDate => _endDate ?? '';
@@ -235,9 +248,14 @@ class SubHistoryByDateProvider extends BaseProvider {
   }
 
   void subHistory(BuildContext context) async {
+    var box = await Hive.openBox(weisleUserBox);
+    String accountId = box.get(weisleUserName) ?? box.get(rweisleUserName);
+    setaccountId = accountId;
+    //setaccountId = UserDetailsGetter.userName;
+
     try {
-      if (_startDate == null || _endDate == null || _accountId == null) {
-        Alerts.errorAlert(context, 'All fields are required', () {
+      if (startDate == 'yyyy-mm-dd' || endDate == 'yyyy-mm-dd') {
+        Alerts.errorAlert(context, 'Date fields are required', () {
           Navigator.pop(context);
         });
       } else {
@@ -249,14 +267,33 @@ class SubHistoryByDateProvider extends BaseProvider {
         if (registerResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
-          navigate(context, LandingScreen());
-        } else if ((registerResponse['resposeCode'] == '04')) {
+          print('Request Successful');
+          print('Request Successful');
+
+          goBack(context);
+          navigate(context,
+              HistoryByDatePage(startDate: startDate, endDate: endDate));
+          var dataFromResponse = registerResponse['data'];
+          List listGotten = List.from(dataFromResponse).toList();
+          subHistoryByDate = listGotten
+              .map((json) => SubHistoryByDateModel.fromJson(json))
+              .toList();
+          var box = await Hive.openBox(weisleUserBox);
+          box.put(weisleid, registerResponse['data']['id']);
+          box.put(weisletxtRef, registerResponse['data']['txtRef']);
+          box.put(weisleplanAmt, registerResponse['data']['planAmt']);
+          box.put(weisleplanCurrency, registerResponse['data']['planCurrency']);
+          box.put(weisleemergencyCountry,
+              registerResponse['data']['emergencyCountry']);
+          box.put(weislesubStatus, registerResponse['data']['subStatus']);
+          box.put(weislecreatedDate, registerResponse['data']['createdDate']);
+        } else if ((registerResponse['data'] == '04')) {
           Alerts.errorAlert(context, 'No data found', () {
             Navigator.pop(context);
           });
         } else {
           setLoading = false;
-          notifyListeners();
+          goBack(context);
           Alerts.errorAlert(context, registerResponse['message'], () {
             Navigator.pop(context);
           });
@@ -264,15 +301,215 @@ class SubHistoryByDateProvider extends BaseProvider {
       }
     } catch (e) {
       setLoading = false;
-      // ignore: avoid_print
-      // print("Weisle error: $e");
-      Alerts.errorAlert(context, 'Something went wrong', () {
-        Navigator.pop(context);
-      });
+      // goBack(context);
+      // Alerts.errorAlert(context, 'Something went wrong', () {
+      //   Navigator.pop(context);
+      // }
+
+      // );
     }
   }
 
   SubHistoryByDateProvider() {
     checkFormValidity();
+  }
+}
+
+class SubHistoryByDateModel {
+  String? id;
+  String? txtRef;
+  String? planAmt;
+  String? planCurrency;
+  String? emergencyCountry;
+  String? subStatus;
+  String? createdDate;
+
+  SubHistoryByDateModel(
+      {this.id,
+      this.createdDate,
+      this.emergencyCountry,
+      this.planAmt,
+      this.planCurrency,
+      this.subStatus,
+      this.txtRef});
+
+  SubHistoryByDateModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'] ?? '';
+    txtRef = json['txtRef'] ?? '';
+    planAmt = json['planAmt'] ?? '';
+    planCurrency = json['planCurrency'] ?? '';
+    emergencyCountry = json['emergencyCountry'] ?? "";
+    subStatus = json['subStatus'] ?? '';
+    createdDate = json['createdDate'] ?? '';
+  }
+}
+
+class HistoryByDatePage extends StatelessWidget {
+  String startDate;
+  String endDate;
+  HistoryByDatePage({Key? key, required this.startDate, required this.endDate})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: colorPrimary,
+        title: TextOf('Sub dates', 20, FontWeight.w600, white),
+        foregroundColor: colorPrimary,
+        leading: IconOf(Icons.arrow_back_ios_new_rounded, colorPrimary, 20),
+        shadowColor: colorPrimary,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Card(
+              elevation: 10,
+              color: colorPrimary,
+              child: SideSpace(
+                10,
+                0,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        TextOf('From:', 20, FontWeight.w500, white),
+                        const XMargin(10),
+                        TextOf(startDate, 20, FontWeight.w300, white),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        TextOf('To:', 20, FontWeight.w500, white),
+                        const XMargin(10),
+                        TextOf(endDate, 20, FontWeight.w300, white),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Consumer<SubHistoryByDateProvider>(
+                  builder: ((context, value, child) {
+                return !value.loading
+                    ? ListView.builder(
+                        itemCount: value.subHistoryByDate.length,
+                        itemBuilder: (context, indexPosition) {
+                          SubHistoryByDateModel histotiesByData =
+                              value.subHistoryByDate[indexPosition];
+                          return SideSpace(
+                            10,
+                            10,
+                            Card(
+                              elevation: 10,
+                              color: litePink,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SideSpace(
+                                      10,
+                                      0,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextOf('Plan Id:', 20,
+                                              FontWeight.w500, black),
+                                          TextOfDecoration(
+                                              histotiesByData.id!,
+                                              20,
+                                              FontWeight.w300,
+                                              black,
+                                              TextAlign.left),
+                                        ],
+                                      )),
+                                  SideSpace(
+                                    10,
+                                    0,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextOf('Text ref:', 20, FontWeight.w500,
+                                            black),
+                                        TextOf(histotiesByData.txtRef!, 20,
+                                            FontWeight.w300, black),
+                                      ],
+                                    ),
+                                  ),
+                                  SideSpace(
+                                    10,
+                                    0,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextOf('Plan Amount:', 20,
+                                            FontWeight.w500, black),
+                                        TextOf(histotiesByData.planAmt!, 20,
+                                            FontWeight.w300, black),
+                                      ],
+                                    ),
+                                  ),
+                                  SideSpace(
+                                      10,
+                                      0,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextOf('Plan currency:', 20,
+                                              FontWeight.w500, black),
+                                          TextOf(histotiesByData.planCurrency!,
+                                              20, FontWeight.w300, black),
+                                        ],
+                                      )),
+                                  SideSpace(
+                                    10,
+                                    0,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextOf('Country:', 20, FontWeight.w500,
+                                            black),
+                                        TextOf(
+                                            histotiesByData.emergencyCountry!,
+                                            20,
+                                            FontWeight.w300,
+                                            black),
+                                      ],
+                                    ),
+                                  ),
+                                  SideSpace(
+                                    10,
+                                    0,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextOf('Sub status:', 20,
+                                            FontWeight.w500, black),
+                                        TextOf(histotiesByData.subStatus!, 20,
+                                            FontWeight.w300, black),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        })
+                    : GettingLoading('Getting histories...');
+              })),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

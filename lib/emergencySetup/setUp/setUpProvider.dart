@@ -1,8 +1,12 @@
 // ignore_for_file: unrelated_type_equality_checks, unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:weisle/emergencySetup/setUp/CONTACTGetPremiumPlan.dart';
+import 'package:weisle/emergencySetup/setUp/PLANgetPremium.dart';
+import 'package:weisle/emergencySetup/setUp/contactSetup.dart';
 import 'package:weisle/helpers/alerts.dart';
-import 'package:weisle/customer/accountLookup.dart';
+import 'package:weisle/emergencySetup/setUp/accountLookup.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
 import 'package:weisle/utils/index.dart';
@@ -15,6 +19,10 @@ class SetUpProvider extends BaseProvider {
   String? _userNames;
   String? _userContacts;
 
+  String? _contact1;
+  String? _contact2;
+  String? _contact3;
+
   bool formValidity = false;
 
   //String get accountId => _accountId ?? '';
@@ -22,12 +30,9 @@ class SetUpProvider extends BaseProvider {
   String get emergencyMsg => _emergencyMsg ?? '';
   String get userNames => _userNames ?? '';
   String get userContacts => _userContacts ?? '';
-
-  // set setaccountId(String accountId) {
-  //   _accountId = accountId;
-  //   checkFormValidity();
-  //   notifyListeners();
-  // }
+  String get contact1 => _contact1 ?? '';
+  String get contact2 => _contact2 ?? '';
+  String get contact3 => _contact3 ?? '';
 
   set setemergencyCat(String emergencyCat) {
     _emergencyCat = emergencyCat;
@@ -53,14 +58,32 @@ class SetUpProvider extends BaseProvider {
     notifyListeners();
   }
 
-  void checkFormValidity() {
-    if (
-        //(_accountId != null) &&
+  set setcontact1(String contact1) {
+    _contact1 = contact1;
+    checkFormValidity();
+    notifyListeners();
+  }
 
-        (_emergencyCat != null) &&
-            (_emergencyMsg != null) &&
-            (_userNames != null) &&
-            (_userContacts != null)) {
+  set setcontact2(String contact2) {
+    _contact2 = contact2;
+    notifyListeners();
+  }
+
+  set setcontact3(String contact3) {
+    _contact3 = contact3;
+    notifyListeners();
+  }
+
+  // void saveUserNames() async {
+  //   var box = await Hive.openBox(weisleUserBox);
+  //   var names = box.put('usernames', userNames);
+  // }
+
+  void checkFormValidity() {
+    if ((_emergencyCat != null) &&
+        (_emergencyMsg != null) &&
+        (_userNames != null) &&
+        (_userContacts != null)) {
       formValidity = true;
     } else {
       formValidity = false;
@@ -68,25 +91,42 @@ class SetUpProvider extends BaseProvider {
     notifyListeners();
   }
 
-  void SetUp(BuildContext context) async {
-    try {
-      if (
-          //_accountId == null ||
+  void emrgencyAndCategoryCheck(context) {
+    if (_emergencyCat == null || _emergencyMsg == null) {
+      Alerts.errorAlert(context, 'Emergency category and message are required',
+          () {
+        Navigator.pop(context);
+      });
+    } else {
+      navigate(context, const SetUsernamePage());
+    }
+  }
 
-          _emergencyCat == null ||
-              _emergencyMsg == null ||
-              _userNames == null ||
-              _userContacts == null) {
-        Alerts.errorAlert(context, 'All fields are required', () {
+  void userNamesCheck(context) {
+    if (_userNames == null) {
+      Alerts.errorAlert(
+          context, 'Add as many usernames you want, separated by commas', () {
+        Navigator.pop(context);
+      });
+    } else {
+      navigate(context, const ContactSetup());
+    }
+  }
+
+  void setUp(BuildContext context) async {
+    try {
+      if (_contact1 == null) {
+        Alerts.errorAlert(context, 'Primary phone number is required', () {
           Navigator.pop(context);
         });
       } else {
+        setuserContacts = "$contact1, $contact2, $contact3";
         Alerts.loadingAlert(context, 'Setting up...');
         FocusScope.of(context).unfocus();
         setLoading = true;
         var box = await Hive.openBox(weisleUserBox);
 
-        String accId = box.get(weisleUserName);
+        String accId = box.get(rweisleUserName) ?? box.get(weisleUserName);
         var registerResponse = await emergencyApiBasics.setUp(
             accountId: accId,
             emergencyCat: _emergencyCat,
@@ -94,22 +134,24 @@ class SetUpProvider extends BaseProvider {
             userNames: _userNames,
             userContacts: _userContacts);
         if (registerResponse['resposeCode'] == '00') {
-          var setUpId = await box.get(weislesetUpId);
           setLoading = false;
-
+          box.put(weislesetUpId, registerResponse['data']['setupId']);
           print('Request Successful');
-          navigate(context, const AccountLookup());
-        } else if ((registerResponse['resposeCode'] == '01')) {
+          goBack(context);
+          Alerts.successAlert(context, 'Emergency setup successful', () {
+            navigatedForever(
+                context, const GetWeizlePremiumContactAndCountyrPage());
+          });
+        } else if (registerResponse['resposeCode'] == '01') {
           setLoading = false;
-          notifyListeners();
+          goBack(context);
           Alerts.errorAlert(context, registerResponse['message'], () {
             Navigator.pop(context);
           });
-
           // print("Weisle register Response is $registerResponse");
         } else {
           setLoading = false;
-          notifyListeners();
+          //goBack(context);
           Alerts.errorAlert(context, registerResponse['message'], () {
             Navigator.pop(context);
           });
@@ -117,9 +159,8 @@ class SetUpProvider extends BaseProvider {
       }
     } catch (e) {
       setLoading = false;
-      // ignore: avoid_print
-      // print("Weisle error: $e");
-      Alerts.errorAlert(context, 'Something went wrong', () {
+      goBack(context);
+      Alerts.errorAlert(context, 'Something went wrong $e', () {
         Navigator.pop(context);
       });
     }

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:weisle/customer/sign_in.dart';
+import 'package:weisle/emergencySetup/setUp/setUp.dart';
 import 'package:weisle/helpers/alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
 import 'package:weisle/utils/index.dart';
+//import 'package:emoji/emoji.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -53,25 +55,17 @@ class _SignUpState extends State<SignUp> {
                     onchanged: (e) => value.setUserPass = e,
                     leading: const Icon(Icons.code, color: Color(0xffFF2156)),
                     hint: "Passworrd"),
-                // PasswordField(
-                //     onchanged: (e) => value.setUserPass = e,
-                //     leading: const Icon(Icons.lock, color: Color(0xffFF2156)),
-                //     hint: "Password"),
-                // PasswordField(
-                //     leading: const Icon(Icons.lock, color: Color(0xffFF2156)),
-                //     hint: "Confirm Password"),
+                PasswordField(
+                    onchanged: (e) => value.setconfirmPass = e,
+                    leading: const Icon(Icons.code, color: Color(0xffFF2156)),
+                    hint: "Confirm passworrd"),
                 const YMargin(20),
                 FormButton(
                     enabled: true,
-                    text: "Register",
+                    text: "SIGNUP",
                     function: () {
                       value.register(context);
                     }),
-                // FormButton(
-                //     text: "Register",
-                //     function: () {
-                //       value.register(context);
-                //     }),
                 const YMargin(40),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   GestureDetector(
@@ -108,6 +102,7 @@ class SignUpProvider extends BaseProvider {
   String? _userName;
   String? _userPass;
   String? _regCode;
+  String? _confirmPass;
   bool formValidity = false;
 
   String get fullName => _fullName ?? '';
@@ -115,6 +110,7 @@ class SignUpProvider extends BaseProvider {
   String get userName => _userName ?? '';
   String get userPass => _userPass ?? '';
   String get regCode => _regCode ?? '';
+  String get confirmPass => _confirmPass ?? '';
 
   set setfullName(String fullName) {
     _fullName = fullName;
@@ -146,12 +142,19 @@ class SignUpProvider extends BaseProvider {
     notifyListeners();
   }
 
+  set setconfirmPass(String confirmPass) {
+    _confirmPass = confirmPass;
+    checkFormValidity();
+    notifyListeners();
+  }
+
   void checkFormValidity() {
     if ((_fullName != null) &&
         (_phoneNo != null) &&
         (_userName != null) &&
+        (_regCode != null) &&
         (_userPass != null) &&
-        (_userPass != null)) {
+        (_confirmPass != null)) {
       formValidity = true;
     } else {
       formValidity = false;
@@ -165,7 +168,8 @@ class SignUpProvider extends BaseProvider {
           _phoneNo == null ||
           _userName == null ||
           _userPass == null ||
-          _regCode == null) {
+          _regCode == null ||
+          _confirmPass == null) {
         Alerts.errorAlert(context, 'All fields are required', () {
           Navigator.pop(context);
         });
@@ -173,8 +177,13 @@ class SignUpProvider extends BaseProvider {
         Alerts.errorAlert(context, 'Make phone number length be 11', () {
           Navigator.pop(context);
         });
+      } else if (_userPass != _confirmPass) {
+        Alerts.errorAlert(context, 'Password mismatch', () {
+          Navigator.pop(context);
+        });
       } else {
         Alerts.loadingAlert(context, 'Registering...');
+
         FocusScope.of(context).unfocus();
         setLoading = true;
         var registerResponse = await customerApiBasic.register(
@@ -190,27 +199,36 @@ class SignUpProvider extends BaseProvider {
         if (registerResponse['resposeCode'] == '00') {
           setLoading = false;
           print('Request Successful');
-          navigate(context, LandingScreen());
-        } else if ((registerResponse['resposeCode'] == '01')) {
-          setLoading = false;
-          notifyListeners();
-          Alerts.errorAlert(context, registerResponse['message'], () {
-            Navigator.pop(context);
+          var userBox = await Hive.openBox(weisleUserBox);
+          userBox.put(rweisleReferral, registerResponse['data']['referral']);
+          userBox.put(rweisleId, registerResponse['data']["weizleId"]);
+          userBox.put(rweisleFullName, registerResponse['data']["fullName"]);
+          userBox.put(rweislephoneNumber, registerResponse['data']["phoneNo"]);
+          userBox.put(rweisleUserName, registerResponse['data']["userName"]);
+          userBox.put(
+              rweisleaccountType, registerResponse['data']['accountType']);
+          userBox.put(rweislemyRefCode, registerResponse['data']["myRefCode"]);
+          userBox.put(
+              rweisleuserStatus, registerResponse['data']["userStatus"]);
+          goBack(context);
+          Alerts.successAlert(
+              context, registerResponse['data']['responseMessage'], () {
+            navigateReplaces(context, const SetUp());
           });
-
-          // print("Weisle register Response is $registerResponse");
         } else {
           setLoading = false;
-          notifyListeners();
-          Alerts.errorAlert(context, registerResponse['message'], () {
+          goBack(context);
+          Alerts.errorAlert(context, 'Valid details required', () {
             Navigator.pop(context);
           });
+          notifyListeners();
         }
       }
     } catch (e) {
       setLoading = false;
       // ignore: avoid_print
       // print("Weisle error: $e");
+      goBack(context);
       Alerts.errorAlert(context, 'Something went wrong', () {
         Navigator.pop(context);
       });

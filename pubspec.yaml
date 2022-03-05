@@ -36,8 +36,21 @@ dependencies:
     sdk: flutter
   hive: ^2.0.5
   path_provider: ^2.0.9
+  country_code_picker: ^2.0.2
   pretty_dio_logger: ^1.2.0-beta-1
   provider: ^6.0.2
+  http: ^0.13.4
+  geocoding: ^2.0.2
+  json_serializable: ^6.1.4
+  geolocator: ^8.2.0
+  google_maps_flutter: ^2.1.1
+  country_pickers: ^2.0.0
+  lint: ^1.8.2
+  intl: ^0.17.0
+  url_launcher: ^6.0.20
+  country_picker: ^2.0.12
+  flutter_spinkit: ^5.1.0
+  location: ^4.3.0
 
 dev_dependencies:
   clipboard: null
@@ -46,7 +59,7 @@ dev_dependencies:
     sdk: flutter
   get_it: null
   google_fonts: ^2.1.0
-  http: ^0.13.4 
+  # http: ^0.13.4 
   rxdart: null
   share: null
   get:

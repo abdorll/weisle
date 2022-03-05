@@ -1,152 +1,83 @@
-import 'dart:io';
-
+// ignore_for_file: prefer_const_constructors_in_immutables
 import 'package:flutter/material.dart';
-import 'package:weisle/emergencySetup/setUp/setUp.dart';
+import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/customer/profile.dart';
 import 'package:weisle/ui/screens/activity_report.dart';
-import 'package:weisle/ui/widgets/navigtion.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:weisle/ui/screens/dashboard/settings.dart';
 import 'home_page.dart';
 
-class LandingScreen extends StatelessWidget {
-  final _myNavController = Get.put(NavController());
+class LandingScreen extends StatefulWidget {
+  //final _myNavController = Get.put(NavController());
 
   LandingScreen({Key? key}) : super(key: key);
 
   @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+  List<Widget> pages = const [
+    Homepage(),
+    Report(),
+    ProfileScreen(),
+    Settings(),
+  ];
+
+  int _selectedIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => exit(0),
-      child: Scaffold(
-        body: Obx(() {
-          if (_myNavController.selectedTab.value == 0) {
-            return const Homepage();
-          } else if (_myNavController.selectedTab.value == 1) {
-            return const Report();
-          } else if (_myNavController.selectedTab.value == 2) {
-            return const ProfileScreen();
-          } else if (_myNavController.selectedTab.value == 3) {
-            return const SetUp();
-          }
-          return Container();
-        }),
-        bottomNavigationBar: Obx(
-          () => Container(
-            width: Get.width,
-            height: 60,
-            padding: const EdgeInsets.fromLTRB(30, 8, 30, 7),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                top: BorderSide(color: Colors.grey.shade600),
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: colorPrimary,
+        backgroundColor: Colors.white,
+        landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home_outlined,
+                size: 30,
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: () {
-                    _myNavController.selectedTab.value = 0;
-                  },
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.home,
-                        size: 30,
-                        color: _myNavController.selectedTab.value == 0
-                            ? colorPrimary
-                            : colorPrimary.withOpacity(0.3),
-                      ),
-                      Text(
-                        'Home',
-                        style: GoogleFonts.mulish(
-                            fontSize: 10,
-                            fontWeight: _myNavController.selectedTab.value == 0
-                                ? FontWeight.bold
-                                : null),
-                      )
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    _myNavController.selectedTab.value = 1;
-                  },
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.ac_unit,
-                        size: 30,
-                        color: _myNavController.selectedTab.value == 1
-                            ? colorPrimary
-                            : colorPrimary.withOpacity(0.3),
-                      ),
-                      Text(
-                        'Reports',
-                        style: GoogleFonts.mulish(
-                            fontSize: 10,
-                            fontWeight: _myNavController.selectedTab.value == 1
-                                ? FontWeight.bold
-                                : null),
-                      )
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _myNavController.selectedTab.value = 2;
-                  },
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        size: 30,
-                        color: _myNavController.selectedTab.value == 2
-                            ? colorPrimary
-                            : colorPrimary.withOpacity(0.3),
-                      ),
-                      Text(
-                        'Profile',
-                        style: GoogleFonts.mulish(
-                            fontSize: 10,
-                            fontWeight: _myNavController.selectedTab.value == 2
-                                ? FontWeight.bold
-                                : null),
-                      )
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    _myNavController.selectedTab.value = 3;
-                  },
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.settings,
-                        size: 30,
-                        color: _myNavController.selectedTab.value == 3
-                            ? colorPrimary
-                            : colorPrimary.withOpacity(0.3),
-                      ),
-                      Text(
-                        'Settings',
-                        style: GoogleFonts.mulish(
-                            fontSize: 10,
-                            fontWeight: _myNavController.selectedTab.value == 3
-                                ? FontWeight.bold
-                                : null),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+              label: "."),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.search_outlined,
+                size: 30,
+              ),
+              label: "."),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.podcasts_outlined,
+                size: 30,
+              ),
+              label: "."),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person_outline,
+                size: 30,
+              ),
+              label: ".")
+        ],
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        currentIndex: _selectedIndex,
+      ),
+      body: Container(
+        child: pages.elementAt(_selectedIndex),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: white,
+        child: Image.asset(weisle_logo, height: 50),
+        onPressed: () {
+          //Overlay.of(context).insert(entry);
+        },
       ),
     );
   }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:weisle/emergencySetup/setUp/anotherEmergencySetup/anotherEmerSetup.dart';
+import 'package:weisle/emergencySetup/setUp/contactSetup.dart';
+import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/ui/screens/settings/settings.dart';
+import 'package:weisle/ui/screens/dashboard/home_page.dart';
+import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
+import 'package:weisle/ui/screens/welcome_screens/onboarding_screen.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
+import 'package:weisle/ui/widgets/header.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 
@@ -25,18 +29,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Image.asset("assets/icons/headericons.png",
-                        height: 30, width: 30),
-                    const YMargin(10),
-                    InkWell(
-                      onTap: () {
-                        navigate(context, const AnotherEmergencySetup());
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [IconOf(Icons.alarm_on_rounded, black, 30)],
-                      ),
-                    ),
+                    const Header(),
                     const YMargin(20),
                     TextOf('Payment method', 23, FontWeight.w500, black),
                     const YMargin(32),
@@ -127,8 +120,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                             15,
                             Row(
                               children: [
-                                IconOf(Icons.storefront_rounded,
-                                    Colors.blue.shade300, 20),
+                                Image.asset(bank),
                                 const XMargin(20),
                                 TextOf(
                                     'Bank Transfer', 18, FontWeight.w400, ash),
@@ -152,7 +144,10 @@ class _PaymentMethodState extends State<PaymentMethod> {
                             15,
                             Row(
                               children: [
-                                IconOf(Icons.circle, green2, 20),
+                                Image.asset(
+                                  whatsapp2,
+                                  color: green2,
+                                ),
                                 const XMargin(20),
                                 TextOf('WhatsApp', 18, FontWeight.w400, ash),
                               ],
@@ -175,7 +170,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                             15,
                             Row(
                               children: [
-                                IconOf(Icons.phone_rounded, deepBlue, 20),
+                                Image.asset(phone),
                                 const XMargin(20),
                                 TextOf('Call', 18, FontWeight.w400, ash),
                               ],
@@ -184,6 +179,20 @@ class _PaymentMethodState extends State<PaymentMethod> {
                         ),
                       ),
                     ),
+                    const YMargin(60),
+                    InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconOf(Icons.refresh_rounded, colorPrimary, 20),
+                          TextOf('Redirect to homepage', 15, FontWeight.w500,
+                              colorPrimary)
+                        ],
+                      ),
+                      onTap: () {
+                        navigatedForever(context, LandingScreen());
+                      },
+                    )
                   ],
                 ),
               ))),

@@ -21,6 +21,9 @@ Color veryLitePink = const Color(0xffFFE5EC);
 Color deepBlue = const Color(0xff1F0EE7);
 Color brown = const Color(0xffE7760E);
 Color deepGreen1 = const Color(0xff128807);
+Color blackGrey = const Color(0xff689592);
+Color blue = const Color(0xff1F0EE7);
+Color fadedBlue = const Color(0xff395185);
 
 //------------------------------------LINEAR GRADIENT
 Color orange = const Color(0xffEB3E07);

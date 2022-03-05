@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weisle/currentLocation.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:weisle/utils/user_details_getter.dart';
+import 'package:intl/intl.dart';
 
 class Report extends StatefulWidget {
   const Report({Key? key}) : super(key: key);
@@ -16,6 +20,8 @@ class _ReportState extends State<Report> {
   int current = 0;
   @override
   Widget build(BuildContext context) {
+    DateTime time = DateTime.now();
+    var now = int.parse(DateFormat('kk').format(time));
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -50,9 +56,21 @@ class _ReportState extends State<Report> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextOf('Good morning,', 14, FontWeight.w400, ash),
+                        TextOf(
+                            ((now > 12) || (now <= 16))
+                                ? 'Good morning💭'
+                                : ((now > 16) || (now < 20))
+                                    ? 'Good afernoon🌤️'
+                                    : "Good evening🌕",
+                            14,
+                            FontWeight.w400,
+                            ash),
                         const YMargin(5),
-                        TextOf('Tinuke Akinlawon', 18, FontWeight.w400, black)
+                        Consumer<UserDetailsGetter>(
+                            builder: ((context, value, child) {
+                          return TextOf(
+                              "${value.fullName}", 18, FontWeight.w400, black);
+                        })),
                       ],
                     )
                   ],
@@ -119,7 +137,9 @@ class _ReportState extends State<Report> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              navigate(context, CurrenLocation());
+                            },
                             child: Card(
                               elevation: 3.0,
                               child: Container(
@@ -463,7 +483,7 @@ class _MakeReportState extends State<MakeReport> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextOf('Curren report', 22, FontWeight.w600, black),
+                        TextOf('Current report', 22, FontWeight.w600, black),
                         TextOf('Popular reports', 17, FontWeight.w400, black)
                       ],
                     ),
@@ -613,7 +633,7 @@ class _MakeReportState extends State<MakeReport> {
                 ),
                 TextFormField(
                   maxLines: 10,
-                  textDirection: TextDirection.ltr,
+                  //textDirection: TextDirection.ltr,
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
                       hintText: 'Description',

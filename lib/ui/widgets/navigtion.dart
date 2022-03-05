@@ -1,15 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
 navigateReplaces(context, Widget route, {isDialog = false}) {
-  return Navigator.pushReplacement(
+  return Navigator.push(
     context,
     MaterialPageRoute(
       builder: (BuildContext ctx) => route,
     ),
   );
+}
+
+navigatedForever(context, Widget route, {isDialog = false}) {
+  return Navigator.pushAndRemoveUntil(context,
+      MaterialPageRoute(builder: (context) => route), (route) => false);
 }
 
 goBack(context) {

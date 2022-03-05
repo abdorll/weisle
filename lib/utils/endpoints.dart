@@ -14,7 +14,7 @@ const resetPassurl = '$customerBaseUrlKey/resetPass';
 const editProfileurl = '$customerBaseUrlKey/editProfile';
 const notificationServiceurl = '$customerBaseUrlKey/notificationService';
 const getNotificationurl = '$customerBaseUrlKey/getNotification';
-
+//6214F313D1BC2
 //---------------------------------------EMERGENCY SETUP
 const getAllCategoriesurl = '$emergencyBaseUrlKey/getEcat';
 const setupEmergurl = '$emergencyBaseUrlKey/setupEmerg';

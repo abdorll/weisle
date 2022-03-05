@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weisle/ui/constants/colors.dart';
@@ -51,12 +53,8 @@ class TextOfDecoration extends StatelessWidget {
     return Text(
       text,
       textAlign: align,
-      style: GoogleFonts.poppins(
-          fontSize: size,
-
-          ///fontStyle: FontStyle.italic,
-          fontWeight: weight,
-          color: color),
+      style:
+          GoogleFonts.poppins(fontSize: size, fontWeight: weight, color: color),
     );
   }
 }
@@ -133,6 +131,24 @@ class WeisleAppBar extends StatelessWidget {
         TextOf(title, 20, FontWeight.w600, color),
         end
       ],
+    );
+  }
+}
+
+class WeisleHeader extends StatelessWidget {
+  WeisleHeader(this.start, this.middle, this.end, {Key? key}) : super(key: key);
+  Widget middle;
+  Widget end;
+  Widget start;
+  @override
+  Widget build(BuildContext context) {
+    return SideSpace(
+      10,
+      10,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [start, middle, end],
+      ),
     );
   }
 }

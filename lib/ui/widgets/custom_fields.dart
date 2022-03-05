@@ -29,27 +29,19 @@ class PlainTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 20),
-      child: Column(
-        children: [
-          StreamBuilder(
-              stream: stream,
-              builder: (context, snapshot) {
-                return TextFormField(
-                  controller: controller,
-                  enabled: enabled ?? true,
-                  maxLines: maxLines ?? 1,
-                  onChanged: onchanged,
-                  decoration: InputDecoration(
-                      hintText: hint,
-                      suffixIcon: trailing,
-                      prefixIcon: leading,
-                      prefixStyle: TextStyle(color: colorPrimary),
-                      errorText:
-                          snapshot.hasError ? snapshot.error.toString() : null),
-                );
-              })
-        ],
-      ),
+      child: TextFormField(
+          controller: controller,
+          enabled: enabled ?? true,
+          maxLines: maxLines ?? 1,
+          onChanged: onchanged,
+          decoration: InputDecoration(
+            hintText: hint,
+            suffixIcon: trailing,
+            prefixIcon: leading,
+            prefixStyle: TextStyle(color: colorPrimary),
+            // errorText:
+            //     snapshot.hasError ? snapshot.error.toString() : null),
+          )),
     );
   }
 }

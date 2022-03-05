@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:weisle/emergencySetup/firstPaymentMethod.dart';
+import 'package:weisle/emergencySetup/setUp/PLANgetPremium.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
@@ -142,6 +144,19 @@ class CreateSubscriptionServiceProvider extends BaseProvider {
     notifyListeners();
   }
 
+  void countryNamePhoneNumberCheck(context) {
+    if (_countryName == null || _phoneNumber == null) {
+      Alerts.errorAlert(
+          context, 'Valid country name and phone number are required', () {
+        Navigator.pop(context);
+      });
+    } else {
+      Future.delayed(Duration(seconds: 2), () {
+        navigate(context, GetAnotherWeizlePremium());
+      });
+    }
+  }
+
   void checkFormValidity() {
     if ((_accountId != null) &&
         (_emergencySetupId != null) &&
@@ -158,6 +173,14 @@ class CreateSubscriptionServiceProvider extends BaseProvider {
   }
 
   void subscribe(BuildContext context) async {
+    setplanAmt = GetAnotherWeizlePremium.planAmt;
+    setplanCurrency = GetAnotherWeizlePremium.planCurrency;
+    setpremiumPlanId = GetAnotherWeizlePremium.premiumPlanId;
+    var userBox = await Hive.openBox(weisleUserBox);
+    String accountIDD = userBox.get(weisleUserName);
+    String setupIDD = userBox.get(weislesetUpId);
+    setaccountId = accountIDD;
+    setemergencySetupId = setupIDD;
     try {
       if (_accountId == null ||
           _emergencySetupId == null ||
@@ -166,15 +189,11 @@ class CreateSubscriptionServiceProvider extends BaseProvider {
           _premiumPlanId == null ||
           _planAmt == null ||
           _planCurrency == null) {
-        Alerts.errorAlert(context, 'Al fields are required', () {
-          Navigator.pop(context);
-        });
-      } else if (_emergencySetupId!.length < 1) {
-        Alerts.errorAlert(context, 'Emergency Setup Id lengt too short', () {
+        Alerts.errorAlert(context, 'All fields are required', () {
           Navigator.pop(context);
         });
       } else {
-        Alerts.loadingAlert(context, 'Proccessing notif...');
+        Alerts.loadingAlert(context, 'Proccessing sub...');
         FocusScope.of(context).unfocus();
         setLoading = true;
         var subscriptionServiceResponse =
@@ -191,11 +210,10 @@ class CreateSubscriptionServiceProvider extends BaseProvider {
             "Weisle CreateSubscription service response is $subscriptionServiceResponse");
         if (subscriptionServiceResponse['resposeCode'] == '00') {
           setLoading = false;
-          var userBox = await Hive.openBox(weisleUserBox);
-          var currency = userBox.put(weisleCurrency,
-              subscriptionServiceResponse['data']['planCurrency']);
+          Alerts.successAlert(context, 'Subscription successfully created', () {
+            navigateReplaces(context, LandingScreen());
+          });
           print('Request Successful');
-          navigate(context, LandingScreen());
         } else if (subscriptionServiceResponse['resposeCode'] == '06') {
           Alerts.errorAlert(context, 'Improper format', () {
             Navigator.pop(context);
@@ -207,6 +225,7 @@ class CreateSubscriptionServiceProvider extends BaseProvider {
       }
     } catch (e) {
       print("Weisle error: $e");
+      Navigator.pop(context);
       Alerts.errorAlert(context, 'Something went Wrong', () {
         Navigator.pop(context);
       });
