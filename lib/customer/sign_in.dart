@@ -120,8 +120,10 @@ class SignInProvider extends BaseProvider {
   String? _fullName;
   String? _accountType;
   String? _userName;
+  String? _userStatus;
   String? _referralCode;
   String? _weisleId;
+  String? _phoneNo;
   //-----------------------------FROM SUB HISTORY BY DATE
   String? _id;
   String? _txtRef;
@@ -133,8 +135,10 @@ class SignInProvider extends BaseProvider {
   bool _userloggedIn = false;
   String get fullName => _fullName ?? 'full name';
   String get uername => _username ?? 'username';
+  String get phoneNo => _phoneNo ?? 'Phone No';
   String get accountType => _accountType ?? 'accountType';
   String get weisleId => _weisleId ?? 'weisleId';
+  String get userStatus => _userStatus ?? 'userStatus';
 
   String get referralCode => _referralCode ?? 'referralCode';
   //---------------------------------FROM SUB HISTORY BY DATE
@@ -164,6 +168,11 @@ class SignInProvider extends BaseProvider {
 
   set setUsername(String username) {
     _userName = username;
+    notifyListeners();
+  }
+
+  set setuserStatus(String userStatus) {
+    _userStatus = userStatus;
     notifyListeners();
   }
 
@@ -213,6 +222,11 @@ class SignInProvider extends BaseProvider {
     notifyListeners();
   }
 
+  set setphoneNo(String phoneNo) {
+    _phoneNo = phoneNo;
+    notifyListeners();
+  }
+
   void login(BuildContext context) async {
     try {
       if (_username == null || _password == null) {
@@ -244,12 +258,16 @@ class SignInProvider extends BaseProvider {
           userDetails.put(
               weisleaccountType, loginResponse['data']['accountType']);
           userDetails.put(weislemyRefCode, loginResponse['data']["myRefCode"]);
-          userDetails.put(weisleuserStatus, loginResponse);
+          userDetails.put(weislephoneNumber, loginResponse['data']["phoneNo"]);
+          userDetails.put(
+              weisleuserStatus, loginResponse['data']["userStatus"]);
           setUsername = userDetails.get(weisleUserName);
           setweisleId = userDetails.get(weisleId) ?? userDetails.get(weisleid);
           setfullName = userDetails.get(weisleFullName);
+          setphoneNo = userDetails.get(weislephoneNumber);
           setaccountType = userDetails.get(weisleaccountType);
           setreferralCode = userDetails.get(weislemyRefCode);
+          setuserStatus = userDetails.get(weisleuserStatus);
           //---------------------------------FROM SUB HISTORY BY DATE
           // setid = userDetails.get(weisleId);
           // settxtRef = userDetails.get(weisletxtRef);

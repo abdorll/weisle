@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weisle/customer/resetPassword.dart';
 import 'package:weisle/emergencySetup/createSubscription.dart';
-import 'package:weisle/emergencySetup/setUp/setUpProvider.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/margin.dart';

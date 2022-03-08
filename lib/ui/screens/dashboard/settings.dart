@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weisle/customer/account_lookup.dart';
 import 'package:weisle/customer/referYourFriedns.dart';
 import 'package:weisle/customer/resetPassword.dart';
 import 'package:weisle/customer/sqaPage.dart';
@@ -36,8 +38,13 @@ class Settings extends StatelessWidget {
                 navigate(context, const SQaPage());
               }),
               const YMargin(10),
-              SettingsContents(Icons.format_align_justify_rounded,
-                  'Account lookup', 'A summary of your details', () {}),
+              Consumer<AccountLookupProvider>(
+                  builder: ((context, value, child) {
+                return SettingsContents(Icons.format_align_justify_rounded,
+                    'Account lookup', 'A summary of your details', () {
+                  value.accountLookup(context);
+                });
+              })),
               const YMargin(10),
               const YMargin(10),
               SettingsContents(Icons.link_rounded, 'Referral code',

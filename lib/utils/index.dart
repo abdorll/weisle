@@ -52,3 +52,6 @@ const weisleplanAmt = 'planAmt';
 const weisleplanCurrency = 'planCurrency';
 const weisleemergencyCountry = 'emergencyCountry';
 const weislesubStatus = 'subStatus';
+
+const weisleSecQuestion = "weisleSecQuestion";
+const weisleAccountStatus = "weisleAccountStatus";

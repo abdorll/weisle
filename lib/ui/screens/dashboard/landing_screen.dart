@@ -37,9 +37,8 @@ class _LandingScreenState extends State<LandingScreen> {
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home_outlined,
-                size: 30,
+              icon: ImageIcon(
+                AssetImage(home_icon),
               ),
               label: "."),
           BottomNavigationBarItem(
@@ -49,15 +48,13 @@ class _LandingScreenState extends State<LandingScreen> {
               ),
               label: "."),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.podcasts_outlined,
-                size: 30,
+              icon: ImageIcon(
+                AssetImage(broadcast_icon),
               ),
               label: "."),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person_outline,
-                size: 30,
+              icon: ImageIcon(
+                AssetImage(person_icon),
               ),
               label: ".")
         ],

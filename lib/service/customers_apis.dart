@@ -27,7 +27,7 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(registerurl, null, data);
   }
 
-  //-------------------------------------------SIGN IN 
+  //-------------------------------------------SIGN IN
   Future signIn({username, password}) {
     Map<String, dynamic> data = {
       "username": username,
@@ -36,9 +36,9 @@ class CustomerApiBasi {
     return _apiBasics!.makePostRequest(signInurl, null, data);
   }
 
-  //-------------------------------------------SET SQA 
-  //-------------------------------------------SET SQA 
-  //-------------------------------------------SET SQA 
+  //-------------------------------------------SET SQA
+  //-------------------------------------------SET SQA
+  //-------------------------------------------SET SQA
   //-------------------------------------------SET SQA
   Future setSqa({userName, secQuestion, secAnswer}) {
     Map<String, dynamic> data = {
@@ -52,13 +52,13 @@ class CustomerApiBasi {
   //-------------------------------------------ACCOUNT LOOKUP
   //-------------------------------------------ACCOUNT LOOKUP
   //-------------------------------------------ACCOUNT LOOKUP
-  Future acctLookup({accountId}) {
+  Future acctLookup({accountId, phoneNo}) {
     Map<String, dynamic> data = {
       "accountId": accountId,
+      "phoneNo": phoneNo,
     };
     return _apiBasics!.makePostRequest(acctLookupurl, null, data);
   }
-
 
   //-------------------------------------------RESET PASSWORD
   //-------------------------------------------RESET PASSWORD
@@ -71,7 +71,6 @@ class CustomerApiBasi {
     };
     return _apiBasics!.makePostRequest(resetPassurl, null, data);
   }
-
 
   //-------------------------------------------EDIT PROFILE
   //-------------------------------------------EDIT PROFILE

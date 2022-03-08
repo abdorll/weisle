@@ -36,7 +36,7 @@ class _HomepageState extends State<Homepage> {
               TextOfDecoration("What's your emergency?", 12, FontWeight.w700,
                   black, TextAlign.center),
               TextOfDecoration(
-                  'Long press on any of the emergency icons to send a message',
+                  '(Long press on any of the emergency icons to send a message)',
                   12,
                   FontWeight.w700,
                   black,

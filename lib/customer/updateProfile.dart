@@ -86,12 +86,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                     ]);
               }),
             ),
-            InkWell(
-              onTap: () {
-                navigate(context, DashboardScreen());
-              },
-              child: TextOf('LOCATE', 20, FontWeight.w800, black),
-            )
+            // InkWell(
+            //   onTap: () {
+            //     navigate(context, DashboardScreen());
+            //   },
+            //   child: TextOf('LOCATE', 20, FontWeight.w800, black),
+            // )
           ],
         ),
       ),
