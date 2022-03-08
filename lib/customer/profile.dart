@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:weisle/customer/resetPassword.dart';
 import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/emergencySetup/setUp/CONTACTGetPremiumPlan.dart';
+import 'package:weisle/emergencySetup/setUp/setUp.dart';
 import 'package:weisle/randoms/map.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
@@ -166,8 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     0,
                     InkWell(
                         onTap: () {
-                          navigate(context,
-                              const GetWeizlePremiumContactAndCountyrPage());
+                          navigate(context, const SetUp());
                         },
                         child: Container(
                           width: 220,

@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors_in_immutables
 import 'package:flutter/material.dart';
+import 'package:weisle/currentLocation.dart';
+import 'package:weisle/randoms/current_location.dart';
+import 'package:weisle/service_locator.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/customer/profile.dart';
 import 'package:weisle/ui/screens/activity_report.dart';
 import 'package:weisle/ui/screens/dashboard/settings.dart';
+import 'package:weisle/ui/widgets/navigtion.dart';
 import 'home_page.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -73,6 +77,7 @@ class _LandingScreenState extends State<LandingScreen> {
         backgroundColor: white,
         child: Image.asset(weisle_logo, height: 50),
         onPressed: () {
+          navigate(context, const CurrentLocationScreen());
           //Overlay.of(context).insert(entry);
         },
       ),

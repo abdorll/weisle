@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:weisle/customer/sign_in.dart';
-import 'package:weisle/customer/sqaPage.dart';
 import 'package:weisle/customer/welcome_back.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
@@ -13,7 +11,7 @@ import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
 import 'package:weisle/utils/index.dart';
-import 'package:weisle/utils/user_details_getter.dart';
+import 'package:weisle/ui/constants/colors.dart';
 import '../ui/constants/colors.dart';
 
 class ResetPasword extends StatefulWidget {
@@ -106,13 +104,21 @@ class Header extends StatelessWidget {
           headericons,
           height: 30,
         ),
-        Image.asset(
-          alarm,
-          height: 40,
-        ));
+        Card(
+            elevation: 7,
+            //shape: RoundedRectangleShapeBorder(),
+            child: Stack(children: [
+              Image.asset(
+                alarm,
+                height: 40,
+              ),
+              const Positioned(
+                  bottom: 20,
+                  left: 20,
+                  child: CircleAvatar(radius: 2, backgroundColor: Colors.pink))
+            ])));
   }
 }
-
 //------------------------------------------------------------RESET PASWORD PROVIDER
 class ResetPasswordProvider extends BaseProvider {
   String? _userPass;

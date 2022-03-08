@@ -33,8 +33,8 @@ class TextOf extends StatelessWidget {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style:
-          GoogleFonts.poppins(fontSize: size, fontWeight: weight, color: color),
+      style: GoogleFonts.poppins(
+          fontSize: size - 3, fontWeight: weight, color: color),
     );
   }
 }
@@ -53,8 +53,8 @@ class TextOfDecoration extends StatelessWidget {
     return Text(
       text,
       textAlign: align,
-      style:
-          GoogleFonts.poppins(fontSize: size, fontWeight: weight, color: color),
+      style: GoogleFonts.poppins(
+          fontSize: size - 3, fontWeight: weight, color: color),
     );
   }
 }

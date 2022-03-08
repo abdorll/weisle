@@ -151,9 +151,7 @@ class CreateSubscriptionServiceProvider extends BaseProvider {
         Navigator.pop(context);
       });
     } else {
-      Future.delayed(Duration(seconds: 2), () {
-        navigate(context, GetAnotherWeizlePremium());
-      });
+      navigate(context, const GetAnotherWeizlePremium());
     }
   }
 

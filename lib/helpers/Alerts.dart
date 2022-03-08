@@ -96,6 +96,9 @@ class Alerts {
             ],
           );
         });
+    Future.delayed(const Duration(milliseconds: 500), () {
+      ok();
+    });
   }
 
   static responseAlert(context, String message, Function ok) {

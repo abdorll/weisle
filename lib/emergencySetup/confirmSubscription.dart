@@ -160,6 +160,7 @@ class ConfirmSubscriptionServiceProvider extends BaseProvider {
             "Weisle ConfirmSubscription service response is $confirmSubscriptionResponse");
         if (confirmSubscriptionResponse['resposeCode'] == '00') {
           setLoading = false;
+          goBack(context);
           print('Request Successful');
           Alerts.successAlert(context, 'Confirmation successsful', () {
             goBack(context);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/emergencySetup/setUp/setUp.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
@@ -31,8 +33,10 @@ class _HomepageState extends State<Homepage> {
                 hello_user,
                 height: 140,
               ),
-              TextOfDecoration(
-                  'Hello user', 12, FontWeight.w700, black, TextAlign.center),
+              Consumer<SignInProvider>(builder: (context, value, child) {
+                return TextOfDecoration('Hello ${value.username}', 12,
+                    FontWeight.w700, black, TextAlign.center);
+              }),
               TextOfDecoration("What's your emergency?", 12, FontWeight.w700,
                   black, TextAlign.center),
               TextOfDecoration(

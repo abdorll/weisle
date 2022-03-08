@@ -1,9 +1,13 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weisle/currentLocation.dart';
 import 'package:weisle/customer/sign_in.dart';
+import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
+import 'package:weisle/ui/widgets/header.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,209 +33,96 @@ class _ReportState extends State<Report> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const YMargin(10),
-              Image.asset("assets/icons/headericons.png",
-                  height: 30, width: 30),
-              const YMargin(10),
-              SideSpace(
-                10,
-                0,
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  InkWell(
-                      onTap: () {
-                        navigate(context, const Tracker());
-                      },
-                      child: IconOf(Icons.alarm_add_rounded, black, 30))
-                ]),
-              ),
+              const Header(),
               const YMargin(10),
               SideSpace(
                 10,
                 0,
                 Row(
                   children: [
-                    CircleAvatar(
-                      backgroundColor: white,
-                      radius: 30,
+                    Card(
+                      elevation: 10,
+                      shadowColor: litePink2,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(90)),
+                      child: CircleAvatar(
+                        backgroundColor: white,
+                        radius: 30,
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextOf(
-                            ((now > 12) || (now <= 16))
+                            now < 12
                                 ? 'Good morning💭'
-                                : ((now > 16) || (now < 20))
+                                : now < 17
                                     ? 'Good afernoon🌤️'
-                                    : "Good evening🌕",
-                            14,
-                            FontWeight.w400,
+                                    : now < 20
+                                        ? 'Good evening🌕'
+                                        : "Good evening🌕",
+                            13,
+                            FontWeight.w500,
                             ash),
                         const YMargin(5),
                         Consumer<SignInProvider>(
                             builder: ((context, value, child) {
                           return TextOf(
-                              value.fullName, 18, FontWeight.w400, black);
+                              value.fullName, 16, FontWeight.w500, black);
                         })),
                       ],
                     )
                   ],
                 ),
               ),
-              Image.asset("assets/images/lagos_map.png",
-                  height: 190, width: double.infinity),
+              SideSpace(
+                10,
+                0,
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        navigate(context, Tracker());
+                      },
+                      child: CircleAvatar(
+                        radius: 90,
+                        backgroundImage:
+                            AssetImage("assets/images/lagos_map.png"),
+                      ),
+                    ),
+                    const XMargin(5),
+                    Column(children: [const YMargin(100), DaysChart()])
+                  ],
+                ),
+              ),
               SideSpace(
                 10,
                 0,
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextOf('Mon', 13, FontWeight.w600, black),
-                            IconOf(Icons.sort, black, 15)
-                          ],
-                        ),
-                        const XMargin(10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextOf('Tue', 13, FontWeight.w600, black),
-                            IconOf(Icons.sort, black, 15)
-                          ],
-                        ),
-                        const XMargin(10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextOf('Wed', 13, FontWeight.w600, black),
-                            IconOf(Icons.sort, black, 15)
-                          ],
-                        ),
-                        const XMargin(10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextOf('Thu', 13, FontWeight.w600, black),
-                            IconOf(Icons.sort, black, 15)
-                          ],
-                        ),
-                        const XMargin(10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextOf('Fri...', 13, FontWeight.w600, black),
-                            IconOf(Icons.sort, black, 15)
-                          ],
-                        ),
-                      ],
-                    ),
                     Row(children: [
                       TextOf('Activity', 20, FontWeight.w500, black)
                     ]),
                     const YMargin(10),
-                    Column(children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    SideSpace(
+                      10,
+                      0,
+                      GridView.count(
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        primary: false,
+                        childAspectRatio: 0.95,
+                        crossAxisSpacing: 15,
+                        mainAxisSpacing: 15,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              navigate(context, CurrenLocation());
-                            },
-                            child: Card(
-                              elevation: 3.0,
-                              child: Container(
-                                child: SideSpace(
-                                    40,
-                                    40,
-                                    Center(
-                                      child: Column(
-                                        children: [
-                                          IconOf(Icons.wash_rounded,
-                                              colorPrimary, 40),
-                                          TextOf('Robbery', 18, FontWeight.w400,
-                                              colorPrimary)
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: Card(
-                              elevation: 3.0,
-                              child: Container(
-                                child: SideSpace(
-                                    40,
-                                    40,
-                                    Center(
-                                      child: Column(
-                                        children: [
-                                          IconOf(Icons.wash_rounded,
-                                              colorPrimary, 40),
-                                          TextOf('Robbery', 18, FontWeight.w400,
-                                              colorPrimary)
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                          )
+                          activity(robbery, 50, 'Robbery'),
+                          activity(flood_icon, 50, 'Flood'),
+                          activity(accident, 50, 'Accident'),
+                          activity(traffic_light, 50, 'Traffic'),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Card(
-                              elevation: 3.0,
-                              child: Container(
-                                color: null,
-                                child: SideSpace(
-                                    40,
-                                    40,
-                                    Center(
-                                      child: Column(
-                                        children: [
-                                          IconOf(Icons.wash_rounded,
-                                              colorPrimary, 40),
-                                          TextOf('Robbery', 18, FontWeight.w400,
-                                              colorPrimary)
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: Card(
-                              elevation: 3.0,
-                              child: Container(
-                                child: SideSpace(
-                                    40,
-                                    40,
-                                    Center(
-                                      child: Column(
-                                        children: [
-                                          IconOf(Icons.wash_rounded,
-                                              colorPrimary, 40),
-                                          TextOf('Robbery', 18, FontWeight.w400,
-                                              colorPrimary)
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ])
+                    )
                   ],
                 ),
               ),
@@ -247,6 +138,80 @@ class _ReportState extends State<Report> {
       current = index;
     });
   }
+}
+
+class DaysChart extends StatelessWidget {
+  const DaysChart({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextOf('Mon', 13, FontWeight.w600, black),
+            IconOf(Icons.sort, black, 15)
+          ],
+        ),
+        const XMargin(10),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextOf('Tue', 13, FontWeight.w600, black),
+            IconOf(Icons.sort, black, 15)
+          ],
+        ),
+        const XMargin(10),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextOf('Wed', 13, FontWeight.w600, black),
+            IconOf(Icons.sort, black, 15)
+          ],
+        ),
+        const XMargin(10),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextOf('Thu', 13, FontWeight.w600, black),
+            IconOf(Icons.sort, black, 15)
+          ],
+        ),
+        const XMargin(10),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextOf('Fri...', 13, FontWeight.w600, black),
+            IconOf(Icons.sort, black, 15)
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+Widget activity(String icon, double height, String text) {
+  return Card(
+    elevation: 6,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            icon,
+            height: height,
+          ),
+          const XMargin(4),
+          TextOfDecoration(text, 17, FontWeight.w500, ash, TextAlign.center)
+        ],
+      ),
+    ),
+  );
 }
 
 //////--------------------------------------------------------------------TRACKER REPORT----------
@@ -273,9 +238,7 @@ class _TrackerState extends State<Tracker> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const YMargin(10),
-              Image.asset("assets/icons/headericons.png",
-                  height: 30, width: 30),
-              const YMargin(10),
+              Header(),
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -417,15 +380,6 @@ class _TrackerState extends State<Tracker> {
                   ],
                 ),
               ),
-              const YMargin(20),
-              Container(
-                width: double.infinity,
-                height: 100,
-                child: Center(
-                    child: TextOfDecoration('Banner Ads', 20, FontWeight.w500,
-                        black, TextAlign.center)),
-                decoration: BoxDecoration(color: white),
-              )
             ],
           ),
         ),

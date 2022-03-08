@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:weisle/customer/resetPassword.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/custom_fields.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
@@ -76,6 +78,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             "Register",
                             style: TextStyle(color: colorPrimary),
                           ))
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextOf('Forgot password', 16, FontWeight.w400, black),
+                      const XMargin(4),
+                      InkWell(
+                        onTap: () {
+                          navigate(context, const ResetPasword());
+                        },
+                        child:
+                            TextOf('Reset', 16, FontWeight.w400, colorPrimary),
+                      )
                     ],
                   )
                 ]);

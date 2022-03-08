@@ -113,15 +113,6 @@ class AccountLookupDetails extends StatelessWidget {
   }
 }
 
-// "weizleId": "3270938661",
-//         "fullName": "Ololade Opadeji",
-//         "phoneNo": "0393939393939",
-//         "userName": "Olap",
-//         "secQuestion": "What is your name",
-//         "accountType": "STANDARD",
-//         "myRefCode": "620E6F3D3E5F8",
-//         "userStatus": "Active"
-
 class AccountLookupProvider extends BaseProvider {
   String? _accountId;
   String? _phoneNo;
