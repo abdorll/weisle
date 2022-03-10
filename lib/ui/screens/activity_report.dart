@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weisle/currentLocation.dart';
+import 'package:weisle/customer/notificationService/notoficationService.dart';
 import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
@@ -10,8 +10,10 @@ import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/header.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:weisle/utils/user_details_getter.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 class Report extends StatefulWidget {
@@ -54,13 +56,15 @@ class _ReportState extends State<Report> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextOf(
-                            now < 12
+                            now > 0
                                 ? 'Good morning💭'
-                                : now < 17
+                                : now > 12
                                     ? 'Good afernoon🌤️'
-                                    : now < 20
+                                    : now > 17
                                         ? 'Good evening🌕'
-                                        : "Good evening🌕",
+                                        : now < 20
+                                            ? 'Good evening🌕'
+                                            : "Good evening🌕",
                             13,
                             FontWeight.w500,
                             ash),
@@ -84,10 +88,24 @@ class _ReportState extends State<Report> {
                       onTap: () {
                         navigate(context, Tracker());
                       },
-                      child: CircleAvatar(
-                        radius: 90,
-                        backgroundImage:
-                            AssetImage("assets/images/lagos_map.png"),
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 90,
+                            backgroundImage:
+                                AssetImage("assets/images/lagos_map.png"),
+                          ),
+                          Positioned(
+                            left: 1,
+                            bottom: 1,
+                            top: 1,
+                            right: 1,
+                            child: SpinKitRipple(
+                              color: colorPrimary,
+                              size: 200,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const XMargin(5),
@@ -228,160 +246,222 @@ class Tracker extends StatefulWidget {
 }
 
 class _TrackerState extends State<Tracker> {
+  String location = 'Searching...';
+  String address = 'Searching...';
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
+  Future<void> getAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    address =
+        '${place.street}, ${place.subAdministrativeArea}, ${place.locality},, ${place.country}';
+    setState(() {});
+  }
+
   int current = 0;
+
+  Future getMapDetails() async {
+    Position position = await _getGeoLocationPosition();
+    location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
+    getAddressFromLatLong(position);
+  }
+
+  @override
+  void initState() {
+    getMapDetails();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const YMargin(10),
-              Header(),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SideSpace(10, 10,
-                        TextOf('Aguda, Surulere', 18, FontWeight.w300, white))
-                  ],
-                ),
-                decoration: BoxDecoration(color: colorPrimary),
-              ),
-              Image.asset("assets/images/lagos_map.png",
-                  height: 190, width: double.infinity),
-              Container(
-                child: SideSpace(
-                    10,
-                    10,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        MediumSizeButton(
-                            () {},
-                            IconOf(Icons.whatshot, white, 25),
-                            colorPrimary,
-                            10,
-                            40,
-                            10,
-                            0),
-                        MediumSizeButton(
-                            () {},
-                            IconOf(Icons.emoji_objects, white, 25),
-                            colorPrimary,
-                            10,
-                            40,
-                            10,
-                            0),
-                        MediumSizeButton(
-                            () {},
-                            IconOf(Icons.share_rounded, white, 25),
-                            colorPrimary,
-                            10,
-                            40,
-                            10,
-                            0),
-                      ],
-                    )),
-                decoration: BoxDecoration(color: lightPink),
-              ),
-              const YMargin(20),
-              SideSpace(
-                10,
-                0,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Card(
-                      child: MediumSizeButton(
-                          () {},
-                          Row(
-                            children: [
-                              TextOf(
-                                  'Active', 20, FontWeight.w400, colorPrimary),
-                              const XMargin(10),
-                              IconOf(Icons.done_all_rounded, colorPrimary, 20),
-                            ],
-                          ),
-                          white,
+          child: Consumer<NotificationServiceProvider>(
+              builder: ((context, value, child) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const YMargin(10),
+                Header(),
+                Container(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SideSpace(
                           10,
-                          30,
-                          15,
-                          0),
-                    ),
-                    Card(
-                      child: MediumSizeButton(
-                          () {},
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextOf('Disable', 20, FontWeight.w400, ash),
-                              const XMargin(10),
-                              IconOf(Icons.alarm_off_rounded, ash, 20),
-                            ],
-                          ),
-                          white,
-                          10,
-                          30,
-                          15,
-                          0),
-                    )
-                  ],
-                ),
-              ),
-              Card(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const YMargin(20),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconOf(Icons.security_rounded, black, 20),
-                            const XMargin(10),
-                            TextOf('No threat detected', 20, FontWeight.w400,
-                                black),
-                          ],
-                        ),
-                        const YMargin(30),
-                        TextOf(
-                            'No threat was identified in your \n current location',
-                            20,
-                            FontWeight.w500,
-                            colorPrimary),
-                        const YMargin(30),
-                        SideSpace(
-                          20,
                           0,
+                          TextOfDecoration(address, 18, FontWeight.w300, white,
+                              TextAlign.left)),
+                      SideSpace(
+                          10,
+                          0,
+                          TextOfDecoration(location, 18, FontWeight.w300, white,
+                              TextAlign.left)),
+                    ],
+                  ),
+                  decoration: BoxDecoration(color: colorPrimary),
+                ),
+                Image.asset("assets/images/lagos_map.png",
+                    height: 190, width: double.infinity),
+                Container(
+                  child: SideSpace(
+                      10,
+                      10,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           MediumSizeButton(
                               () {},
-                              InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                MakeReport()));
-                                  },
-                                  child: TextOf(
-                                      'Report', 20, FontWeight.w400, white)),
+                              IconOf(Icons.whatshot, white, 25),
                               colorPrimary,
-                              15,
-                              60,
+                              10,
+                              40,
                               10,
                               0),
-                        ),
-                        const YMargin(10),
-                      ],
-                    )
-                  ],
+                          MediumSizeButton(
+                              () {},
+                              IconOf(Icons.emoji_objects, white, 25),
+                              colorPrimary,
+                              10,
+                              40,
+                              10,
+                              0),
+                          MediumSizeButton(
+                              () {},
+                              IconOf(Icons.share_rounded, white, 25),
+                              colorPrimary,
+                              10,
+                              40,
+                              10,
+                              0),
+                        ],
+                      )),
+                  decoration: BoxDecoration(color: lightPink),
                 ),
-              ),
-            ],
-          ),
+                const YMargin(20),
+                SideSpace(
+                  10,
+                  0,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Card(
+                        child: MediumSizeButton(
+                            () {},
+                            Row(
+                              children: [
+                                TextOf('Active', 20, FontWeight.w400,
+                                    colorPrimary),
+                                const XMargin(10),
+                                IconOf(
+                                    Icons.done_all_rounded, colorPrimary, 20),
+                              ],
+                            ),
+                            white,
+                            10,
+                            30,
+                            15,
+                            0),
+                      ),
+                      Card(
+                        child: MediumSizeButton(
+                            () {},
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextOf('Disable', 20, FontWeight.w400, ash),
+                                const XMargin(10),
+                                IconOf(Icons.alarm_off_rounded, ash, 20),
+                              ],
+                            ),
+                            white,
+                            10,
+                            30,
+                            15,
+                            0),
+                      )
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const YMargin(20),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconOf(Icons.security_rounded, black, 20),
+                              const XMargin(10),
+                              TextOf('No threat detected', 20, FontWeight.w400,
+                                  black),
+                            ],
+                          ),
+                          const YMargin(30),
+                          TextOf(
+                              'No threat was identified in your \n current location',
+                              20,
+                              FontWeight.w500,
+                              colorPrimary),
+                          const YMargin(30),
+                          SideSpace(
+                            20,
+                            0,
+                            MediumSizeButton(
+                                () {},
+                                InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MakeReport()));
+                                    },
+                                    child: TextOf(
+                                        'Report', 20, FontWeight.w400, white)),
+                                colorPrimary,
+                                15,
+                                60,
+                                10,
+                                0),
+                          ),
+                          const YMargin(10),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            );
+          })),
         ),
       ),
     );

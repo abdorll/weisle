@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
@@ -171,6 +172,10 @@ class NotificationServiceProvider extends BaseProvider {
   }
 
   void notoficationService(BuildContext context) async {
+    var box = await Hive.openBox(weisleUserBox);
+    String accountId = box.get(weisleUserName);
+    String emergencyId = box.get(emergencySetupId);
+    setaccountId = accountId;
     try {
       if (_accountId == null ||
           _emergencySetupId == null ||
@@ -180,7 +185,7 @@ class NotificationServiceProvider extends BaseProvider {
           _fullAddress == null ||
           _emergencyCountry == null ||
           _latitude == null) {
-        Alerts.errorAlert(context, 'Al fields are required', () {
+        Alerts.errorAlert(context, 'All fields are required', () {
           Navigator.pop(context);
         });
       } else if (_emergencySetupId!.length < 1) {
