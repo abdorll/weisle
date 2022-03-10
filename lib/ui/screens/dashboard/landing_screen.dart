@@ -1,19 +1,14 @@
-// ignore_for_file: prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors_in_immutables, sized_box_for_whitespace
 import 'package:flutter/material.dart';
-import 'package:weisle/currentLocation.dart';
-import 'package:weisle/randoms/current_location.dart';
-import 'package:weisle/service_locator.dart';
+import 'package:weisle/customer/profile.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
-import 'package:weisle/customer/profile.dart';
 import 'package:weisle/ui/screens/activity_report.dart';
 import 'package:weisle/ui/screens/dashboard/settings.dart';
-import 'package:weisle/ui/widgets/navigtion.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'home_page.dart';
 
 class LandingScreen extends StatefulWidget {
-  //final _myNavController = Get.put(NavController());
-
   LandingScreen({Key? key}) : super(key: key);
 
   @override
@@ -21,66 +16,170 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  List<Widget> pages = const [
-    Homepage(),
-    Report(),
-    ProfileScreen(),
-    Settings(),
+  int currentTab = 0;
+  final List<Widget> screens = [
+    const Homepage(),
+    const Report(),
+    const ProfileScreen(),
+    const Settings(),
   ];
-
-  int _selectedIndex = 0;
+  final PageStorageBucket bucket = PageStorageBucket();
+  Widget currentScreen = const Homepage();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: colorPrimary,
-        backgroundColor: Colors.white,
-        landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-              icon: ImageIcon(
-                AssetImage(home_icon),
-              ),
-              label: "."),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.search_outlined,
-                size: 30,
-              ),
-              label: "."),
-          BottomNavigationBarItem(
-              icon: ImageIcon(
-                AssetImage(broadcast_icon),
-              ),
-              label: "."),
-          BottomNavigationBarItem(
-              icon: ImageIcon(
-                AssetImage(person_icon),
-              ),
-              label: ".")
-        ],
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        currentIndex: _selectedIndex,
+      body: PageStorage(
+        child: currentScreen,
+        bucket: bucket,
       ),
-      body: Container(
-        child: pages.elementAt(_selectedIndex),
+      floatingActionButton: FloatingActionButton(
+        child: Image.asset(weisle_logo),
+        onPressed: () {},
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: white,
-        child: Image.asset(weisle_logo, height: 50),
-        onPressed: () {
-          navigate(context, const CurrentLocationScreen());
-          //Overlay.of(context).insert(entry);
-        },
-      ),
+      bottomNavigationBar: BottomAppBar(
+          color: Colors.grey[50],
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 10,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: ash,
+                      offset: const Offset(
+                        5.0,
+                        5.0,
+                      ),
+                      blurRadius: 10.0,
+                      spreadRadius: 2.0,
+                    ), //BoxShadow
+                    const BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(0.0, 0.0),
+                      blurRadius: 0.0,
+                      spreadRadius: 0.0,
+                    ),
+                  ],
+                  border: Border.all(
+                    color: white,
+                  )),
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      MaterialButton(
+                        minWidth: 40,
+                        onPressed: () {
+                          setState(() {
+                            currentScreen = Homepage();
+                            currentTab = 0;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ImageIcon(
+                              const AssetImage(home_icon),
+                              color:
+                                  currentTab == 0 ? colorPrimary : Colors.grey,
+                            ),
+                            CircleAvatar(
+                              radius: 2,
+                              backgroundColor:
+                                  currentTab == 0 ? colorPrimary : white,
+                            ),
+                          ],
+                        ),
+                      ),
+                      MaterialButton(
+                        minWidth: 40,
+                        onPressed: () {
+                          setState(() {
+                            currentScreen = Report();
+                            currentTab = 1;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            IconOf(
+                                Icons.search_outlined,
+                                currentTab == 1 ? colorPrimary : Colors.grey,
+                                25),
+                            CircleAvatar(
+                              radius: 2,
+                              backgroundColor:
+                                  currentTab == 1 ? colorPrimary : white,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      MaterialButton(
+                        minWidth: 40,
+                        onPressed: () {
+                          setState(() {
+                            currentScreen = ProfileScreen();
+                            currentTab = 2;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ImageIcon(
+                              const AssetImage(broadcast_icon),
+                              color:
+                                  currentTab == 2 ? colorPrimary : Colors.grey,
+                            ),
+                            CircleAvatar(
+                              radius: 2,
+                              backgroundColor:
+                                  currentTab == 2 ? colorPrimary : white,
+                            ),
+                          ],
+                        ),
+                      ),
+                      MaterialButton(
+                        minWidth: 40,
+                        onPressed: () {
+                          setState(() {
+                            currentScreen = Settings();
+                            currentTab = 3;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ImageIcon(
+                              const AssetImage(person_icon),
+                              color:
+                                  currentTab == 3 ? colorPrimary : Colors.grey,
+                            ),
+                            CircleAvatar(
+                              radius: 2,
+                              backgroundColor:
+                                  currentTab == 3 ? colorPrimary : white,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          )),
     );
   }
 }

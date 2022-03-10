@@ -1,89 +1,49 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CurrentLocationScreen extends StatefulWidget {
-  const CurrentLocationScreen({Key? key}) : super(key: key);
   @override
-  _CurrentLocationScreenState createState() => _CurrentLocationScreenState();
+  State<CurrentLocationScreen> createState() => CurrentLocationScreenState();
 }
 
-class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
-  String location = 'Null, Press Button';
-  String Address = 'search';
-  Future<Position> _getGeoLocationPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-  }
+class CurrentLocationScreenState extends State<CurrentLocationScreen> {
+  Completer<GoogleMapController> _controller = Completer();
 
-  Future<void> getAddressFromLatLong(Position position) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
-    Placemark place = placemarks[0];
-    Address =
-        '${place.street}, ${place.subAdministrativeArea}, ${place.locality},, ${place.country}';
-    setState(() {});
-  }
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
 
+  static const CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
   @override
   Widget build(BuildContext context) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
+    }
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Coordinates Points',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              location,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              'ADDRESS',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(Address),
-            ElevatedButton(
-                onPressed: () async {
-                  Position position = await _getGeoLocationPosition();
-                  location =
-                      'Lat: ${position.latitude} , Long: ${position.longitude}';
-                  getAddressFromLatLong(position);
-                },
-                child: const Text('Get Location'))
-          ],
-        ),
+      body: GoogleMap(
+        mapType: MapType.hybrid,
+        initialCameraPosition: _kGooglePlex,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _goToTheLake,
+        label: const Text('To the lake!'),
+        icon: const Icon(Icons.directions_boat),
       ),
     );
+  }
+
+  Future<void> _goToTheLake() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }

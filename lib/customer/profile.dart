@@ -13,6 +13,7 @@ import 'package:weisle/customer/updateProfile.dart';
 import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
+import 'package:weisle/utils/user_details_getter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -188,34 +189,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               borderRadius: BorderRadius.circular(10)),
                         )),
                   ),
-                  SideSpace(
-                      0,
-                      10,
-                      Card(
-                        child: InkWell(
-                          onTap: () {},
-                          child: Container(
-                            width: double.infinity,
-                            child: SideSpace(
-                              10,
-                              10,
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextOf('Added usernames', 15, FontWeight.w500,
-                                      black),
-                                  IconOf(
-                                      Icons.arrow_drop_down, colorPrimary, 20)
-                                ],
-                              ),
+                  SideSpace(0, 10, Consumer<UserDetailsGetter>(
+                      builder: (context, value, child) {
+                    return Card(
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: TextOf('Your usernames', 20,
+                                      FontWeight.w500, black),
+                                  content: TextOfDecoration(
+                                      'Primary: ${value.uername} \nOthers: ${value.allUsernames}',
+                                      20,
+                                      FontWeight.w300,
+                                      black,
+                                      TextAlign.left),
+                                );
+                              });
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          child: SideSpace(
+                            10,
+                            10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextOf('Added usernames', 15, FontWeight.w500,
+                                    black),
+                                IconOf(Icons.arrow_drop_down, colorPrimary, 20)
+                              ],
                             ),
-                            decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(10)),
                           ),
+                          decoration: BoxDecoration(
+                              color: white,
+                              borderRadius: BorderRadius.circular(10)),
                         ),
-                      )),
+                      ),
+                    );
+                  })),
                   SideSpace(
                       0,
                       10,

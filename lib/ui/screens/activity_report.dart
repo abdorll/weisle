@@ -271,14 +271,19 @@ class _TrackerState extends State<Tracker> {
         desiredAccuracy: LocationAccuracy.high);
   }
 
+  Placemark? plaemarkPlace;
+  Position? locationOnLongLat;
   Future<void> getAddressFromLatLong(Position position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
+
     address =
-        '${place.street}, ${place.subAdministrativeArea}, ${place.locality},, ${place.country}';
-    setState(() {});
+        '${place.street}, ${place.subAdministrativeArea}, ${place.locality}, ${place.country}';
+    setState(() {
+      plaemarkPlace = place;
+    });
   }
 
   int current = 0;
@@ -286,6 +291,9 @@ class _TrackerState extends State<Tracker> {
   Future getMapDetails() async {
     Position position = await _getGeoLocationPosition();
     location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
+    setState(() {
+      locationOnLongLat = position;
+    });
     getAddressFromLatLong(position);
   }
 
@@ -302,6 +310,22 @@ class _TrackerState extends State<Tracker> {
         child: SingleChildScrollView(
           child: Consumer<NotificationServiceProvider>(
               builder: ((context, value, child) {
+            Future.delayed(Duration(seconds: 5), () {
+              value.setemergencyCity =
+                  plaemarkPlace!.subAdministrativeArea.toString();
+              value.setemergencyState = plaemarkPlace!.locality.toString();
+              value.setemergencyCountry = plaemarkPlace!.country.toString();
+              value.setlongitude = locationOnLongLat!.longitude.toString();
+              value.setlatitude = locationOnLongLat!.latitude.toString();
+              value.setfullAddress = address;
+            });
+
+            //       _emergencyState == null ||
+            // _emergencyCity == null ||
+            // _longitude == null ||
+            // _fullAddress == null ||
+            // _emergencyCountry == null ||
+            // _latitude == null
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -439,11 +463,7 @@ class _TrackerState extends State<Tracker> {
                                 () {},
                                 InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MakeReport()));
+                                      value.notoficationService(context);
                                     },
                                     child: TextOf(
                                         'Report', 20, FontWeight.w400, white)),

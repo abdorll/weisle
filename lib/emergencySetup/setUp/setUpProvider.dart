@@ -114,6 +114,8 @@ class SetUpProvider extends BaseProvider {
   }
 
   void setUp(BuildContext context) async {
+    var box = await Hive.openBox(weisleUserBox);
+    box.put(weisleusernames, userNames);
     try {
       if (_contact1 == null) {
         Alerts.errorAlert(context, 'Primary phone number is required', () {
@@ -127,32 +129,32 @@ class SetUpProvider extends BaseProvider {
         var box = await Hive.openBox(weisleUserBox);
 
         String accId = box.get(rweisleUserName) ?? box.get(weisleUserName);
-        var registerResponse = await emergencyApiBasics.setUp(
+        var setupResponse = await emergencyApiBasics.setUp(
             accountId: accId,
             emergencyCat: _emergencyCat,
             emergencyMsg: _emergencyMsg,
             userNames: _userNames,
             userContacts: _userContacts);
-        if (registerResponse['resposeCode'] == '00') {
+        if (setupResponse['resposeCode'] == '00') {
           setLoading = false;
-          box.put(weislesetUpId, registerResponse['data']['setupId']);
+          box.put(weislesetUpId, setupResponse['data']['setupId']);
           print('Request Successful');
           goBack(context);
           Alerts.successAlert(context, 'Emergency setup successful', () {
             navigatedForever(
                 context, const GetWeizlePremiumContactAndCountyrPage());
           });
-        } else if (registerResponse['resposeCode'] == '01') {
+        } else if (setupResponse['resposeCode'] == '01') {
           setLoading = false;
           goBack(context);
-          Alerts.errorAlert(context, registerResponse['message'], () {
+          Alerts.errorAlert(context, setupResponse['message'], () {
             Navigator.pop(context);
           });
-          // print("Weisle register Response is $registerResponse");
+          // print("Weisle register Response is $setupResponse");
         } else {
           setLoading = false;
           //goBack(context);
-          Alerts.errorAlert(context, registerResponse['message'], () {
+          Alerts.errorAlert(context, setupResponse['message'], () {
             Navigator.pop(context);
           });
         }

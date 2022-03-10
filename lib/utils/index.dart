@@ -42,6 +42,7 @@ const rweislesetUpId = 'rsetUpId';
 const rweislemyrefCode = 'rmyrefCode';
 const rweisleuserStatus = 'ruserStatus';
 const rweislemyRefCode = 'rweislemyRefCode';
+const weisleusernames = 'weisleusernames';
 //-------------------------SET SQA
 const weisleSecurityAnswer = 'weisleSecurityAnswer';
 //-----------------------SUB HISTORY BY DATE

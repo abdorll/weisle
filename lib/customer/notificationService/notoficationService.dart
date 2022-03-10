@@ -1,7 +1,10 @@
+// ignore_for_file: prefer_is_empty
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/colors.dart';
+import 'package:weisle/ui/screens/activity_report.dart';
 import 'package:weisle/ui/screens/dashboard/landing_screen.dart';
 import 'package:weisle/ui/widgets/navigtion.dart';
 import 'package:weisle/utils/base_provider.dart';
@@ -174,8 +177,9 @@ class NotificationServiceProvider extends BaseProvider {
   void notoficationService(BuildContext context) async {
     var box = await Hive.openBox(weisleUserBox);
     String accountId = box.get(weisleUserName);
-    String emergencyId = box.get(emergencySetupId);
+    String setupIDD = box.get(weislesetUpId) ?? '656975794574';
     setaccountId = accountId;
+    setemergencySetupId = setupIDD;
     try {
       if (_accountId == null ||
           _emergencySetupId == null ||
@@ -213,7 +217,7 @@ class NotificationServiceProvider extends BaseProvider {
           setLoading = false;
           print('Request Successful');
           Alerts.successAlert(context, 'Notification succssfully set', () {
-            navigatedForever(context, LandingScreen());
+            navigatedForever(context, const MakeReport());
           });
         } else if (notoficationServiceResponse['resposeCode'] == '06') {
           Alerts.errorAlert(context, 'Emergency setup is inactive', () {
