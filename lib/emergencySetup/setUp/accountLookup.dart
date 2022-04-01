@@ -180,10 +180,10 @@ class SetUsernamePageProvider extends BaseProvider {
         Alerts.loadingAlert(context, 'Looking up...');
         FocusScope.of(context).unfocus();
         setLoading = true;
-        var SetUsernamePageResponse =
+        var setUsernamePageResponse =
             await customerApiBasic.acctLookup(accountId: _accountID);
 
-        if (SetUsernamePageResponse['resposeCode'] == '00') {
+        if (setUsernamePageResponse.status == true) {
           setLoading = false;
           print('Request Successful');
           goBack(context);
@@ -191,18 +191,12 @@ class SetUsernamePageProvider extends BaseProvider {
               () {
             navigateReplaces(context, GetWeizlePremiumContactAndCountyrPage());
           });
-        } else if (SetUsernamePageResponse['resposeCode'] == "01") {
-          setLoading = false;
-          Alerts.errorAlert(context, 'Invalid account', () {
-            Navigator.pop(context);
-          });
         } else {
           setLoading = false;
           goBack(context);
-          Alerts.errorAlert(context, SetUsernamePageResponse['message'], () {
+          Alerts.errorAlert(context, setUsernamePageResponse.message!, () {
             Navigator.pop(context);
           });
-          notifyListeners();
         }
       }
     } catch (e) {

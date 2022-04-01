@@ -262,22 +262,27 @@ class SignInProvider extends BaseProvider {
             username: _username, password: _password);
 
         print("Weisle Login Response is $loginResponse");
-        if (loginResponse['resposeCode'] == '00') {
+        if (loginResponse.status == true) {
           setLoading = false;
           print('Request Successful');
           //₦100,000
           var userDetails = await Hive.openBox(weisleUserBox);
           userDetails.put(isLoggedInUser, true);
-          userDetails.put(weisleId, loginResponse['data']["weizleId"]);
-          userDetails.put(weisleFullName, loginResponse['data']["fullName"]);
-          userDetails.put(weislephoneNumber, loginResponse['data']["phoneNo"]);
-          userDetails.put(weisleUserName, loginResponse['data']["userName"]);
+          userDetails.put(weisleId, loginResponse.data['data']["weizleId"]);
           userDetails.put(
-              weisleaccountType, loginResponse['data']['accountType']);
-          userDetails.put(weislemyRefCode, loginResponse['data']["myRefCode"]);
-          userDetails.put(weislephoneNumber, loginResponse['data']["phoneNo"]);
+              weisleFullName, loginResponse.data['data']["fullName"]);
           userDetails.put(
-              weisleuserStatus, loginResponse['data']["userStatus"]);
+              weislephoneNumber, loginResponse.data['data']["phoneNo"]);
+          userDetails.put(
+              weisleUserName, loginResponse.data['data']["userName"]);
+          userDetails.put(
+              weisleaccountType, loginResponse.data['data']['accountType']);
+          userDetails.put(
+              weislemyRefCode, loginResponse.data['data']["myRefCode"]);
+          userDetails.put(
+              weislephoneNumber, loginResponse.data['data']["phoneNo"]);
+          userDetails.put(
+              weisleuserStatus, loginResponse.data['data']["userStatus"]);
           setUsername = userDetails.get(weisleUserName);
           setweisleId = userDetails.get(weisleId) ?? userDetails.get(weisleid);
           setfullName = userDetails.get(weisleFullName);
@@ -285,21 +290,13 @@ class SignInProvider extends BaseProvider {
           setaccountType = userDetails.get(weisleaccountType);
           setreferralCode = userDetails.get(weislemyRefCode);
           setuserStatus = userDetails.get(weisleuserStatus);
-          //---------------------------------FROM SUB HISTORY BY DATE
-          // setid = userDetails.get(weisleId);
-          // settxtRef = userDetails.get(weisletxtRef);
-          // setplanAmt = userDetails.get(weisleplanAmt);
-          // setplanCurrency = userDetails.get(weisleplanCurrency);
-          // setemergencyCountry = userDetails.get(weisleemergencyCountry);
-          // setsubStatus = userDetails.get(weislesubStatus);
-          // setcreatedDate = userDetails.get(weislecreatedDate);
           goBack(context);
           Alerts.successAlert(context, 'Login successful', () {
             navigatedForever(context, LandingScreen());
           });
         } else {
           goBack(context);
-          Alerts.errorAlert(context, 'Failed', () {
+          Alerts.errorAlert(context, loginResponse.message!, () {
             Navigator.pop(context);
           });
           print("Weisle Login Response is $loginResponse");

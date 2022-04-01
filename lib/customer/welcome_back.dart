@@ -29,73 +29,71 @@ class _WelcomeBackState extends State<WelcomeBack> {
           builder: ((context, value, child) => SideSpace(
                 10,
                 10,
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        WeisleHeader(
-                            Image.asset(
-                              weisle_logo,
-                              height: 30,
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      WeisleHeader(
+                          Image.asset(
+                            weisle_logo,
+                            height: 30,
+                          ),
+                          Container(),
+                          Container()),
+                      const YMargin(20),
+                      TextOf('Welcome back', 30, FontWeight.w600, black),
+                      const YMargin(10),
+                      Image.asset(
+                        welcome_back,
+                        height: 200,
+                      ),
+                      PlainTextField(
+                          onchanged: (e) => value.setusername = e,
+                          leading: const Icon(Icons.person,
+                              color: Color(0xffFF2156)),
+                          hint: "Username"),
+                      PasswordField(
+                          onchanged: (e) => value.setPasword = e,
+                          leading:
+                              const Icon(Icons.lock, color: Color(0xffFF2156)),
+                          hint: "Password"),
+                      const YMargin(30),
+                      InkWell(
+                          onTap: () {
+                            value.login(context);
+                          },
+                          child: Container(
+                            width: 270,
+                            child: Center(
+                              child: SideSpace(0, 10,
+                                  TextOf('LOGIN', 40, FontWeight.w800, ash)),
                             ),
-                            Container(),
-                            Container()),
-                        const YMargin(20),
-                        TextOf('Welcome back', 30, FontWeight.w600, black),
-                        const YMargin(10),
-                        Image.asset(
-                          welcome_back,
-                          height: 200,
-                        ),
-                        PlainTextField(
-                            onchanged: (e) => value.setusername = e,
-                            leading: const Icon(Icons.person,
-                                color: Color(0xffFF2156)),
-                            hint: "Username"),
-                        PasswordField(
-                            onchanged: (e) => value.setPasword = e,
-                            leading: const Icon(Icons.lock,
-                                color: Color(0xffFF2156)),
-                            hint: "Password"),
-                        const YMargin(30),
-                        InkWell(
+                            decoration: BoxDecoration(
+                                color: colorPrimary,
+                                border: Border.all(color: colorPrimary),
+                                borderRadius: BorderRadius.circular(20)),
+                          )),
+                      const YMargin(5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextOf("Don't have an account? ", 15, FontWeight.w500,
+                              ash),
+                          InkWell(
                             onTap: () {
-                              value.login(context);
+                              navigate(context, const SignUp());
                             },
-                            child: Container(
-                              width: 270,
-                              child: Center(
-                                child: SideSpace(0, 10,
-                                    TextOf('LOGIN', 40, FontWeight.w800, ash)),
-                              ),
-                              decoration: BoxDecoration(
-                                  color: colorPrimary,
-                                  border: Border.all(color: colorPrimary),
-                                  borderRadius: BorderRadius.circular(20)),
-                            )),
-                        const YMargin(5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextOf("Don't have an account? ", 15,
-                                FontWeight.w500, ash),
-                            InkWell(
-                              onTap: () {
-                                navigate(context, const SignUp());
-                              },
-                              child: TextOf(
-                                  "SIGNUP ", 15, FontWeight.w500, colorPrimary),
-                            ),
-                          ],
-                        )
-                        // FormButton(
-                        //     enabled: true,
-                        //     text: "Login",
-                        //     function: () {
-                        //       value.login(context);
-                        //     }),
-                      ],
-                    ),
+                            child: TextOf(
+                                "SIGNUP ", 15, FontWeight.w500, colorPrimary),
+                          ),
+                        ],
+                      )
+                      // FormButton(
+                      //     enabled: true,
+                      //     text: "Login",
+                      //     function: () {
+                      //       value.login(context);
+                      //     }),
+                    ],
                   ),
                 ),
               )),

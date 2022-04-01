@@ -4,9 +4,8 @@ import 'package:weisle/customer/account_lookup.dart';
 import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/customer/sign_up.dart';
 import 'package:weisle/emergencySetup/setUp/categorySetup.dart';
-import 'package:weisle/emergencySetup/setUp/setUp.dart';
 import 'package:weisle/emergencySetup/setUp/setUpProvider.dart';
-import 'package:weisle/service_locator.dart';
+
 import 'package:weisle/customer/resetPassword.dart';
 import 'package:weisle/customer/updateProfile.dart';
 import 'package:weisle/subscription/getSubHistory.dart';

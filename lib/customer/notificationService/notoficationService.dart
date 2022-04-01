@@ -213,18 +213,17 @@ class NotificationServiceProvider extends BaseProvider {
         );
         print(
             "Weisle Notification service response is $notoficationServiceResponse");
-        if (notoficationServiceResponse['resposeCode'] == '00') {
+        if (notoficationServiceResponse.status == true) {
           setLoading = false;
           print('Request Successful');
           Alerts.successAlert(context, 'Notification succssfully set', () {
             navigatedForever(context, const MakeReport());
           });
-        } else if (notoficationServiceResponse['resposeCode'] == '06') {
-          Alerts.errorAlert(context, 'Emergency setup is inactive', () {
+        } else {
+          goBack(context);
+          Alerts.errorAlert(context, notoficationServiceResponse.message!, () {
             Navigator.pop(context);
           });
-        } else {
-          print("Weisle Notification Response is $notoficationServiceResponse");
         }
       }
     } catch (e) {

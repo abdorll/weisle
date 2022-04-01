@@ -275,7 +275,7 @@ class PremiumPlansProvider extends BaseProvider {
       setLoading = true;
       const CircularProgressIndicator();
       var getPremiumPlasResponse = await emergencyApiBasics.getPremiumPlan();
-      List listFromCatResponse = List.from(getPremiumPlasResponse['data']);
+      List listFromCatResponse = List.from(getPremiumPlasResponse.data['data']);
       print(listFromCatResponse);
       premiumPlanList = listFromCatResponse
           .map((json) => GetPremiumPlanModel.fromJson(json))

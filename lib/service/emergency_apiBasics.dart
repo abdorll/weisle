@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:weisle/service/api_basics.dart';
 import 'package:weisle/utils/endpoints.dart';
 import 'package:weisle/utils/index.dart';
+import 'package:weisle/models.dart';
 
 class EmergencyApiBasics {
   ApiBasics? _apiBasics;
@@ -16,8 +17,9 @@ class EmergencyApiBasics {
   //------------------GET CATEGORIES
   //------------------GET CATEGORIES
   //------------------GET CATEGORIES
-  Future getCategories() {
-    return apiBasics.makeGetRequest(getAllCategoriesurl, null);
+  Future<ServiceResponse> getCategories() async{
+    var response = await apiBasics.makeGetRequest(getAllCategoriesurl, null);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //------------------SET UP
@@ -40,14 +42,14 @@ class EmergencyApiBasics {
   //------------------CREATE SUBSCRIPTION
   //------------------CREATE SUBSCRIPTION
 
-  Future createSubscription(
+  Future<ServiceResponse> createSubscription(
       {accountId,
       emergencySetupId,
       countryName,
       phoneNumber,
       premiumPlanId,
       planAmt,
-      planCurrency}) {
+      planCurrency}) async{
     Map<String, dynamic> data = {
       "accountId": accountId,
       "emergencySetupId": emergencySetupId,
@@ -57,29 +59,33 @@ class EmergencyApiBasics {
       "planAmt": planAmt,
       "planCurrency": planCurrency
     };
-    return apiBasics.makePostRequest(createSuburl, null, data);
+    var response = await apiBasics.makePostRequest(createSuburl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //------------------CONFIRM SUBSCRIPTION
   //------------------CONFIRM SUBSCRIPTION
   //------------------CONFIRM SUBSCRIPTION
 
-  Future confirmSubscription({accountId, subId, txtRef, paymentStatus}) {
+  Future<ServiceResponse> confirmSubscription({accountId, subId, txtRef, paymentStatus}) async{
     Map<String, dynamic> data = {
       "accountId": accountId,
       "SubId": subId,
       "txtRef": txtRef,
       "paymentStatus": paymentStatus,
     };
-    return apiBasics.makePostRequest(confirmSubPlnurl, null, data);
+    var response = await apiBasics.makePostRequest(confirmSubPlnurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
+    
   }
 
   //--------------GET PREMIUM PLAN
   //--------------GET PREMIUM PLAN
   //--------------GET PREMIUM PLAN
-  Future getPremiumPlan() async {
+  Future<ServiceResponse> getPremiumPlan() async {
     var userBox = await Hive.openBox(weisleUserBox);
     var currency = userBox.get(weisleCurrency);
-    return apiBasics.makeGetRequest("$premiumPlanurl/NGN", null);
+    var response = await apiBasics.makeGetRequest("$premiumPlanurl/NGN", null);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 }

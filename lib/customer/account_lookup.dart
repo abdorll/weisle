@@ -150,9 +150,9 @@ class AccountLookupProvider extends BaseProvider {
           accountId: _accountId, phoneNo: _phoneNo);
       setLoading = false;
       goBack(context);
-      if (accountLookup['resposeCode'] == '00') {
-        box.put(weisleSecQuestion, accountLookup['data']['secQuestion']);
-        box.put(weislesubStatus, accountLookup['data']['Active']);
+      if (accountLookup.status == true) {
+        box.put(weisleSecQuestion, accountLookup.data['data']['secQuestion']);
+        box.put(weislesubStatus, accountLookup.data['data']['Active']);
         setSecQuestion = box.get(weisleSecQuestion);
         navigate(context, const AccountLookupPage());
       } else {

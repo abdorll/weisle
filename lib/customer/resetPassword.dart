@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import 'package:weisle/customer/account_lookup.dart';
 import 'package:weisle/customer/welcome_back.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
@@ -22,6 +24,8 @@ class ResetPasword extends StatefulWidget {
 }
 
 class _ResetPaswordState extends State<ResetPasword> {
+  String? secQeus;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,13 +74,38 @@ class _ResetPaswordState extends State<ResetPasword> {
                               color: Color(0xffFF2156)),
                           hint: "Confirm pawword"),
                       const YMargin(20),
+                      Consumer<AccountLookupProvider>(
+                          builder: (context, value, child) {
+                        secQeus = value.secQuestion;
+                        return InkWell(
+                          onTap: () {
+                            value.accountLookup(context);
+                          },
+                          child: TextOf(
+                              value.secQuestion == 'Security question not set!'
+                                  ? 'SQA not set yet, go and set'
+                                  : '',
+                              17,
+                              FontWeight.w500,
+                              value.secQuestion == 'Security question not set!'
+                                  ? colorPrimary
+                                  : white),
+                        );
+                      }),
                       const YMargin(20),
-                      FormButton(
-                          enabled: true,
-                          text: "Reset password",
-                          function: () {
-                            value.resetPass(context);
-                          }),
+                      value.formValidity == true
+                          ? FormButton(
+                              enabled: true,
+                              text: "Reset password",
+                              function: () {
+                                value.resetPass(context);
+                              })
+                          : FormButton(
+                              enabled: false,
+                              text: "Reset password",
+                              function: () {
+                                value.resetPass(context);
+                              }),
                       const YMargin(40),
                     ]);
               }),
@@ -119,6 +148,7 @@ class Header extends StatelessWidget {
             ])));
   }
 }
+
 //------------------------------------------------------------RESET PASWORD PROVIDER
 class ResetPasswordProvider extends BaseProvider {
   String? _userPass;
@@ -157,10 +187,10 @@ class ResetPasswordProvider extends BaseProvider {
   }
 
   void checkFormValidity() {
-    if ((_userPass != null) && (_confirmPass != null)) {
-      formValidity = true;
-    } else {
+    if ((userPass == '') || (confirmPass == '') || (_secAnswer != '')) {
       formValidity = false;
+    } else {
+      formValidity = true;
     }
     notifyListeners();
   }
@@ -174,6 +204,10 @@ class ResetPasswordProvider extends BaseProvider {
         Alerts.errorAlert(context, 'All fields are required', () {
           Navigator.pop(context);
         });
+      } else if (_secAnswer == null) {
+        Alerts.errorAlert(context, 'You need to set SQA first', () {
+          goBack(context);
+        });
       } else if (userPass != confirmPass) {
         Alerts.errorAlert(context, 'Password mismatch', () {
           goBack(context);
@@ -184,27 +218,27 @@ class ResetPasswordProvider extends BaseProvider {
         setLoading = true;
         var registerResponse = await customerApiBasic.resetPass(
             userName: userName, userPass: _userPass, secAnswer: secAnswer);
-        if (registerResponse['resposeCode'] == '00') {
+        if (registerResponse.status == true) {
           setLoading = false;
           print('Request Successful');
           goBack(context);
-          Alerts.successAlert(
-              context, registerResponse['data']['responseMessage'], () {
-            navigatedForever(context, const WelcomeBack());
+          Alerts.successAlert(context, 'Password reset successfully', () {
+            Future.delayed(const Duration(seconds: 1), () {
+              navigatedForever(context, const WelcomeBack());
+            });
           });
         } else {
-          setLoading = false;
           goBack(context);
-          Alerts.errorAlert(context, 'Password reset successful', () {
+          Alerts.errorAlert(context, registerResponse.message!, () {
             Navigator.pop(context);
           });
         }
       }
     } catch (e) {
-      setLoading = false;
+      print("Weisle error: $e");
       goBack(context);
-      Alerts.errorAlert(context, 'Go and set a security Q&A first', () {
-        goBack(context);
+      Alerts.errorAlert(context, 'Set SQA first', () {
+        Navigator.pop(context);
       });
     }
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:weisle/emergencySetup/setUp/CONTACTGetPremiumPlan.dart';
 import 'package:weisle/emergencySetup/setUp/PLANgetPremium.dart';
+import 'package:weisle/emergencySetup/setUp/categorySetup.dart';
 import 'package:weisle/emergencySetup/setUp/contactSetup.dart';
 import 'package:weisle/helpers/alerts.dart';
 import 'package:weisle/emergencySetup/setUp/accountLookup.dart';
@@ -92,6 +93,7 @@ class SetUpProvider extends BaseProvider {
   }
 
   void emrgencyAndCategoryCheck(context) {
+    setemergencyMsg = CategoriesPage.defaultMsg ?? "Emergency!!! Please";
     if (_emergencyCat == null || _emergencyMsg == null) {
       Alerts.errorAlert(context, 'Emergency category and message are required',
           () {
@@ -116,6 +118,7 @@ class SetUpProvider extends BaseProvider {
   void setUp(BuildContext context) async {
     var box = await Hive.openBox(weisleUserBox);
     box.put(weisleusernames, userNames);
+
     try {
       if (_contact1 == null) {
         Alerts.errorAlert(context, 'Primary phone number is required', () {
@@ -135,29 +138,23 @@ class SetUpProvider extends BaseProvider {
             emergencyMsg: _emergencyMsg,
             userNames: _userNames,
             userContacts: _userContacts);
-        if (setupResponse['resposeCode'] == '00') {
+        if (setupResponse.status == true) {
           setLoading = false;
-          box.put(weislesetUpId, setupResponse['data']['setupId']);
+          box.put(weislesetUpId, setupResponse.data['data']['setupId']);
           print('Request Successful');
           goBack(context);
           Alerts.successAlert(context, 'Emergency setup successful', () {
             navigatedForever(
                 context, const GetWeizlePremiumContactAndCountyrPage());
           });
-        } else if (setupResponse['resposeCode'] == '01') {
+        } else {
           setLoading = false;
           goBack(context);
-          Alerts.errorAlert(context, setupResponse['message'], () {
+          Alerts.errorAlert(context, setupResponse.message, () {
             Navigator.pop(context);
           });
           // print("Weisle register Response is $setupResponse");
-        } else {
-          setLoading = false;
-          //goBack(context);
-          Alerts.errorAlert(context, setupResponse['message'], () {
-            Navigator.pop(context);
-          });
-        }
+        } 
       }
     } catch (e) {
       setLoading = false;

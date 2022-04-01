@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:weisle/customer/sign_in.dart';
+import 'package:weisle/customer/welcome_back.dart';
 import 'package:weisle/helpers/Alerts.dart';
 import 'package:weisle/ui/constants/asset_images.dart';
 import 'package:weisle/ui/constants/colors.dart';
@@ -134,12 +135,11 @@ class SQaProvider extends BaseProvider {
         Alerts.loadingAlert(context, 'Setting SQA...');
         FocusScope.of(context).unfocus();
         setLoading = true;
-        var SQaResponse = await customerApiBasic.setSqa(
+        var sQaResponse = await customerApiBasic.setSqa(
             userName: username,
             secQuestion: _secQuestion,
             secAnswer: _secAnswer);
-        print("Weisle setSQA response is $SQaResponse");
-        if (SQaResponse['resposeCode'] == '00') {
+        if (sQaResponse.status == true) {
           setLoading = false;
           var box = await Hive.openBox(weisleUserBox);
           SQaProvider.securityAnswer = box.put(weisleSecurityAnswer, secAnswer);
@@ -147,15 +147,13 @@ class SQaProvider extends BaseProvider {
           goBack(context);
           Alerts.successAlert(context, 'Security question set successfully',
               () {
-            goBack(context);
+            navigatedForever(context, const WelcomeBack());
           });
-        } else if (SQaResponse['resposeCode'] == '01') {
+        } else {
           goBack(context);
           Alerts.errorAlert(context, 'Invalid credentials', () {
             Navigator.pop(context);
           });
-        } else {
-          print("Weisle setSQA Response is $SQaResponse");
         }
       }
     } catch (e) {

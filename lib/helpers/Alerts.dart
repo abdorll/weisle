@@ -46,6 +46,7 @@ class Alerts {
             ),
             actions: [
               CupertinoDialogAction(
+                isDestructiveAction: true,
                 child: Container(
                   decoration: BoxDecoration(
                       color: green1,
@@ -61,6 +62,9 @@ class Alerts {
             ],
           );
         });
+    Future.delayed(const Duration(milliseconds: 1200), () {
+      ok();
+    });
   }
 
   static successAlert(context, String message, Function ok) {
@@ -96,7 +100,7 @@ class Alerts {
             ],
           );
         });
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 600), () {
       ok();
     });
   }

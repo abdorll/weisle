@@ -56,15 +56,13 @@ class _ReportState extends State<Report> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextOf(
-                            now > 0
-                                ? 'Good morning💭'
-                                : now > 12
-                                    ? 'Good afernoon🌤️'
-                                    : now > 17
-                                        ? 'Good evening🌕'
-                                        : now < 20
-                                            ? 'Good evening🌕'
-                                            : "Good evening🌕",
+                            now <= 0
+                                ? 'Good morning 💭'
+                                : (now > 12) && (now <= 16)
+                                    ? 'Good afernoon 🌤️'
+                                    : (now > 16) && (now < 20)
+                                        ? 'Good evening 🌕'
+                                        : "Good night 🌒",
                             13,
                             FontWeight.w500,
                             ash),

@@ -148,7 +148,7 @@ class CategoriesProvider extends BaseProvider {
       setLoading = true;
       const CircularProgressIndicator();
       var getCategoriesResponse = await emergencyApiBasics.getCategories();
-      List listFromCatResponse = List.from(getCategoriesResponse['data']);
+      List listFromCatResponse = List.from(getCategoriesResponse.data['data']);
       print(listFromCatResponse);
       categoriesList = listFromCatResponse
           .map((json) => CategoriesModel.fromJson(json))

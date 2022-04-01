@@ -206,19 +206,17 @@ class CreateSubscriptionServiceProvider extends BaseProvider {
         );
         print(
             "Weisle CreateSubscription service response is $subscriptionServiceResponse");
-        if (subscriptionServiceResponse['resposeCode'] == '00') {
+        if (subscriptionServiceResponse.status == true) {
           setLoading = false;
           Alerts.successAlert(context, 'Subscription successfully created', () {
             navigatedForever(context, LandingScreen());
           });
           print('Request Successful');
-        } else if (subscriptionServiceResponse['resposeCode'] == '06') {
-          Alerts.errorAlert(context, 'Improper format', () {
+        } else {
+          goBack(context);
+          Alerts.errorAlert(context, subscriptionServiceResponse.message!, () {
             Navigator.pop(context);
           });
-        } else {
-          print(
-              "Weisle CreateSubscription Response is $subscriptionServiceResponse");
         }
       }
     } catch (e) {

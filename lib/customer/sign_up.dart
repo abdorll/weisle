@@ -196,28 +196,33 @@ class SignUpProvider extends BaseProvider {
         // print(registerResponse['resposeCode']);
         // // ignore: avoid_print
         // print("Weisle register Response is $registerResponse");
-        if (registerResponse['resposeCode'] == '00') {
+        if (registerResponse.status == true) {
           setLoading = false;
           print('Request Successful');
           var userBox = await Hive.openBox(weisleUserBox);
-          userBox.put(rweisleReferral, registerResponse['data']['referral']);
-          userBox.put(rweisleId, registerResponse['data']["weizleId"]);
-          userBox.put(rweisleFullName, registerResponse['data']["fullName"]);
-          userBox.put(rweislephoneNumber, registerResponse['data']["phoneNo"]);
-          userBox.put(rweisleUserName, registerResponse['data']["userName"]);
           userBox.put(
-              rweisleaccountType, registerResponse['data']['accountType']);
-          userBox.put(rweislemyRefCode, registerResponse['data']["myRefCode"]);
+              rweisleReferral, registerResponse.data['data']['referral']);
+          userBox.put(rweisleId, registerResponse.data['data']["weizleId"]);
           userBox.put(
-              rweisleuserStatus, registerResponse['data']["userStatus"]);
+              rweisleFullName, registerResponse.data['data']["fullName"]);
+          userBox.put(
+              rweislephoneNumber, registerResponse.data['data']["phoneNo"]);
+          userBox.put(
+              rweisleUserName, registerResponse.data['data']["userName"]);
+          userBox.put(
+              rweisleaccountType, registerResponse.data['data']['accountType']);
+          userBox.put(
+              rweislemyRefCode, registerResponse.data['data']["myRefCode"]);
+          userBox.put(
+              rweisleuserStatus, registerResponse.data['data']["userStatus"]);
 
-          Alerts.successAlert(context, 'Regiteraation successful', () {
+          Alerts.successAlert(context, 'Regitration successful', () {
             navigateReplaces(context, const SetUp());
           });
         } else {
           setLoading = false;
           goBack(context);
-          Alerts.errorAlert(context, 'Valid details required', () {
+          Alerts.errorAlert(context, registerResponse.message!, () {
             Navigator.pop(context);
           });
           notifyListeners();

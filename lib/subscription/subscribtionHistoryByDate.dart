@@ -32,7 +32,7 @@ class _SubHistoryByDateState extends State<SubHistoryByDate> {
     if (selectedDate == null) {
       return 'yyyy-mm-dd';
     } else {
-      return '${selectedDate!.year}-0${selectedDate!.month}-0${selectedDate!.day}';
+      return '${selectedDate!.year}-${selectedDate!.month.toString().length > 1 ? selectedDate!.month : '0${selectedDate!.month}'}-${selectedDate!.day.toString().length > 1 ? selectedDate!.day : '0${selectedDate!.day}'}';
     }
   }
 
@@ -40,7 +40,7 @@ class _SubHistoryByDateState extends State<SubHistoryByDate> {
     if (secondDselectedDate == null) {
       return 'yyyy-mm-dd';
     } else {
-      return '${secondDselectedDate!.year}-0${secondDselectedDate!.month}-0${secondDselectedDate!.day}';
+      return '${secondDselectedDate!.year}-${secondDselectedDate!.month.toString().length > 1 ? secondDselectedDate!.month : '0${secondDselectedDate!.month}'}-${secondDselectedDate!.day.toString().length > 1 ? secondDselectedDate!.day : '0${secondDselectedDate!.day}'}';
     }
   }
 
@@ -51,8 +51,10 @@ class _SubHistoryByDateState extends State<SubHistoryByDate> {
       body: SafeArea(
         child: Consumer<SubHistoryByDateProvider>(
             builder: (context, value, child) {
-          value.setstartDate = getNewDate();
-          value.setendDate = secondGetNewDate();
+          Future.delayed(const Duration(milliseconds: 300), () {
+            value.setstartDate = getNewDate();
+            value.setendDate = secondGetNewDate();
+          });
           return SideSpace(
             10,
             10,
@@ -264,37 +266,32 @@ class SubHistoryByDateProvider extends BaseProvider {
         setLoading = true;
         var registerResponse = await subscribtionApiBasic.subHistoryByDate(
             accountId: _accountId, startDate: _startDate, endDate: _endDate);
-        if (registerResponse['resposeCode'] == '00') {
+        if (registerResponse.status == true) {
           setLoading = false;
-          print('Request Successful');
-          print('Request Successful');
           print('Request Successful');
 
           goBack(context);
           navigate(context,
               HistoryByDatePage(startDate: startDate, endDate: endDate));
-          var dataFromResponse = registerResponse['data'];
+          var dataFromResponse = registerResponse.data['data'];
           List listGotten = List.from(dataFromResponse).toList();
           subHistoryByDate = listGotten
               .map((json) => SubHistoryByDateModel.fromJson(json))
               .toList();
           var box = await Hive.openBox(weisleUserBox);
-          box.put(weisleid, registerResponse['data']['id']);
-          box.put(weisletxtRef, registerResponse['data']['txtRef']);
-          box.put(weisleplanAmt, registerResponse['data']['planAmt']);
-          box.put(weisleplanCurrency, registerResponse['data']['planCurrency']);
+          box.put(weisleid, registerResponse.data['data']['id']);
+          box.put(weisletxtRef, registerResponse.data['data']['txtRef']);
+          box.put(weisleplanAmt, registerResponse.data['data']['planAmt']);
+          box.put(weisleplanCurrency,
+              registerResponse.data['data']['planCurrency']);
           box.put(weisleemergencyCountry,
-              registerResponse['data']['emergencyCountry']);
-          box.put(weislesubStatus, registerResponse['data']['subStatus']);
-          box.put(weislecreatedDate, registerResponse['data']['createdDate']);
-        } else if ((registerResponse['data'] == '04')) {
-          Alerts.errorAlert(context, 'No data found', () {
-            Navigator.pop(context);
-          });
+              registerResponse.data['data']['emergencyCountry']);
+          box.put(weislesubStatus, registerResponse.data['data']['subStatus']);
+          box.put(
+              weislecreatedDate, registerResponse.data['data']['createdDate']);
         } else {
-          setLoading = false;
           goBack(context);
-          Alerts.errorAlert(context, registerResponse['message'], () {
+          Alerts.errorAlert(context, registerResponse.message!, () {
             Navigator.pop(context);
           });
         }

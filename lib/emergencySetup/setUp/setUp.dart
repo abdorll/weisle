@@ -47,11 +47,13 @@ class _SetUpState extends State<SetUp> {
                   height: 120,
                 ),
                 const YMargin(20),
-                TextOf(
-                    'Hello User, Congrats on Successfully signing up.\n Tap on any of the emergency icons to quickly set up.',
-                    15,
-                    FontWeight.w600,
-                    black),
+                Consumer<SignInProvider>(
+                  builder: (context, value, child) => TextOf(
+                      'Hello ${value.username}, Congrats on Successfully signing up.\n Tap on any of the emergency icons to quickly set up.',
+                      15,
+                      FontWeight.w600,
+                      black),
+                ),
                 const YMargin(20),
                 Material(
                   borderRadius: BorderRadius.circular(20),
@@ -162,12 +164,8 @@ class _SetUpState extends State<SetUp> {
                         ),
                         const XMargin(10),
                         Expanded(
-                          child: TextOfDecoration(
-                              CategoriesPage.defaultMsg ?? "No message yet",
-                              20,
-                              FontWeight.w400,
-                              ash,
-                              TextAlign.left),
+                          child: TextOfDecoration('Emergency!!! Plase help!!!',
+                              20, FontWeight.w400, ash, TextAlign.left),
                         )
                       ],
                     ),
@@ -210,22 +208,13 @@ class _SetUpState extends State<SetUp> {
                               ),
                               const XMargin(10),
                               Expanded(
-                                child: TextFormField(
-                                  onChanged: (e) {
-                                    value.setemergencyMsg = e;
-                                  },
-                                  decoration: InputDecoration(
-                                      hintText: "Emergency message",
-                                      hintStyle: GoogleFonts.poppins(
-                                        color: ash,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      fillColor: litePink,
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(90))),
-                                ),
+                                child: TextOfDecoration(
+                                    CategoriesPage.defaultMsg ??
+                                        "No category selected",
+                                    20,
+                                    FontWeight.w400,
+                                    ash,
+                                    TextAlign.left),
                               ),
                               const XMargin(10),
                             ],

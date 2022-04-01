@@ -3,6 +3,7 @@ import 'package:weisle/customer/sign_in.dart';
 import 'package:weisle/customer/sign_up.dart';
 import 'package:weisle/logic/local_db/first_time.dart';
 import 'package:weisle/ui/constants/colors.dart';
+import 'package:weisle/ui/widgets/basic_widgets.dart';
 import 'package:weisle/ui/widgets/form_button.dart';
 import 'package:weisle/ui/widgets/margin.dart';
 

@@ -3,6 +3,7 @@ import 'package:weisle/customer/profile.dart';
 import 'package:weisle/service/api_basics.dart';
 import 'package:weisle/utils/endpoints.dart';
 import 'package:weisle/utils/index.dart';
+import 'package:weisle/models.dart';
 
 class SubscribtionApiBasic {
   ApiBasics? _apiBasics;
@@ -14,19 +15,24 @@ class SubscribtionApiBasic {
     return _subscribtionApiBasic;
   }
 
-  Future subHistoryByDate({startDate, endDate, accountId}) {
+  Future<ServiceResponse> subHistoryByDate(
+      {startDate, endDate, accountId}) async {
     Map<String, dynamic> data = {
       "startDate": startDate,
       "endDate": endDate,
       "accountId": accountId
     };
-    return apiBasics.makePostRequest(subHistoryByDateurl, null, data);
+    var response =
+        await apiBasics.makePostRequest(subHistoryByDateurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
-  Future getSubHistory() async {
+  Future<ServiceResponse> getSubHistory() async {
     var userBox = await Hive.openBox(weisleUserBox);
     String fullName = userBox.get(weisleFullName);
     String accountId = userBox.get(weisleUserName);
-    return apiBasics.makeGetRequest("$allSubHistoryurl/$accountId", null);
+    var response =
+        await apiBasics.makeGetRequest("$allSubHistoryurl/$accountId", null);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 }

@@ -1,5 +1,6 @@
 import "package:weisle/service/api_basics.dart";
 import "package:weisle/utils/endpoints.dart";
+import "package:weisle/models.dart";
 
 class CustomerApiBasi {
   ApiBasics? _apiBasics;
@@ -11,12 +12,12 @@ class CustomerApiBasi {
   }
 
   //------------------------------------------REGISTER ENDOINT CALLING
-  Future register(
+  Future<ServiceResponse> register (
       {String? fullName,
       String? phoneNo,
       String? userName,
       String? userPass,
-      String? regCode}) {
+      String? regCode}) async{
     Map<String, dynamic> data = {
       "fullName": fullName,
       "phoneNo": phoneNo,
@@ -24,70 +25,76 @@ class CustomerApiBasi {
       "userPass": userPass,
       "regCode": regCode
     };
-    return _apiBasics!.makePostRequest(registerurl, null, data);
+    var response = await _apiBasics!.makePostRequest(registerurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //-------------------------------------------SIGN IN
-  Future signIn({username, password}) {
+  Future<ServiceResponse> signIn({username, password}) async{
     Map<String, dynamic> data = {
       "username": username,
       "password": password,
     };
-    return _apiBasics!.makePostRequest(signInurl, null, data);
+    var response = await _apiBasics!.makePostRequest(signInurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //-------------------------------------------SET SQA
   //-------------------------------------------SET SQA
   //-------------------------------------------SET SQA
   //-------------------------------------------SET SQA
-  Future setSqa({userName, secQuestion, secAnswer}) {
+  Future<ServiceResponse> setSqa({userName, secQuestion, secAnswer}) async{
     Map<String, dynamic> data = {
       "userName": userName,
       "secQuestion": secQuestion,
       "secAnswer": secAnswer,
     };
-    return _apiBasics!.makePostRequest(setSqaurl, null, data);
+    var response = await _apiBasics!.makePostRequest(setSqaurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //-------------------------------------------ACCOUNT LOOKUP
   //-------------------------------------------ACCOUNT LOOKUP
   //-------------------------------------------ACCOUNT LOOKUP
-  Future acctLookup({accountId, phoneNo}) {
+  Future<ServiceResponse> acctLookup({accountId, phoneNo}) async{
     Map<String, dynamic> data = {
       "accountId": accountId,
       "phoneNo": phoneNo,
     };
-    return _apiBasics!.makePostRequest(acctLookupurl, null, data);
+    var response = await _apiBasics!.makePostRequest(acctLookupurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //-------------------------------------------RESET PASSWORD
   //-------------------------------------------RESET PASSWORD
   //-------------------------------------------RESET PASSWORD
-  Future resetPass({userName, secAnswer, userPass}) {
+  Future<ServiceResponse> resetPass({userName, secAnswer, userPass}) async{
     Map<String, dynamic> data = {
       "userName": userName,
       "secAnswer": secAnswer,
       "userPass": userPass,
     };
-    return _apiBasics!.makePostRequest(resetPassurl, null, data);
+    var response = await _apiBasics!.makePostRequest(resetPassurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //-------------------------------------------EDIT PROFILE
   //-------------------------------------------EDIT PROFILE
   //-------------------------------------------EDIT PROFILE
-  Future editProfile({userName, fullName, phoneNo}) {
+  Future<ServiceResponse> editProfile({userName, fullName, phoneNo}) async{
     Map<String, dynamic> data = {
       "userName": userName,
       "fullName": fullName,
       "phoneNo": phoneNo,
     };
-    return _apiBasics!.makePostRequest(editProfileurl, null, data);
+    var response = await _apiBasics!.makePostRequest(editProfileurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //-------------------------------------------NOTIFICATION SERVICE
   //-------------------------------------------NOTIFICATION SERVICE
   //-------------------------------------------NOTIFICATION SERVICE
-  Future notificationService({
+  Future<ServiceResponse> notificationService({
     accountId,
     emergencySetupId,
     emergencyState,
@@ -96,7 +103,7 @@ class CustomerApiBasi {
     latitude,
     fullAddress,
     emergencyCountry,
-  }) {
+  }) async{
     Map<String, dynamic> data = {
       "accountId": accountId,
       "emergencySetupId": emergencySetupId,
@@ -107,13 +114,15 @@ class CustomerApiBasi {
       "fullAddress": fullAddress,
       "emergencyCountry": emergencyCountry,
     };
-    return _apiBasics!.makePostRequest(notificationServiceurl, null, data);
+    var response = await _apiBasics!.makePostRequest(notificationServiceurl, null, data);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 
   //-------------------------------------------GET NOTIFICATION
   //-------------------------------------------GET NOTIFICATION
   //-------------------------------------------GET NOTIFICATION
-  Future getNotification({userName}) {
-    return _apiBasics!.makeGetRequest(getNotificationurl + userName, null);
+  Future<ServiceResponse> getNotification({userName}) async{
+    var response = await _apiBasics!.makeGetRequest(getNotificationurl + userName, null);
+    return ServiceResponse.fromJSON(response.toJSON());
   }
 }

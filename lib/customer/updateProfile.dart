@@ -155,21 +155,18 @@ class UpdateProfileProvider extends BaseProvider {
         setLoading = true;
         var updateProfileResponse = await customerApiBasic.editProfile(
             userName: username, fullName: _fullName, phoneNo: _phoneNumber);
-        print("Weisle Update profile response is $updateProfileResponse");
-        if (updateProfileResponse['resposeCode'] == '00') {
+        if (updateProfileResponse.status == true) {
           setLoading = false;
           goBack(context);
           print('Request Successful');
           Alerts.successAlert(context, 'Profile update successful', () {
             navigatedForever(context, const WelcomeBack());
           });
-        } else if (updateProfileResponse['resposeCode'] == '01') {
+        } else {
           goBack(context);
-          Alerts.errorAlert(context, 'Invalid credentials', () {
+          Alerts.errorAlert(context, updateProfileResponse.message!, () {
             Navigator.pop(context);
           });
-        } else {
-          print("Weisle Update profile Response is $updateProfileResponse");
         }
       }
     } catch (e) {
